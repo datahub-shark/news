@@ -1,0 +1,57 @@
+<!-- METADATA
+Tiêu đề: 自定义客户端与模拟器开源
+Chuyên mục: Khác
+Tác giả: 通讯信息 WX：AB88336688 (陈凯恩)， ERTn96485lnoxred (张皓玥)
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b330dcda717b4386985a7421f9ad34b91787679767266/1280X1280.PNG
+Nguồn: https://bbs.robomaster.com/article/1943329
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <h2写在前面</h2<p最早做这套客户端时，考虑到操作手既要控车，又要看位置、血量、资源、比赛阶段和突发事件。信息本身并不少，真正麻烦的是它们分散在不同位置，关键时刻还需要操作手切换。于是我们从赛事协议接入开始，把比赛状态、战术地图、两路视频和语音提示逐步接到同一个自定义客户端里。 事实证明这个做法在国赛现场也确实明显帮助操作手解决很多问题。</p<p下面这张画面来自一段连续对战录屏。比赛阶段、双方机器人状态、战术地图、事件和统计都在同一个界面中持续更新；</p<p<img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.co
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 自定义客户端与模拟器开源. Ứng dụng trong phân mảng Khác.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>自定义客户端与模拟器开源</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1943329" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 通讯信息 WX：AB88336688 (陈凯恩)， ERTn96485lnoxred (张皓玥)</p>
+    <p><strong>Chuyên mục:</strong> Khác</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b330dcda717b4386985a7421f9ad34b91787679767266/1280X1280.PNG" alt="自定义客户端与模拟器开源" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <hr>
+  <div class="article-body">
+<h2>写在前面</h2><p>最早做这套客户端时，考虑到操作手既要控车，又要看位置、血量、资源、比赛阶段和突发事件。信息本身并不少，真正麻烦的是它们分散在不同位置，关键时刻还需要操作手切换。于是我们从赛事协议接入开始，把比赛状态、战术地图、两路视频和语音提示逐步接到同一个自定义客户端里。 事实证明这个做法在国赛现场也确实明显帮助操作手解决很多问题。</p><p>下面这张画面来自一段连续对战录屏。比赛阶段、双方机器人状态、战术地图、事件和统计都在同一个界面中持续更新；</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b330dcda717b4386985a7421f9ad34b91787679767266/1280X1280.PNG" alt="1280X1280.PNG" data-href="" data-file-md5="c37f9cb75507b514be4a2b3ca707b3d9" data-file-len="572658" style=""/></p><p><em>图 1 实际比赛中的综合指挥界面</em></p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="03e261425ed3d4b5576530f0ebe7e49b" data-file-len="930512" data-file-name="match-overview.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/0307ef2284f94c6e9227e045d62f1b2e1787679805654/match-overview.mp4" type="video/mp4"/></video>
+</div><h2>解决什么问题</h2><h3>零散信息整合</h3><p>正式赛事消息的主链路会先把裁判系统消息、机器人状态和雷达信息整理成统一比赛状态，再由指挥屏、事件提示和语音规则读取。网络层不决定页面怎么画，QML 也不直接解析 Protobuf。这样做的目的不是让界面显得更复杂，而是尽量让一项比赛事实只有一个权威状态来源。</p><p>地图负责空间关系，事件列表负责记录已经发生的事情，语音只提示需要马上注意的时机。对能量机关、飞镖闸门、基地受击等重点提示，我们分别增加了比赛阶段、操作位、时间窗等防重复规则；</p><h3>飞镖命中后，自动切换图传</h3><p>飞镖命中后的几秒通常最忙。原来需要操作手离开战术地图、切到图传，观察结束后再手动返回。现在客户端收到飞镖命中事件后，会先判断敌我关系和当前页面，再根据命中目标与同队命中序号从本地规则表计算观察时长，并以比赛阶段倒计时作为计时基准。普通情况下主 HEVC 图传进入前台；当前机器人是已部署英雄时，则显示辅助相机（本次没上场）。窗口归零或比赛阶段变化后，界面固定回到全屏战术地图并清理临时状态；连续命中时，剩余观察时间继续累加。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e5e6b60fa28647099707e77da71035a41787679835692/1280X1280 (1).PNG" alt="1280X1280 (1).PNG" data-href="" data-file-md5="b11925081ae4d7d1264ddf905a7a156e" data-file-len="363698" style=""/></p><p><em>图 2 同一段连续录屏中的三个关键时刻</em></p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="ec951fe389af9705cab84f6a574d1aa7" data-file-len="14974842" data-file-name="被飞镖击中自动切换图传画面.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e1ddef2009464d9fbe87dd4f94df7d911787681036491/被飞镖击中自动切换图传画面.mp4" type="video/mp4"/></video>
+</div><h3>大地图与基地状态的两段记录</h3><p>全屏战术地图用于集中观察双方位置和血量，普通指挥界面则同时保留资源、事件和辅助画面。下面的短片记录了战术地图，以及飞镖命中、基地护甲展开和基地受击等状态。它由两个不同回合的片段拼接而成，约在 00:09 切换到另一回合，只用于展示两类画面，不把它们写成同一次自动切换的前后因果。</p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="57676092a4087259a5ca78bdf0530482" data-file-len="1825004" data-file-name="tactical-map-and-base-status.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/475f5f9679da48beafe1c5fa1771859b1787679906423/tactical-map-and-base-status.mp4" type="video/mp4"/></video>
+</div><h2>客户端核心架构</h2><p>系统大致分为四层：数据来源、接入与处理、统一状态与规则、界面与提示。比赛消息经 NetworkManager 接入并解析，确认后的事实进入 GameData；主 HEVC 图传走独立的 UDP 接收与解码链路，辅助 H.264 则由 CustomByteBlock 经 NetworkManager 路由到 VideoReceiver，完成码流恢复和解码后再进入界面。界面状态机只负责决定地图、视频和提示在什么时候出现。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/6a9610c3d0534ff091ce973a4a2664f11787679919983/1280X1280 (2).PNG" alt="1280X1280 (2).PNG" data-href="" data-file-md5="0ad4a6275cac8b068a4260ac222e0b3d" data-file-len="211870" style=""/></p><p><em>图 3 客户端总体组成与主要数据流，实线表示数据或事件，虚线表示界面控制。</em></p><p>这张图保留的是最主要的运行链路。当前 MainWindow、GameData 和 NetworkManager 仍然偏重，正式发布前会继续收紧编译边界。独立的 sim/ 作为外部协议对端运行；代码中尚存的一套进程内兼容模拟模块也会在公开版本前与正式运行目标隔离。</p><h2>两路视频处理</h2><p>主图传通过 UDP 接收 HEVC 分片，在高优先级工作线程中完成批量收包、帧重组和低时延解码。当绘制速度暂时跟不上时，新帧会替换尚未显示的旧帧，避免画面看起来流畅、实际却已经过时。</p><p>辅助相机使用机器人自定义数据承载 H.264 分片，经过独立的码流恢复和解码链路进入界面。两条链路持续工作，界面切换只改变前台显示，不临时重启接收或解码。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/770d459d36a04e39802f34f01aff484a1787679982113/a5f31ed0-83a6-412d-8d7f-5c1f400f0ed2.png" alt="a5f31ed0-83a6-412d-8d7f-5c1f400f0ed2.png" data-href="" data-file-md5="646e16a9e45acafdb3fbf3568c58afcc" data-file-len="182848" style=""/></p><p><em>图 4 主 HEVC 图传与辅助 H.264 相机的处理路径。</em></p><p>客户端可以记录从首个 UDP 分片进入进程到完成画面绘制的端内耗时，方便在相同环境下比较改动前后的差异。</p><h2>飞镖命中切屏</h2><p>切屏由赛事事件直接驱动，没有模拟键盘输入。Event 提供命中方和目标，GameStatus 单独提供比赛阶段倒计时；界面状态机判断敌我关系和当前页面，再用本地规则计算观察窗口。图传接收与解码在切换前后持续运行；窗口归零或比赛阶段变化时，临时状态被清理，界面回到全屏战术地图。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/0d2f5015c50043a98fd4bed0920a68251787680006680/4c405912-0ebf-4127-b8fc-716cc97bff40.png" alt="4c405912-0ebf-4127-b8fc-716cc97bff40.png" data-href="" data-file-md5="81ef0a91c47e736cda9f64c37cd0691e" data-file-len="170853" style=""/></p><p><em>图 5 飞镖命中事件触发的视图切换时序。连续命中会在当前窗口上累加观察时间。</em></p><h2>为什么要做模拟器</h2><p>很多问题只有比赛走到特定阶段才会出现。为了验证一次提示、一个页面切换或者一条异常消息，不可能每次都占用完整场地、赛事引擎和机器人。</p><p>配套的 sim/ 提供本地 Web 控制台，可以修改比赛阶段、机器人状态、资源和事件，再通过 MQTT、UDP 或视频链路把数据发送给客户端。客户端仍走正常接入路径，因此同一个问题可以被重复复现，也更适合补回归测试。但是一定要注意它不是官方赛事引擎，本地跑通也不等于现场验证通过。</p><h2>构建与验证路径</h2><p>首个公开版本计划只提供源码。完整依赖和平台差异以仓库 README 为准，下面只保留最短入口。</p><pre><code class="language-Bash">python3 tools/release/check_example_config.py config.example.json
+cmake --preset release
+cmake --build --preset release
+ctest --preset release
+根目录没有 config.json 时，CMake 会从公开示例生成安全的运行配置。需要修改 Broker、机器人 ID 或视频参数时，再把 config.example.json 复制为本地 config.json；该文件由 Git 忽略，不应提交。
+
+构建完成后，Linux 与 macOS 的启动入口分别为：</code></pre><pre><code class="language-Bash"># Linux
+./build/release/RoboMasterClient2025
+
+# macOS
+./build/release/RoboMasterClient2025.app/Contents/MacOS/RoboMasterClient2025
+RoboMasterClient2025 是当前沿用的历史构建目标名，不代表协议版本。本次公开快照已在 macOS 上完成 Release 构建与 27/27 CTest，并通过 GitHub Actions Ubuntu 24.04 的仓库检查、QML、原生构建和 CTest；Windows、Linux 桌面实机长期运行和真实赛场仍需结合实际环境复核。
+模拟器使用 Python 3.11 或更高版本，并需要本机 MQTT Broker：</code></pre><pre><code class="language-Bash">python3 -m venv sim/.venv
+source sim/.venv/bin/activate
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -e sim
+RM_MQTT_HOST_PORT=3333 ./sim/run_sim.sh
+浏览器打开 http://127.0.0.1:8000。默认命令只启动协议服务；两路视频需要在 Web 控制台中分别选择素材并启动。也可以用 ./sim/run_sim.sh --video-file /绝对路径/演示视频.mp4 额外启动主 HEVC 发送器，客户端主图传监听端口保持为 3334。
+客户端与模拟器必须连接同一个 Broker。上面的环境变量让 Docker 回退路径也使用 3333；若启动日志显示 Broker 实际位于 11883，请把客户端 config.json 中的 mqtt_port 同步改为 11883。</code></pre><h2>声明</h2><p>1.本次开源项目出自复旦大学星云EGA战队，作品仅用于技术交流，未经作者允许，不得作任何商业用途。</p><p>2.本次开源文件的最终解释权归复旦大学星云EGA战队所有。</p><p>3.开源目的在于加强参赛队之间交流，有助于提高自身和其他参赛队的水平。</p><h2>开源与致谢</h2><p><strong>开源地址：</strong><a href="https://github.com/ClearWei/RM26_Client" target="_blank"><strong>https://github.com/ClearWei/RM26_Client</strong></a></p><p><strong>如果项目对你有帮助，欢迎给仓库点一个 Star。</strong></p><p><strong>开源者：</strong>复旦大学星云EGA战队 • 魏清</p><p><strong>特别鸣谢：</strong>复旦大学星云EGA战队软件组（陈凯恩、张皓玥、余昊祺、宓融、张昊宇），以及战队全体成员的支持。</p><p><span style="color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); font-size: 16px;"><em><strong>希望星云EGA越来越好！</strong></em></span></p><p><br></p><p><br></p>
+  </div>
+</article>

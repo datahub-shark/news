@@ -1,0 +1,30 @@
+<!-- METADATA
+Tiêu đề: 
+Chuyên mục: Thị giác máy
+Tác giả: 飞扬的土豆
+Ảnh bìa: 
+Nguồn: https://bbs.robomaster.com/article/1948632
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <h1<strong简介</strong</h1<p 开源内容包括了本队伍一年以来从零搭建SOC部分的代码框架，方案选型，武林探秘自动机器人SOC端的所有代码，从串口驱动到算法移植到上层逻辑规划。最终能达到的效果是：<strong能与MCU端相配合在比赛任务中呈现较好的效果。</strong</p<p<strong链接： </strong<a href="https://github.com/potato484/RC_2026/" target="_blank"https://github.com/potato484/RC_2026/</a </p<p具体演示视频在R
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: . Ứng dụng trong phân mảng Thị giác máy.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1></h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1948632" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 飞扬的土豆</p>
+    <p><strong>Chuyên mục:</strong> Thị giác máy</p>
+  </div>
+  
+  
+  <hr>
+  <div class="article-body">
+<h1><strong>简介</strong></h1><p> &nbsp; &nbsp;开源内容包括了本队伍一年以来从零搭建SOC部分的代码框架，方案选型，武林探秘自动机器人SOC端的所有代码，从串口驱动到算法移植到上层逻辑规划。最终能达到的效果是：<strong>能与MCU端相配合在比赛任务中呈现较好的效果。</strong></p><p><strong>链接： </strong><a href="https://github.com/potato484/RC_2026/" target="_blank">https://github.com/potato484/RC_2026/</a> </p><p>具体演示视频在README里面有链接</p><h1><strong>需要注意的部分</strong></h1><p> &nbsp; &nbsp;1.串口驱动部分目前只是能用的情况，具体的异常处理考虑不完善（几乎没做），笔者最初设计的时候没有进行深入的思考，只是一个很初级的demo，并且存在多个节点会抢占一个串口设备文件的情况，本来是笔者的小巧思，觉得这样可以提醒使用者启动出问题了，但是现在回过头来，并不是一种优雅的处理方式，也许可以做一些退化处理和逻辑判断，比如做一个桥接层？也许是更好的一种修改方式。</p><p> &nbsp; &nbsp;2.导航部分并没有使用nav2，前期甚至想过自定义控制器去完成比赛任务，但是经过反复尝试后发现，要想在有限的时间完成场地适配需要先建图然后裁剪相关点云，再做导航适配，对场地容忍度极小。所以最后基于里程计实时位姿，在行为树节点内做相对坐标系速度闭环。经过测试，效果能在不依赖任何先验地图的情况下，完成单段距离导航。对于在指定任务点进行作业的比赛任务，可以作为一个实现参考。</p><p> &nbsp; &nbsp;3.代码基于机身的base_link进行的做了点云裁剪，使用的时候切记需要调整相关参数</p><p> &nbsp; &nbsp;4.点云匹配算法被AI改的乱七八糟的，也没做过单独的测试，直接忽视即可，实机链路也并没有启动相关节点。</p><p> &nbsp; &nbsp;5.视觉相关的实现，大部分都是散的，实现其实中规中矩，会vibe就行。主要是异常处理部分，当时加了一堆保护，如识别框闪烁，消失等，认为挺有价值的，后续有时间会整理出来。</p><p> &nbsp; &nbsp;6.主要采用的是行为树编排的动作，来完成比赛任务，但是没想到最后核心的一大坨逻辑实现全被放在一个文件里面了，代码几千行，不过主要是业务侧的实现，有些异常处理也混在这里面了，调试的时间太紧了，就让AI放纵了，但现在回过头来想认为最好的比赛任务编排方式不是采用行为树，而是复用其中的思想，抽象一颗小树出来用来完成比赛的任务。但在demo阶段行为树作为AI的已有知识写的其实很快的，本身属于比赛逻辑测，出问题相关日志一看就知道问题在哪里。</p><p> &nbsp; &nbsp;7.感谢北极熊战队的文章和代码，帮助了笔者相关知识的入门。</p><p><span id="referenceDom-1" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/714072/1" data-order="1">[1]</span></p><p> &nbsp; &nbsp;</p>
+  </div>
+</article>

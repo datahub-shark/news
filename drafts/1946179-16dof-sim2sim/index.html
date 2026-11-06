@@ -1,0 +1,37 @@
+<!-- METADATA
+Tiêu đề: 16DOF轮足机器人强化学习、仿真与 Sim2Sim 开源
+Chuyên mục: Robot di động
+Tác giả: Sulcunfu
+Ảnh bìa: 
+Nguồn: https://bbs.robomaster.com/article/1946179
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <h1【RC2026 山东华宇工学院HYNova战队】16DOF轮足机器人强化学习、仿真与 Sim2Sim 开源</h1<h216DOF 轮足机器人强化学习训练、MuJoCo 仿真与 Sim2Sim 验证工程开源</h2<h2开篇</h2<p大家好，我们是山东华宇工学院 HYNova 战队。本项目整理轮足机器人的软件部分，公开从 MJCF 机器人模型、mjlab 强化学习训练，到 MuJoCo 独立仿真和 Sim2Sim 策略验证的代码，方便其他队伍理解从仿真模型到实机部署前验证的完整流程。<a href="https://github.com/wusi321/RC_Legged_Traini
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 16DOF轮足机器人强化学习、仿真与 Sim2Sim 开源. Ứng dụng trong phân mảng Robot di động.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>16DOF轮足机器人强化学习、仿真与 Sim2Sim 开源</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1946179" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> Sulcunfu</p>
+    <p><strong>Chuyên mục:</strong> Robot di động</p>
+  </div>
+  
+  
+  <hr>
+  <div class="article-body">
+<h1>【RC2026 山东华宇工学院HYNova战队】16DOF轮足机器人强化学习、仿真与 Sim2Sim 开源</h1><h2>16DOF 轮足机器人强化学习训练、MuJoCo 仿真与 Sim2Sim 验证工程开源</h2><h2>开篇</h2><p>大家好，我们是山东华宇工学院 HYNova 战队。本项目整理轮足机器人的软件部分，公开从 MJCF 机器人模型、mjlab 强化学习训练，到 MuJoCo 独立仿真和 Sim2Sim 策略验证的代码，方便其他队伍理解从仿真模型到实机部署前验证的完整流程。<a href="https://github.com/wusi321/RC_Legged_Training_Simulation" target="_blank">github完整项目入口</a><br><br>实机部署、ROS 2/C++ 控制主线、比赛任务集成和打点工具已整理在<a href="https://github.com/Dichen33/RC_Legged_Control" target="_blank"><code>RC_Legged_Control</code></a> 项目。机械图纸见[山东华宇工学院16DOF机械开源]。全套完整开源见<a href="https://github.com/zeitvex/RC_WheelLeg" target="_blank">RC_WheelLeg轮足全开源</a></p><h2>本次开源内容</h2><ol><li><code>rc_mjlab/src/robot/</code>：基于 mjlab 的四轮腿混合机器人训练任务，包含 Flat、Rough、Crawl 三类任务。</li><li><code>rc_mjlab/mjcf/</code>：机器人 MJCF、场景入口和 STL 网格文件。</li><li><code>rc_mjlab/sim2sim/</code>：策略回放、交互式 MuJoCo 3D 仿真、二维导航面板和竞赛地形验证。</li><li><code>rc_mjlab/mujoco_sim/</code>：独立的运动学、动力学和 MPC 调试工具。</li><li><code>model_rough.pt</code>、<code>model_crawl.pt</code>：用于本地回放和接口验证的示例策略权重。</li><li><code>pyproject.toml</code>、<code>uv.lock</code>：Python 项目依赖和锁定版本。</li></ol><h2>训练设计概览</h2><p>机器人为 4 条轮腿，每条腿包含 3 个腿部关节和 1 个驱动轮，共 16 个执行器。训练中使用 MuJoCo 进行物理仿真，策略决策频率为 50 Hz，物理步长为 2 ms。训练任务包含速度跟踪、姿态稳定、关节限位、碰撞、动作平滑和能耗等约束，并加入摩擦、质量、执行器、传感器偏置和持续扰动等随机化因素。</p><p>Rough 任务包含台阶、粗糙地面、高墙和斜坡等竞赛相关地形；Crawl 任务用于限高和爬坡场景。具体奖励权重、课程和随机化范围请以 <code>rc_mjlab/README.md</code> 与 <code>src/robot/</code> 配置为准。</p><h2>快速开始</h2><pre><code class="language-bash language-bash">cd rc_mjlab
+uv sync
+uv run train Robot-Flat-v0
+uv run train Robot-Rough-v0
+uv run play Robot-Rough-v0</code></pre><p>首次运行前请确认本地已安装可用的 PyTorch、MuJoCo、mjlab、图形环境和对应 CUDA 驱动。不同机器上的 GPU 和依赖版本可能导致训练速度及回放效果不同。</p><h2>Sim2Sim 与仿真回放</h2><pre><code class="language-bash language-bash">cd rc_mjlab
+uv run python sim2sim/sim2sim.py
+uv run python sim2sim/nav_sim2sim.py
+uv run python mujoco_sim/run.py</code></pre><p>Sim2Sim 入口会读取本目录的 <code>mjcf/</code>、<code>sim2sim/terrain/</code> 和策略权重。</p><h2>与实机部署的关系</h2><p>训练与仿真负责策略学习、模型检查和部署前回放；实机部署负责传感器接入、电机映射、CAN 通信、安全检查、导航和比赛任务调度。两部分必须核对观测顺序、动作顺序、关节方向、零位、缩放和控制频率，不能仅凭仿真能运行就直接上电。</p><p>实机和比赛集成代码请查看<a href="https://github.com/Dichen33/RC_Legged_Control" target="_blank"><code>RC_Legged_Control</code></a> 项目</p><h2>复现建议</h2><p>建议按以下顺序验证：先运行 MuJoCo 独立模型，再回放 Flat/Rough/Crawl 策略，随后检查 Sim2Sim 的观测和动作接口，最后再与实机部署工程逐项核对。首次上车前应架空机器人，确认急停、关节方向、零位和限位。</p><h2>免责声明与第三方说明</h2><p>本项目中的模型、网格、mjlab、MuJoCo、PyTorch 及其他依赖需遵守各自许可证。示例策略不代表对任何硬件平台的性能承诺；使用者应自行完成安全评估和硬件适配。</p><h2>相关目录</h2><ul><li><a href="https://github.com/Dichen33/RC_Legged_Control" target="_blank"><code>RC_Legged_Control</code></a>：实机部署、ROS 2、比赛集成、导航与打点工具。</li><li>完整项目见<a href="https://github.com/zeitvex/RC_WheelLeg" target="_blank">RC_WheelLeg轮足全开源</a></li></ul><h2>结语</h2><p>如果项目对你有用，请为<a href="https://github.com/zeitvex/RC_WheelLeg" target="_blank">RC_WheelLeg轮足全开源</a>点上一个star，也欢迎来和我们进行技术交流，我们将持续更新完善开源项目</p><ul><li></li></ul><p><br></p>
+  </div>
+</article>

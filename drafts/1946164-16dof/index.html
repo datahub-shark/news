@@ -1,0 +1,60 @@
+<!-- METADATA
+Tiêu đề: 16DOF轮足机器人嵌入式/控制开源
+Chuyên mục: Robot di động
+Tác giả: dichen
+Ảnh bìa: 
+Nguồn: https://bbs.robomaster.com/article/1946164
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p<br</p<h1HYNova 16DOF轮足机器人嵌入式/控制开源</h1<p大家好！我们是山东华宇工学院 HYNova 战队，一支 2026 年刚起步的新队伍。这次开源的是嵌入式/控制相关内容。</p<h21. 项目背景</h2<p我们这套控制开源主要来自轮足机器人从早期验证到最终实机比赛的迭代过程。前期做过 8DOF 串联腿方案，中期检查阶段留下了 Dji_A 单片机工程。</p<p后来整机升级为 16DOF 轮足构型，控制也从 Python 快速验证，逐步迁移到 ROS 2，最后形成了比赛实机上的 ROS 2 控制主线。</p<p这份仓库只整理控制相关内容，按时间顺序主要包括：</
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 16DOF轮足机器人嵌入式/控制开源. Ứng dụng trong phân mảng Robot di động.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>16DOF轮足机器人嵌入式/控制开源</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1946164" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> dichen</p>
+    <p><strong>Chuyên mục:</strong> Robot di động</p>
+  </div>
+  
+  
+  <hr>
+  <div class="article-body">
+<p><br></p><h1>HYNova 16DOF轮足机器人嵌入式/控制开源</h1><p>大家好！我们是山东华宇工学院 HYNova 战队，一支 2026 年刚起步的新队伍。这次开源的是嵌入式/控制相关内容。</p><h2>1. 项目背景</h2><p>我们这套控制开源主要来自轮足机器人从早期验证到最终实机比赛的迭代过程。前期做过 8DOF 串联腿方案，中期检查阶段留下了 Dji_A 单片机工程。</p><p>后来整机升级为 16DOF 轮足构型，控制也从 Python 快速验证，逐步迁移到 ROS 2，最后形成了比赛实机上的 ROS 2 控制主线。</p><p>这份仓库只整理控制相关内容，按时间顺序主要包括：</p><ul><li>前期 8DOF 中期检查使用过的 Dji_A 单片机工程。</li><li>少量实机前 <code>sim2sim</code> 运行验证。</li><li>16DOF 轮足 Python sim2real 快速验证版本。</li><li>16DOF 轮足历史 ROS 2 版本。</li><li>最终实机使用的 16DOF ROS 2 <code>sim2real</code> 控制主线。</li><li>比赛任务、路线工具、Web/遥控调试和屏幕。</li></ul><p>当前控制主路线可以简单理解为：</p><pre><code class="language-text language">8DOF 中期检查 Dji_A 留档
+  -&gt; 少量 sim2sim 实机前验证
+  -&gt; 16DOF Python sim2real 快速验证
+  -&gt; 16DOF ROS 2 控制链路拆分
+  -&gt; 最终 ROS 2 sim2real 实机主线
+  -&gt; 比赛任务集成 / 路线工具 / 屏幕</code></pre><h2>2. 硬件与平台</h2><p>最终 ROS 2 控制主线面向 16DOF 轮足实机：</p><ul><li>机器人构型：12 个腿部关节电机 + 4 个轮关节电机。</li><li>上位计算：Jetson Orin Nano/Orin NX 或 x86_64 工控机。</li><li>控制系统：Ubuntu 22.04 + ROS 2 Humble。</li><li>执行器通信：双路 SocketCAN，默认 <code>can0</code>、<code>can1</code>。</li><li>定位与状态输入：IMU、Odom、Odin 或可替换的等价 ROS 2 topic。</li><li>调试入口：遥控器、Web/UDP、ROS topic、触控屏。</li></ul><p>Dji_A 单片机工程只对应前期 8DOF 中期检查阶段，用于保留 STM32/FreeRTOS、CAN/UART、PID、ramp 等嵌入式参考，不参与最终 16DOF ROS 2 控制链路。</p><h2>3. 环境准备</h2><p>基础环境：</p><pre><code class="language-text language">Ubuntu 22.04
+ROS 2 Humble
+C++17
+Python 3.10+
+colcon / ament_cmake
+ONNX Runtime
+可选 CUDA / TensorRT</code></pre><p>常用依赖示例：</p><pre><code class="language-bash language">sudo apt update
+sudo apt install -y \
+  ros-humble-desktop \
+  python3-colcon-common-extensions \
+  python3-rosdep \
+  build-essential cmake \
+  python3-pip</code></pre><p>Python 调试工具常用依赖根据对应目录的 <code>requirements</code> 安装即可。屏幕程序需要目标机有桌面环境、Python 3、Tkinter 和 X11 显示权限。</p><p>策略模型、ONNX、TensorRT engine、传感器 SDK、实测地图和主要训练/仿真资源不放在本控制仓库内，使用时需要按自己的硬件和授权自行准备。</p><h2>4. 项目结构</h2><pre><code class="language-text language">RC_Legged_Control/
+├── README.md                  # 工程说明、功能、目录和快速使用
+├── docs/                      # 架构、用法、理论、移植、测试记录和帖子
+├── embedded/Dji_A/            # 前期 8DOF 中期检查单片机工程，参考用
+├── simulation/sim2sim/        # 少量实机前 sim2sim 运行验证
+├── legacy_control/            # 16DOF Python/ROS 2 历史迭代版本
+├── ros2_ws/                   # 16DOF 最终 ROS 2 控制主线
+├── tools/nav_tools/           # 路线、地图、避障区域编辑和检查工具
+├── CHANGELOG.md
+└── THIRD_PARTY_NOTICES.md</code></pre><p><code>embedded/Dji_A/</code> 为 8DOF 阶段的嵌入式参考，<code>simulation/sim2sim/</code> 只保留少量控制实机前检查入口。<code>legacy_control/</code> 用来看迭代过程，最重要的为 <code>ros2_ws/</code>，最终实机使用的控制主线就在这里。</p><h2>5. 实现流程</h2><h3>5.1 8DOF 中期检查</h3><p>最早我们做过 8DOF 串联腿方案，中期检查时使用过 DJI RoboMaster A 型开发板相关的单片机工程，也就是现在仓库里的 <code>embedded/Dji_A/</code>。</p><p>这部分代码主要包含 FreeRTOS 任务、CAN/UART 通信、电机反馈解析、PID 和 ramp 斜坡限幅。当时它用于 8DOF 阶段的控制检查。后来我们经过队内讨论，认为 16DOF 轮足构型更适合完成越障任务，所以后续控制主线也转向 16DOF 轮足。</p><h3>5.2 少量 sim2sim 运行验证</h3><p>在控制实机前，我们会保留一点 sim2sim 检查，用来确认动作输出、配置文件和路线行为是否明显异常。本仓库中的 <code>simulation/sim2sim/</code> 只承担这个作用。</p><p>这里的 sim2sim 不是主要算法内容。完整 sim2sim、强化学习训练、模型导出和训练细节会放到算法相关开源中单独说明。</p><h3>5.3 16DOF Python 快速验证</h3><p>16DOF 轮足结构确定后，控制最开始用 Python 验证。这样做主要是为了快：改参数快，看日志方便，Web 调试看起来直观。</p><p>Python 阶段主要解决这些问题：</p><ul><li>电机 ID、方向和零点是否对应。</li><li>12 个腿部关节和 4 个轮关节电机的顺序是否一致。</li><li>策略输入输出维度、动作缩放和默认站姿是否对齐。</li><li>IMU、CAN、遥控器和安全保护逻辑是否能跑通。</li></ul><p>仓库中的 <code>legacy_control/python_sim2real_v1/</code> 和 <code>legacy_control/python_sim2real_v2/</code> 就是这个阶段留下来的版本。它们不是最终部署入口，但对理解 16DOF 控制早期验证过程很有帮助。</p><h3>5.4 迁移到 ROS 2</h3><p>Python 版本跑通后，我们开始迁移到 ROS 2。这个阶段重点是把控制链路拆清楚，而不是把所有逻辑都堆在一个脚本里。</p><p>拆分后的职责大致是：</p><ul><li><code>sim2real_hw</code>：负责 CAN、关节反馈、目标下发和安全边界。</li><li><code>sim2real_runtime</code>：负责观测构建、策略推理、动作处理和模式管理。</li><li><code>cmd_mux_node</code>：负责遥控、Web、Nav 等输入的优先级和超时。</li><li><code>sim2real_bringup</code>：负责统一启动和参数管理。</li></ul><p><code>legacy_control/ros2_sim2real_v1/</code> 和 <code>legacy_control/ros2_sim2real_v2_base/</code> 记录了这个迁移过程。</p><h3>5.5 最终 ROS 2 sim2real 主线</h3><p>最终实机使用的主线在 <code>ros2_ws/</code>。这一版围绕 16DOF 轮足实机部署整理，核心是把策略到实机之间的接口固定下来。</p><p>实机控制中很容易出现“仿真能跑，实机不对”的问题。很多时候不是策略完全不能用，而是关节顺序、零点、方向、动作缩放、默认站姿或 CAN 映射有一处不一致。我们把这些内容集中到部署契约和运行时参数里，尽量减少这种接口漂移。</p><p>ROS 2 主线主要包括：</p><ul><li><code>sim2real_common</code>：部署契约、滤波、安全监控等通用模块。</li><li><code>sim2real_hw</code>：SocketCAN 硬件桥接、反馈读取、目标下发和保护逻辑。</li><li><code>sim2real_runtime</code>：策略运行时、遥控/Web/Nav 输入处理、命令转换。</li><li><code>sim2real_nav2</code>：比赛路线和导航相关配置。</li><li><code>sim2real_bringup</code>：统一启动文件和运行参数。</li></ul><h3>5.6 比赛任务和屏幕</h3><p>比赛里不只是让机器人走起来，还要处理路线、定位、遥控接管、Web 调试、屏幕操作、任务恢复和异常停车。</p><p>这部分主要包括：</p><ul><li>路线 JSON 和任务分段。</li><li>离线路线编辑、避障区域标注、路线安全检查。</li><li>Web/UDP 调试入口。</li><li>遥控器节点和命令仲裁。</li><li><code>ros2_ws/Screen/</code> 屏幕相关代码。</li></ul><p>屏幕是最终实机使用的操作入口之一，可以启动/停止 ROS 2 系统、切换 <code>LOC REL</code> / <code>LOC ODOM</code>、进入导航、恢复任务、急停/复位，并查看一些关键状态。现场调试时，屏幕、遥控器、Web 和 ROS topic 配合起来，比只靠终端看日志直观很多。</p><h2>6. 常用命令</h2><p>如果刚修改过 ROS 2 代码或参数，建议重新构建相关包：</p><pre><code class="language-bash language">cd ros2_ws
+source /opt/ros/humble/setup.bash
+colcon build --packages-select sim2real_runtime sim2real_bringup --symlink-install --merge-install
+source install/setup.bash</code></pre><p>当前常用启动方式是不启动 Nav2，默认会启动遥控器节点：</p><pre><code class="language-bash language">ros2 launch sim2real_bringup sim2real_system.launch.py launch_nav2:=false</code></pre><p>Python 历史版本的 Web 调试入口：</p><pre><code class="language-bash language">python web/server.py --host 0.0.0.0 --port 8080</code></pre><p>屏幕手动启动：</p><pre><code class="language-bash language">cd ros2_ws/Screen
+bash run_fullscreen_quit.sh</code></pre><p>如果 SSH 启动屏幕后提示没有 X11 显示权限，需要在 Nano 本地图形桌面终端执行：</p><pre><code class="language-bash language">DISPLAY=:0 xhost +SI:localuser:rc2</code></pre><h2>7. 项目内容总结</h2><p>简单来说，这份仓库主要开源的是 HYNova 轮足机器人控制落地过程：从 8DOF 阶段的单片机检查，到少量 sim2sim 实机前验证，再到 16DOF Python/ROS 2 迭代，最后落到 ROS 2 sim2real 实机控制、比赛任务集成和现场调试工具。</p><p>它更适合需要做实机控制部署的队伍参考，尤其是下面几类内容：</p><ul><li>8DOF 阶段 Dji_A 工程中的 STM32/FreeRTOS、CAN/UART、PID 和 ramp 组织方式。</li><li>少量 sim2sim 如何作为控制部署前检查入口。</li><li>16DOF 轮足从 Python 快速验证到 ROS 2 最终主线的演进过程。</li><li>部署契约如何管理观测维度、动作维度、关节顺序、零点、方向、默认站姿和 CAN 映射。</li><li>遥控器、Web 调试、屏幕和 ROS topic 检查如何配合使用。</li></ul><p>强化学习训练、主要算法链路、模型权重和完整仿真工程不在本仓库内，会在算法相关开源中单独说明。</p><h2>8. 后续优化方向</h2><ul><li>给不同历史版本补充更清楚的差异说明。</li><li>将部署契约做成更容易校验的配置生成流程。</li><li>补充更完整的实机测试记录，包括启动流程、急停响应和 CAN 状态。</li><li>继续优化路线工具和任务分段，降低现场改路线的成本。</li><li>继续优化导航和路线规划，让机器人在绕杆等任务中走得更顺。</li></ul><h2>9. 终语</h2><p>这份控制开源不算完美，里面也能看到我们一路迭代留下来的痕迹。我们把这些版本按阶段整理出来，是希望后来的队伍不只看到最终代码，也能看到一套控制系统是怎么从能跑、能调，慢慢整理成最终实机主线的。</p><p>感谢社区和前辈队伍的开源资料。HYNova 也是在参考已有资料的过程中一步步搭起来的，希望这份控制开源能给同样起步较晚、正在做实机控制落地的队伍提供一些可复用的经验。</p><p>关于控制的开源仓库链接：<a href="https://github.com/Dichen33/RC_Legged_Control" target="_blank">https://github.com/Dichen33/RC_Legged_Control</a></p><p><br>关于强化学习、仿真与 Sim2Sim 开源仓库链接： <a href="https://github.com/wusi321/RC_Legged_Training_Simulation" target="_blank">https://github.com/wusi321/RC_Legged_Training_Simulation</a> </p><p><br>整体开源仓库链接：<a href="https://github.com/zeitvex/RC_WheelLeg" target="_blank">https://github.com/zeitvex/RC_WheelLeg</a></p><p><br></p>
+  </div>
+</article>
