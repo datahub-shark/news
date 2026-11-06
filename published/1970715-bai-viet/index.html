@@ -3,7 +3,7 @@ Tiêu đề: Thuật toán bù trọng lực chi tiết cho cánh tay robot 7 b�
 Chuyên mục: Điều khiển
 Độ hữu dụng: ⭐⭐⭐⭐⭐ (Động lực học cánh tay robot 7 trục & bù mô-men xoắn thực chiến)
 Tác giả: Đội DreamChaser (追梦战队) - Đại học Công nghệ Bắc Kinh (BIT)
-Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/81b4229d5fa041dc965ad2486135723d1789689778838/image.png
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/4216a61a1dab4790a0a356fd69c299f51787333184878/image.png
 Nguồn: https://bbs.robomaster.com/article/1970715
 Tên nguồn: RoboMaster BBS
 Tóm tắt: Hướng dẫn toán học và động lực học hoàn chỉnh về thuật toán bù trọng lực (Gravity Compensation) cho cánh tay robot hình người 7 bậc tự do (7-DOF Redundant Arm). Bài viết thiết lập hệ tọa độ MDH (Modified Denavit-Hartenberg), mô hình hóa vị trí khối tâm 3D từng khâu, thiết lập hàm thế năng tổng quát và đạo hàm riêng theo các góc khớp để tính toán chính xác vectơ mô-men bù trừ trọng lực cho 7 khớp J0 - J6.
@@ -21,6 +21,10 @@ Trạng thái: READY
       <p><strong>Đánh giá độ hữu dụng:</strong> <span style="color:#eab308;font-weight:bold;">⭐⭐⭐⭐⭐ (Động lực học thực chiến cho cánh tay 7-DOF)</span></p>
     </div>
   </header>
+
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/4216a61a1dab4790a0a356fd69c299f51787333184878/image.png" alt="Sơ đồ vectơ tọa độ bù trọng lực toàn phương cánh tay robot 7-DOF" style="width:100%;max-height:480px;object-fit:cover;display:block;">
+  </div>
 
   <div class="article-body" style="line-height:1.85;font-size:15px;">
     <h2>1. Tổng quan bài toán bù trọng lực cánh tay 7 bậc tự do</h2>
@@ -47,7 +51,13 @@ Trạng thái: READY
     <p style="text-align:center;">$$\tau_{g,k} = \frac{\partial E_p}{\partial q_k} = \sum_{i=k}^{7} m_i \cdot \mathbf{g}^T \cdot \left( \frac{\partial \mathbf{p}_{ci}}{\partial q_k} \right)$$</p>
     <p>Nhóm tác giả đã triển khai thuật toán tính toán đệ quy ngược từ cổ tay về gốc (Recursive Newton-Euler / Backward accumulation), giúp giảm độ phức tạp tính toán xuống mức tối thiểu, cho phép chạy vòng lặp bù lực ở tần số <strong>1000 Hz (1 ms)</strong> trên vi điều khiển STM32 mà không chiếm dụng quá 5% CPU.</p>
 
-    <h2>4. Ứng dụng thực tế</h2>
+    <h2>4. Kiểm chứng mô phỏng trên MuJoCo</h2>
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/01124b07d7df456d8df267595eb108a51787333148980/image.png" alt="Mô hình kiểm chứng bù trọng lực 14 bậc tự do trong MuJoCo" style="max-width:100%;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 1: Mô hình kiểm chứng thuật toán bù trọng lực 14-DOF trong MuJoCo (sai số &lt; 1.75e-11 N·m)</em></p>
+    </div>
+
+    <h2>5. Ứng dụng thực tế</h2>
     <p>Khi tích hợp thuật toán này, toàn bộ cánh tay robot 7 bậc tự do đạt được trạng thái <strong>lơ lửng không trọng lực</strong>: Khi thả tay ra, cánh tay đứng yên ở bất kỳ vị trí nào trong không gian; người điều khiển chỉ cần dùng một ngón tay đẩy nhẹ là cánh tay di chuyển mượt mà theo đúng hướng tác động.</p>
   </div>
 </article>
