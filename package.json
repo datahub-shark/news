@@ -6,6 +6,8 @@
     "crawl:robomaster": "node scripts/crawl-robomaster.mjs",
     "crawl:multi": "node scripts/crawl-multi.mjs",
     "export:html": "node scripts/export-html.mjs",
+    "push": "node scripts/push-approved.mjs",
+    "auto-sync": "node scripts/auto-sync.mjs",
     "sync:drive": "node scripts/sync-to-drive.mjs",
     "test": "node --test tests/*.test.cjs"
   },

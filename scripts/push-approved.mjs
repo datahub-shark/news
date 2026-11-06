@@ -71,11 +71,18 @@ async function loginFlow() {
   console.log('\n======================================================');
   console.log('🔑 ĐĂNG NHẬP ADMIN ĐỂ ĐẨY BÀI LÊN DRIVE');
   console.log('======================================================\n');
-  console.log('Đang yêu cầu gửi mã xác nhận đến email quản trị...');
-  await callApi('requestCode');
-  console.log('✅ Đã gửi mã OTP đến email quản trị.');
 
-  const code = await ask('\n👉 Nhập mã OTP 6 số từ email: ');
+  const codeArgIdx = process.argv.indexOf('--code');
+  let code = codeArgIdx !== -1 && process.argv[codeArgIdx + 1] ? process.argv[codeArgIdx + 1] : '';
+
+  if (!code) {
+    console.log('Đang yêu cầu gửi mã xác nhận đến email quản trị...');
+    await callApi('requestCode');
+    console.log('✅ Đã gửi mã OTP đến email quản trị.');
+
+    code = await ask('\n👉 Nhập mã OTP 6 số từ email: ');
+  }
+
   if (!code) throw new Error('Chưa nhập mã OTP.');
 
   const res = await callApi('login', { code });
