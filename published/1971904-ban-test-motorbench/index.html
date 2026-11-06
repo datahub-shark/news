@@ -1,0 +1,111 @@
+<!-- METADATA
+Tiêu đề: RM-MotorBench: Bàn test động cơ đa năng cho phòng Lab Robot (Không cần nạp lại Firmware)
+Chuyên mục: Điều khiển
+Tác giả: RoboMaster Community / wbz2006
+Nguồn: https://bbs.robomaster.com/article/1971904
+Tên nguồn: RoboMaster BBS
+Tóm tắt: Tôi tổng hợp giải pháp bàn thử nghiệm và cân chỉnh động cơ RM-MotorBench phục vụ phòng Lab: Cho phép thêm động cơ trực tiếp trên giao diện Web UI theo ID gạt mã ESC, đặt tốc độ vòng quay và gửi lệnh qua USB CDC xuống bo điều khiển để lái bus CAN. Điểm mạnh vượt trội là thay đổi động cơ và tinh chỉnh PID tức thì mà không cần sửa code hay nạp lại firmware, đồng thời hiển thị đồ thị thời gian thực về tốc độ, dòng điện và nhiệt độ.
+Gợi ý ứng dụng: Áp dụng ngay cho phòng Lab hoặc xưởng chế tạo robot: Căn chỉnh thông số PID và kiểm tra tải thực tế cho các dòng động cơ DJI (M3508, M2006, GM6020) và Đạt Diệu Damiao (DM4310, DM8009P). Tiết kiệm hàng chục giờ nạp code lặp đi lặp lại khi kiểm tra cơ cấu nạp đạn, bánh đà hoặc khớp quay robot.
+Tệp đính kèm: GitHub: https://github.com/wbz2006/RM-MotorBench | Windows EXE: MotorBench-1.2.0-Windows-x64.exe
+Trạng thái: READY
+-->
+
+<article class="robot-ideas-article">
+  <header class="article-header">
+    <h1>RM-MotorBench: Bàn test động cơ đa năng cho phòng Lab Robot (Không cần nạp lại Firmware)</h1>
+    <div class="article-meta">
+      <p><strong>Chuyên mục:</strong> <span class="badge">Điều khiển</span> · <strong>Mã nguồn:</strong> <a href="https://github.com/wbz2006/RM-MotorBench" target="_blank" rel="noopener">GitHub wbz2006/RM-MotorBench ↗</a></p>
+      <p><strong>Nguồn tham khảo:</strong> <a href="https://bbs.robomaster.com/article/1971904" target="_blank" rel="noopener">RoboMaster BBS</a></p>
+    </div>
+  </header>
+
+  <div class="resource-box" style="background:#f0f7ff;border:1px solid #1b85ff;padding:16px;border-radius:8px;margin:20px 0;">
+    <h3 style="margin-top:0;color:#1b85ff;">📦 Tài nguyên & Tải phần mềm</h3>
+    <ul style="margin-bottom:0;line-height:1.8;">
+      <li><strong>Mã nguồn mở trên GitHub:</strong> <a href="https://github.com/wbz2006/RM-MotorBench" target="_blank" rel="noopener">https://github.com/wbz2006/RM-MotorBench ↗</a></li>
+      <li><strong>Bản cài đặt Desktop Windows:</strong> <a href="https://github.com/wbz2006/RM-MotorBench/releases/download/host-v1.2.0/MotorBench-1.2.0-Windows-x64.exe" target="_blank" rel="noopener">MotorBench-1.2.0-Windows-x64.exe ↗</a> (Chạy trực tiếp, không cần cấu hình Node.js hay Python)</li>
+      <li><strong>Dòng động cơ hỗ trợ:</strong> DJI M3508, DJI M2006, DJI GM6020, Damiao DM4310, DM8009P.</li>
+    </ul>
+  </div>
+
+  <div class="article-body" style="line-height:1.8;font-size:15px;">
+    <h2>1. Bài toán: Nỗi ám ảnh nạp code khi test động cơ</h2>
+    <p>Khi thiết kế cơ cấu robot (như cơ cấu cấp đạn, bệ gimbal, cụm bánh đà hay cơ cấu kẹp), khâu thử nghiệm động cơ thường tốn rất nhiều thời gian lãng phí:</p>
+    <ul>
+      <li>Mỗi lần đổi động cơ hoặc đổi ID CAN, kỹ sư phải mở IDE, sửa code, biên dịch lại rồi nạp lại firmware.</li>
+      <li>Khó quan sát trực quan đồ thị đáp ứng bước nhảy (Step response) và độ vọt lố (Overshoot) khi căn chỉnh PID.</li>
+      <li>Rủi ro sai lệch ID bus CAN gây va chạm lệnh giữa các thiết bị.</li>
+    </ul>
+
+    <h2>2. Giải pháp RM-MotorBench: Test động cơ qua Web UI không cần nạp lại code</h2>
+    <p>Tôi thấy giải pháp của <strong>RM-MotorBench</strong> giải quyết trọn vẹn vấn đề này: Người dùng chỉ cần nạp firmware tổng quát một lần duy nhất vào bo điều khiển. Toàn bộ thao tác sau đó được thực hiện trực tiếp trên giao diện Web UI:</p>
+    <ol>
+      <li><strong>Giao thức giao tiếp:</strong> Máy tính kết nối với bo mạch qua cổng ảo USB Virtual COM (CDC). Các lệnh cấu hình và điều khiển được gửi xuống bo mạch với độ trễ dưới 2ms.</li>
+      <li><strong>Tự động điều phối CAN bus:</strong> Bo mạch phân tích lệnh và tự động khởi tạo node điều khiển trên bus CAN tương ứng với ID gạt mã của ESC mà không cần biên dịch lại firmware.</li>
+      <li><strong>Phản hồi telemetry thời gian thực:</strong> Tốc độ vòng quay (RPM), dòng điện tiêu thụ (A), vị trí góc và nhiệt độ động cơ được gửi ngược lên máy tính và vẽ biểu đồ trực tiếp.</li>
+    </ol>
+
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/ef7d49f3d6244a59b7395bff229315b31792844524622/overview-photo.png" alt="Bàn test thực tế RM-MotorBench" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 1: Mô hình bàn test thực tế tại phòng Lab</em></p>
+    </div>
+
+    <h2>3. Các tính năng kỹ thuật nổi bật</h2>
+    <ul>
+      <li><strong>Hỗ trợ đa dạng phần cứng:</strong> Firmware mã nguồn mở (CubeMX + CMake) sẵn sàng cho 3 dòng bo mạch thông dụng: DJI Type A, DJI Type C và Damiao MC02; tất cả dùng chung một Host UI.</li>
+      <li><strong>Chuyển đổi 3 vòng điều khiển trực tiếp (Vận tốc / Vị trí / Dòng điện):</strong> Căn chỉnh thông số PID ngay trên giao diện web và ghi tức thời vào vòng lặp điều khiển.</li>
+      <li><strong>Bộ công cụ đo kiểm chuyên dụng:</strong>
+        <ul>
+          <li>Vẽ đồ thị đáp ứng thời gian thực với tần số lấy mẫu cao.</li>
+          <li>Tự động phát tín hiệu kích thích hình Sin hoặc sóng bước nhảy (Step wave) để nhận dạng hệ thống.</li>
+          <li>Công cụ tính toán quy đổi giữa tần số cơ cấu sang số vòng quay/phút của động cơ.</li>
+        </ul>
+      </li>
+      <li><strong>Cơ chế an toàn phòng ngừa hư hại:</strong>
+        <ul>
+          <li><strong>Nhịp tim bảo vệ (Heartbeat timeout):</strong> Nếu mất tín hiệu kết nối máy tính quá 1.5 giây, bo mạch lập tức ngắt toàn bộ lệnh điều khiển để chống trôi tự do.</li>
+          <li><strong>Phím dừng khẩn cấp (E-Stop):</strong> Nhấn phím cách (Spacebar) ngắt lực tức thì khi cơ cấu bị kẹt tải.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/99893f5f7ebd4814a9c32aedf60406651792844454567/ui-annotated.png" alt="Giao diện Web UI của MotorBench" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 2: Chi tiết các vùng chức năng trên phần mềm điều khiển Host UI</em></p>
+    </div>
+
+    <h2>4. Hướng dẫn thiết lập & thao tác nhanh</h2>
+    <ol>
+      <li><strong>Nạp firmware bo mạch:</strong> Dùng VS Code với extension STM32CubeIDE, mở thư mục dự án tương ứng với bo mạch đang có (Type A / Type C / MC02) và nhấn <code>F5</code> để nạp.</li>
+      <li><strong>Khởi chạy Host UI trên máy tính:</strong>
+        <ul>
+          <li>Cách nhanh nhất: Tải file <code>MotorBench-1.2.0-Windows-x64.exe</code> về mở trực tiếp.</li>
+          <li>Cách chạy từ nguồn: Mở terminal, gõ <code>npm install && npm start</code> rồi truy cập <code>http://127.0.0.1:3000</code>.</li>
+        </ul>
+      </li>
+      <li><strong>Kết nối & điều khiển:</strong>
+        <ul>
+          <li>Chọn cổng COM tương ứng của bo mạch.</li>
+          <li>Bấm <code>＋ Thêm động cơ</code> $\rightarrow$ Chọn Model (M3508 / M2006 / GM6020 / DM4310) $\rightarrow$ Chọn Bus CAN (CAN1 / CAN2) $\rightarrow$ Điền ID gạt mã của ESC.</li>
+          <li>Bấm <code>Bind</code> (Liên kết) $\rightarrow$ Bấm <code>Enable</code> (Kích hoạt) $\rightarrow$ Kéo thanh trượt để test tốc độ và xem đồ thị phản hồi.</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h2>5. Lưu ý thực tế về phần cứng và an toàn điện</h2>
+    <div style="background:#fff3cd;border-left:4px solid #f59e0b;padding:14px;border-radius:4px;margin:15px 0;">
+      <strong>⚠️ Kinh nghiệm thực chiến khi đấu nối bàn test:</strong>
+      <ul style="margin:8px 0 0;padding-left:20px;">
+        <li>Luôn kiểm tra chiều phân cực jack nguồn XT30 / XT60 trước khi bật nguồn 24V (cắm ngược cực sẽ cháy nổ chip nguồn và driver).</li>
+        <li>Đảm bảo bus CAN có <strong>trở đầu cuối 120Ω</strong> để tránh phản xạ sóng làm mất gói dữ liệu CAN ở tốc độ cao (1 Mbps).</li>
+        <li>Khi bắt đầu thử nghiệm cơ cấu mới, luôn giới hạn trần dòng điện (Current Limit) ở mức thấp để tránh làm gãy bánh răng nếu cơ cấu bị kẹt.</li>
+      </ul>
+    </div>
+
+    <h2>6. Giới hạn cần lưu ý khi sử dụng</h2>
+    <ul>
+      <li>Danh sách động cơ đã gán trên Web hiện tại không lưu vào bộ nhớ ROM của bo mạch, do đó khi mất nguồn hoặc rút cáp USB bạn sẽ cần bấm thêm lại trên Web.</li>
+      <li>Thông số PID mẫu chỉ là tham khảo cho trạng thái không tải; khi lắp vào tải cơ khí thực tế (bánh đà quán tính lớn, cánh tay đòn), cần tinh chỉnh lại hệ số $K_p$, $K_i$, $K_d$ phù hợp.</li>
+    </ul>
+  </div>
+</article>

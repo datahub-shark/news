@@ -97,8 +97,10 @@ function parseDraft(content) {
 
   const metaText = metaMatch[1];
   const getValue = key => {
-    const m = metaText.match(new RegExp(`${key}:\\s*(.*?)(?=\\n[\\w\\s]+:|\\n-->|$)`, 'i'));
-    return m ? m[1].trim() : '';
+    const lines = metaText.split(/\r?\n/);
+    const prefix = key.toLowerCase() + ':';
+    const line = lines.find(l => l.trim().toLowerCase().startsWith(prefix));
+    return line ? line.trim().slice(prefix.length).trim() : '';
   };
 
   const status = getValue('Trạng thái').toUpperCase();

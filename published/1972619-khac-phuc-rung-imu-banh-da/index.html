@@ -1,0 +1,116 @@
+<!-- METADATA
+Tiêu đề: Hiện tượng rung IMU do bánh đà ma sát: Bản chất toán học và 4 giải pháp triệt tiêu dao động giả
+Chuyên mục: Điều khiển
+Tác giả: RoboMaster Community / Hồng Trúc (红竹)
+Nguồn: https://bbs.robomaster.com/article/1972619
+Tên nguồn: RoboMaster BBS
+Tóm tắt: Tôi tổng hợp phân tích chuyên sâu về hiện tượng bệ ngắm gimbal bị gật gù (Pitch oscillation) khi quay bánh đà ma sát tốc độ cao: Bản chất không phải do cộng hưởng kết cấu tần số thấp, mà do phép chuẩn hóa vector gia tốc trong thuật toán Mahony vô tình nhân chéo hai tần số rung cao thành tần số phách (beat frequency) siêu thấp. Bài viết chia sẻ 4 giải pháp kỹ thuật thực chiến gồm: cân bằng động, bộ lọc thông thấp 20Hz trước Mahony, chuẩn hóa gia tốc cố định a/g, và triển khai thuật toán VQF triệt tiêu 98% rung lắc mà không gây trễ pha.
+Gợi ý ứng dụng: Áp dụng trực tiếp cho hệ thống điều khiển bệ ngắm (Gimbal / Turret) trên robot tự hành và cơ cấu phóng bắn cơ khí. Giúp loại bỏ hoàn toàn hiện tượng lệch góc Pitch do rung động bánh đà, đảm bảo độ chính xác ổn định điểm ngắm ở cự ly xa mà không cần hạ thấp đáp ứng của hệ điều khiển.
+Tệp đính kèm: Không có
+Trạng thái: PUBLISHED (6/11/2026)
+-->
+
+<article class="robot-ideas-article">
+  <header class="article-header">
+    <h1>Hiện tượng rung IMU do bánh đà ma sát: Bản chất toán học và 4 giải pháp triệt tiêu dao động giả</h1>
+    <div class="article-meta">
+      <p><strong>Chuyên mục:</strong> <span class="badge">Điều khiển</span> · <strong>Lĩnh vực:</strong> IMU / Mahony Filter / VQF / Gimbal Control</p>
+      <p><strong>Nguồn tham khảo:</strong> <a href="https://bbs.robomaster.com/article/1972619" target="_blank" rel="noopener">RoboMaster BBS</a></p>
+    </div>
+  </header>
+
+  <div class="article-body" style="line-height:1.8;font-size:15px;">
+    <h2>1. Hiện tượng thực tế: Bệ ngắm "gật gù" khi khởi động bánh đà</h2>
+    <p>Khi căn chỉnh hệ thống bệ xoay (Gimbal) có gắn cơ cấu bánh đà ma sát quay tốc độ cao (ví dụ cơ cấu bắn bóng, bắn đĩa hoặc bệ phóng), một lỗi rất phổ biến khiến các kỹ sư đau đầu là: <strong>Vừa bật bánh đà lên thì bệ ngắm bắt đầu dao động gật gù nhỏ theo trục Pitch</strong>.</p>
+    <p>Xem dữ liệu góc phản hồi từ IMU, trục Pitch xuất hiện sóng dao động chu kỳ dạng hình Sin rất rõ (tần số khoảng 0.25 - 0.3 Hz). Biên độ sóng này tuy nhỏ (khoảng 0.01 rad), nhưng ở khoảng cách 5m sẽ làm đầu ngắm lệch tới <strong>5 cm</strong>.</p>
+
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/83b5d72f22f642398ecdc3ea331f254e1793286394482/图1.png" alt="Dao động góc Pitch phản hồi từ IMU khi bật bánh đà" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 1: Phản hồi góc Pitch của IMU xuất hiện sóng hình sin khi chạy 2 bánh đà</em></p>
+    </div>
+
+    <p><strong>Thử nghiệm kiểm chứng thú vị:</strong></p>
+    <ul>
+      <li>Khóa cứng khớp trục motor bằng Encoder (không dùng IMU phản hồi): Bệ ngắm đứng im phắc, nhưng IMU vẫn báo góc dao động $\rightarrow$ <strong>Chứng minh góc rung này là "Tư thế giả" (Fake Attitude) do thuật toán tính sai, cơ khí thực tế không hề lắc</strong>.</li>
+      <li>Nếu đưa góc IMU này vào vòng lặp kín PID của bệ ngắm, bộ điều khiển tưởng bệ đang bị nghiêng thật nên cố phát lực bù lại, dẫn đến toàn bộ bệ rung lắc dữ dội theo.</li>
+      <li>Bật 1 bánh đà: IMU chỉ sinh ra độ lệch tĩnh cố định (DC offset), không dao động.</li>
+      <li>Bật cả 2 bánh đà: Ngay lập tức xuất hiện dao động chu kỳ hình sin rõ rệt.</li>
+    </ul>
+
+    <h2>2. Bản chất toán học: Tại sao rung động cao tần lại biến thành dao động tần số thấp?</h2>
+    <p>Hai bánh đà quay ở tốc độ khoảng 600 - 625 rad/s, tạo ra rung động cơ khí ở tần số khoảng <strong>100 Hz</strong>. Tại sao góc tư thế lại dao động ở tần số siêu chậm <strong>0.28 Hz</strong>?</p>
+    
+    <div style="background:#f8fafc;border-left:4px solid #3b82f6;padding:16px;border-radius:4px;margin:20px 0;">
+      <h3 style="margin-top:0;color:#1e40af;">📐 Cơ chế trộn sóng phi tuyến trong thuật toán Mahony</h3>
+      <p>Trong bộ lọc Mahony, để tính sai số góc so với trọng lực $g$, vector gia tốc đo được $\mathbf{a} = (v_x, v_y, g + v_z)$ bắt buộc phải đi qua bước <strong>chuẩn hóa vector về độ dài đơn vị</strong>:</p>
+      <p style="text-align:center;">$$\mathbf{n} = \frac{\mathbf{a}}{\lVert\mathbf{a}\rVert} = \frac{(v_x, v_y, g + v_z)}{\sqrt{v_x^2 + v_y^2 + (g + v_z)^2}}$$</p>
+      <p>Khai triển Taylor thành phần trục $x$ lên bậc 2, ta thu được:</p>
+      <p style="text-align:center;">$$n_x \approx \frac{v_x}{g} - \frac{v_x \cdot v_z}{g^2}$$</p>
+      <p>Số hạng bậc hai chứa <strong>tích số của gia tốc rung trục x và trục z</strong> ($v_x \cdot v_z$). Giả sử rung động từ 2 bánh đà có tần số $f_1$ và $f_2$:</p>
+      <p style="text-align:center;">$$\cos(2\pi f_1 t) \times \cos(2\pi f_2 t) = \frac{1}{2} \left[ \cos\bigl(2\pi (f_1 - f_2) t\bigr) + \cos\bigl(2\pi (f_1 + f_2) t\bigr) \right]$$</p>
+      <p>👉 <strong>Kết luận cốt lõi:</strong> Phép chia độ dài vector đã vô tình thực hiện phép nhân tín hiệu (Nonlinear mixing). Nó sinh ra thành phần <strong>tần số phách (Beat frequency) bằng đúng hiệu số $|f_1 - f_2| = 101.01\text{ Hz} - 100.73\text{ Hz} = 0.28\text{ Hz}$!</strong></p>
+      <p>Tần số tổng $f_1 + f_2 \approx 200\text{ Hz}$ quá nhanh nên bộ lọc lướt qua, nhưng tần số hiệu $0.28\text{ Hz}$ quá chậm nên thuật toán Mahony ngỡ là robot đang nghiêng thật và hiệu chỉnh góc theo!</p>
+    </div>
+
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/839267f664b44eb1ad8fe947f801e2be1793286469540/图3.png" alt="Phổ tần số gia tốc IMU" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 2: Phổ tần số gia tốc cho thấy 2 đỉnh rung lệch nhau 0.28 Hz từ 2 motor</em></p>
+    </div>
+
+    <h2>3. Bốn (04) giải pháp xử lý từ cơ khí đến thuật toán</h2>
+
+    <h3>Giải pháp 1: Cân bằng động và giảm chấn cơ khí (Triệt tiêu nguồn gốc)</h3>
+    <ul>
+      <li>Gia công bánh đà chính xác cao, cân bằng động tĩnh để triệt tiêu độ lệch tâm.</li>
+      <li>Dùng đệm silicon / cao su giảm chấn cho bệ gắn IMU hoặc đặt IMU trên kết cấu tách biệt rung động cơ học trực tiếp từ motor bắn.</li>
+    </ul>
+
+    <h3>Giải pháp 2: Bộ lọc thông thấp (Low-Pass Filter) 20Hz trước bộ lọc Mahony</h3>
+    <div style="background:#ecfdf5;border-left:4px solid #10b981;padding:14px;border-radius:4px;margin:15px 0;">
+      <strong>💡 Giải pháp thực chiến hiệu quả nhất và dễ triển khai nhất:</strong>
+      <p style="margin:8px 0 0;">Vì hiện tượng trộn sóng xảy ra <em>bên trong</em> phép chuẩn hóa của Mahony, ta chỉ cần <strong>lọc thông thấp gia tốc 3 trục trước khi nạp vào Mahony</strong> (Cut-off tần số khoảng 20 Hz).<br>
+      Tín hiệu rung động 100 Hz bị triệt tiêu hoàn toàn trước khi kịp nhân chéo với nhau. Thực nghiệm cho thấy biên độ dao động giả giảm ngay <strong>87%</strong>, triệt tiêu hoàn toàn hiện tượng bệ ngắm bị gật gù!</p>
+    </div>
+
+    <h3>Giải pháp 3: Thay đổi phép chuẩn hóa cố định độ dài gia tốc (Fixed Modulus)</h3>
+    <p>Thay vì chia cho độ dài vector thay đổi $\lVert\mathbf{a}\rVert$, ta chuẩn hóa bằng hằng số trọng lực cố định $g = 9.81\text{ m/s}^2$:</p>
+    <p style="text-align:center;">$$\mathbf{n} = \frac{\mathbf{a}}{g}$$</p>
+    <p>Cách này biến mẫu số thành hằng số, triệt tiêu hoàn toàn phép nhân phi tuyến $v_x \cdot v_z$, giúp giảm 90% dao động giả sinh ra từ thuật toán.</p>
+
+    <h3>Giải pháp 4: Chuyển sang thuật toán ước lượng tư thế hiện đại VQF (VQF Filter)</h3>
+    <p>VQF (Vector Quaternion Filter) là thuật toán tư thế mã nguồn mở công bố năm 2023. Khác với Mahony, VQF chuyển đổi gia tốc sang hệ quy chiếu quán tính thông qua vận tốc góc của Gyroscope trước, sau đó mới lọc thông thấp trên hệ quy chiếu quán tính.</p>
+    <table style="width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;">
+      <thead>
+        <tr style="background:#f1f5f9;">
+          <th style="padding:10px;border:1px solid #cbd5e1;text-align:left;">Thuật toán tư thế</th>
+          <th style="padding:10px;border:1px solid #cbd5e1;text-align:center;">Biên độ dao động giả (rad)</th>
+          <th style="padding:10px;border:1px solid #cbd5e1;text-align:center;">Tỉ lệ rung còn lại</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:10px;border:1px solid #cbd5e1;"><strong>Mahony nguyên bản</strong></td>
+          <td style="padding:10px;border:1px solid #cbd5e1;text-align:center;">$1.07 \times 10^{-2}$</td>
+          <td style="padding:10px;border:1px solid #cbd5e1;text-align:center;"><strong>100%</strong> (Gật gù mạnh)</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;border:1px solid #cbd5e1;"><strong>Mahony + LPF 20Hz</strong></td>
+          <td style="padding:10px;border:1px solid #cbd5e1;text-align:center;">$1.39 \times 10^{-3}$</td>
+          <td style="padding:10px;border:1px solid #cbd5e1;text-align:center;"><strong>13.0%</strong> (Khỏi hẳn)</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;border:1px solid #cbd5e1;"><strong>VQF ($\tau = 3\text{s}$)</strong></td>
+          <td style="padding:10px;border:1px solid #cbd5e1;text-align:center;">$1.84 \times 10^{-4}$</td>
+          <td style="padding:10px;border:1px solid #cbd5e1;text-align:center;"><strong>1.72%</strong> (Gần như bằng 0)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>4. Tổng kết kinh nghiệm khi lập trình Robot</h2>
+    <ol>
+      <li>Không vội đổ lỗi cho cơ khí hay nhiễu điện khi thấy bệ ngắm bị rung chu kỳ chậm. Hãy kiểm tra Encoder trước: nếu motor đứng yên mà IMU vẫn báo nghiêng thì 100% là <strong>tư thế giả do thuật toán lọc</strong>.</li>
+      <li>Không lọc thông thấp ở đầu ra góc tư thế (sẽ làm hệ thống phản hồi cực kỳ chậm). Hãy <strong>lọc thông thấp ở đầu vào gia tốc thô trước khi nạp vào bộ ước lượng tư thế</strong>.</li>
+      <li>Cấu hình tần số cắt LPF cho gia tốc ở mức <strong>20 Hz</strong> là điểm cân bằng lý tưởng giữa khử nhiễu rung bánh đà và đảm bảo độ nhạy khi bệ xoay quay quét nhanh.</li>
+    </ol>
+  </div>
+</article>

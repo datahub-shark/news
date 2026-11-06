@@ -180,7 +180,10 @@ export async function crawlRoboMasterArticles(options = {}) {
       const doc = dom.window.document;
 
       const rawTitle = doc.querySelector('title')?.textContent || '';
-      const title = cleanText(rawTitle.replace(/-RoboMaster.*$/, ''));
+      let title = cleanText(rawTitle.replace(/-RoboMaster.*$/, ''));
+      // Chắt lọc tri thức: Loại bỏ các tiền tố tên đội thi, trường học, mùa giải
+      title = title.replace(/^[【\[][^】\]]*(?:战队|大学|联队|高校|AWARD|RM202\d|赛季)[^】\]]*[】\]]\s*/i, '')
+                   .replace(/^[【\[][^】\]]*[】\]]\s*/, '').trim();
       
       const metaDesc = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
       const summary = cleanText(metaDesc).slice(0, 500);
@@ -221,8 +224,8 @@ export async function crawlRoboMasterArticles(options = {}) {
       const category = detectCategory(title, summary);
 
       // Trích xuất mốc thời gian xuất bản nguyên tác từ Nuxt SSR
-      const createAtMatch = html.match(/createAt:"([^"]+)"/);
-      const updateAtMatch = html.match(/updateAt:"([^"]+)"/);
+      const createAtMatch = artHtml.match(/createAt:"([^"]+)"/);
+      const updateAtMatch = artHtml.match(/updateAt:"([^"]+)"/);
       const createdAt = createAtMatch ? createAtMatch[1] : new Date().toISOString();
       const publishedAt = updateAtMatch ? updateAtMatch[1] : createdAt;
 
