@@ -10,3 +10,5 @@ drafts/*/images/
 published/*/images/
 drafts/*/videos/
 published/*/videos/
+__pycache__/
+*.pyc
