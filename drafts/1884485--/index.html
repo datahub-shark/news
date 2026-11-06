@@ -1,18 +1,14 @@
 <!-- METADATA
-Tiêu đề: 西安交通大学-笃行战队
+Tiêu đề: 低成本带串口无控镖电源板 mã nguồn mở & bản vẽ 】西安交通大学-笃行
 Chuyên mục: Cơ khí
-Tác giả: 通讯信息 1459054506
+Tác giả: Cộng đồng RoboMaster
 Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e1458d6b97224a49bba3f24a91b0b4211780644994279/image.png
 Nguồn: https://bbs.robomaster.com/article/1884485
 Tên nguồn: RoboMaster BBS
 Tóm tắt: <p26赛季我们选择上的是全制导的阵容，因此将这块我认为比较好用的无控电源板开源一下</p<p26赛季飞镖触发装置2可以通过一个半双工串口进行阵营的设置以及镖头状态的查询。但是实际使用上，只需要进行阵营的设置，也没有接收镖头返回信息的需求（有没有设置成功我看一眼不就知道了doge）因此为了简化电路不使用半双工串口，只使用串口发送功能。</p<p25赛季飞镖电源板使用ip5306作为充放电管理芯片（过于经典就不赘述了），26赛季针对飞镖头的串口在其基础上增加一个不到1块钱的STC8G1K08A完成串口发送功能，通过一个双刀三掷开关，一路控制是否上电，一路控制发送红方或者蓝方颜色设置的指令。（即向
 Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 西安交通大学-笃行战队. Ứng dụng trong phân mảng Cơ khí.
-Tệp đính kèm: darttrigger.hex (Cục bộ - 0.00 MB), main.c (Cục bộ - 0.00 MB), tai-nguyen.epro2 (Cục bộ - 0.11 MB)
-Trạng thái: DRAFT
-HƯỚNG DẪN: 
-- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
-- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
-- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+Tệp đính kèm: darttrigger.hex, main.c, tai-nguyen.epro2
+Trạng thái: READY
 -->
 
 <article class="robot-ideas-article">

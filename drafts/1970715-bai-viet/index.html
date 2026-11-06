@@ -1,18 +1,14 @@
 <!-- METADATA
-Tiêu đề: 仿人形七轴机械臂重力补偿算法详细推导
+Tiêu đề: RM2026 北京理工大学 嵌入式/控制方向】Thuật toán bù trọng lực chi tiết cánh tay robot 7-DOF · ĐH Bách khoa Bắc Kinh (BIT DreamChaser)
 Chuyên mục: Thị giác máy
-Tác giả: 通讯信息 微信：Nomad1191023
+Tác giả: Nomad1191023
 Ảnh bìa: 
 Nguồn: https://bbs.robomaster.com/article/1970715
 Tên nguồn: RoboMaster BBS
 Tóm tắt: <p<br</p<h21. 简介</h2<p 本文是<a href="https://bbs.robomaster.com/article/1941628?source=8" target=""《仿人形七轴双臂机械臂控制技术开源》</a的补充，围绕其中的重力补偿方案，进一步说明 MDH 坐标系、质量与质心参数、势能求导以及七轴补偿力矩的计算过程。</p<p 原技术方案是建立在一定的质心分布假设下，将机械臂简化为上臂、前臂和末端三段等效质量。这种处理可以减少公式规模，但需要机械结构满足相应条件。当关节模组、连接件或末端负载的质心偏离假设位置时，
 Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 仿人形七轴机械臂重力补偿算法详细推导. Ứng dụng trong phân mảng Thị giác máy.
 Tệp đính kèm: Không có
-Trạng thái: DRAFT
-HƯỚNG DẪN: 
-- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
-- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
-- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+Trạng thái: READY
 -->
 
 <article class="robot-ideas-article">
