@@ -59,6 +59,7 @@ function adminApi(action,payload){payload=payload||{};try{
  if(action==='saveSource')return locked_(()=>saveSource_(payload.source||{}));
  if(action==='save')return locked_(()=>save_(payload));
  if(action==='importFeeds'){const count=importFeeds_();return {ok:true,count};}
+ if(action==='shareDrive')return locked_(()=>({ok:true,count:shareArticlesFolder_()}));
  throw Error('Thao tác không hợp lệ.');
  }catch(e){return {ok:false,error:e.message,code:e.code||'REQUEST_FAILED'};}}
 function clean_(value,max){if(typeof value!=='string')return '';return value.trim().slice(0,max);}
@@ -93,6 +94,7 @@ function save_(payload){
  if(existing)sheet_('Articles').getRange(existing.row,1,1,2).setValues([[text_(article.id),encoded]]);else sheet_('Articles').appendRow([text_(article.id),encoded]);
  }catch(e){try{file.setTrashed(true);}catch(cleanupError){console.warn(cleanupError);}throw e;}
  try{sheet_('Audit').appendRow([now,status,text_(article.id)]);}catch(e){console.warn('Audit: '+e.message);}
+ try{autoShareDriveLinks_(html+' '+(input.robotIdea||'')+' '+(input.summary||''));}catch(e){console.warn('Auto share: '+e.message);}
  return {ok:true,article:{...article,html}};
 }
 function strip_(html){return String(html||'').replace(/<[^>]*>/g,' ').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/\s+/g,' ').trim();}
@@ -107,3 +109,6 @@ function importFeeds_(){return locked_(()=>{
 });}
 function scheduledImport_(){return importFeeds_();}
 function installImportTrigger_(){ScriptApp.getProjectTriggers().filter(t=>t.getHandlerFunction()==='scheduledImport_').forEach(t=>ScriptApp.deleteTrigger(t));ScriptApp.newTrigger('scheduledImport_').timeBased().everyHours(6).create();}
+function shareArticlesFolder_(){let count=0;try{const folders=DriveApp.getFoldersByName('Robot Ideas Articles');while(folders.hasNext()){count+=makePublicRecursively_(folders.next());}}catch(e){console.warn('Share articles folder: '+e.message);}return count;}
+function makePublicRecursively_(folder){let count=0;try{folder.setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW);}catch(e){}try{const files=folder.getFiles();while(files.hasNext()){const f=files.next();try{f.setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW);count++;}catch(e){}}}catch(e){}try{const subs=folder.getFolders();while(subs.hasNext()){count+=makePublicRecursively_(subs.next());}}catch(e){}return count;}
+function autoShareDriveLinks_(text){if(!text||typeof text!=='string')return 0;let count=0;const fileMatches=[...text.matchAll(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_\-]+)/gi)].map(m=>m[1]);const folderMatches=[...text.matchAll(/drive\.google\.com\/drive\/(?:u\/\d+\/)?folders\/([a-zA-Z0-9_\-]+)/gi)].map(m=>m[1]);const allIds=[...new Set([...fileMatches,...folderMatches])];for(const id of allIds){try{DriveApp.getFileById(id).setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW);count++;}catch(e){try{DriveApp.getFolderById(id).setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW);count++;}catch(e2){}}}return count;}
