@@ -1,0 +1,129 @@
+<!-- METADATA
+Tiêu đề: 华南理工大学华南虎战队
+Chuyên mục: Cơ khí
+Tác giả: 胡宇桥.
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/0282b42fd63f40aea54ca1e081e103091787473209454/20260823-094334.jpg
+Nguồn: https://bbs.robomaster.com/article/1941689
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <h11.摘要</h1<p本项目为 RoboMaster 2026 比赛设计了反无人机完整项目，旨在实现在<strong远距离</strong下实现<strong低误差</strong的跟踪空中无人机上的激光模块。为此，我们精心设计了一套激光共轴方案的机械结构和“所见即所得”的下位机主导的算法方案，实现了<strong上位机视觉测量 + 下位机 1 kHz 电流闭环</strong的视觉伺服方案，且我们进行了控制理论的详细分析，而非盲目的调参。我们训练了一款识别准，泛化性强的yolo模型，并进行了量化部署，实现了低延迟，这是我们算法方案的基石。 </p<p style="tet-a
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 华南理工大学华南虎战队. Ứng dụng trong phân mảng Cơ khí.
+Tệp đính kèm: bai-viet-tai-nguyen.pdf (Cục bộ - 2.29 MB), bai-viet-tai-nguyen.step (Cục bộ - 20.54 MB)
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>华南理工大学华南虎战队</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1941689" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 胡宇桥.</p>
+    <p><strong>Chuyên mục:</strong> Cơ khí</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/0282b42fd63f40aea54ca1e081e103091787473209454/20260823-094334.jpg" alt="华南理工大学华南虎战队" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
+    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
+    <ul style="margin-bottom:0;">
+      <li><a href="./attachments/bai-viet-tai-nguyen.pdf" target="_blank"><strong>bai-viet-tai-nguyen.pdf</strong></a> (📁 Đã tải trong thư mục attachments/ - 2.29 MB)</li>
+      <li><a href="./attachments/bai-viet-tai-nguyen.step" target="_blank"><strong>bai-viet-tai-nguyen.step</strong></a> (📁 Đã tải trong thư mục attachments/ - 20.54 MB)</li>
+    </ul>
+  </div>
+  <hr>
+  <div class="article-body">
+<h1>1.摘要</h1><p>本项目为 RoboMaster 2026 比赛设计了反无人机完整项目，旨在实现在<strong>远距离</strong>下实现<strong>低误差</strong>的跟踪空中无人机上的激光模块。为此，我们精心设计了一套激光共轴方案的机械结构和“所见即所得”的下位机主导的算法方案，实现了<strong>上位机视觉测量 + 下位机 1 kHz 电流闭环</strong>的视觉伺服方案，且我们进行了控制理论的详细分析，而非盲目的调参。我们训练了一款识别准，泛化性强的yolo模型，并进行了量化部署，实现了低延迟，这是我们算法方案的基石。 &nbsp;</p><p style="text-align: center;"><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/0282b42fd63f40aea54ca1e081e103091787473209454/20260823-094334.jpg" alt="20260823-094334.jpg" data-href="" data-file-md5="cff8e764d34bd034e936c65a1797c2f7" data-file-len="20428" style=""> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </p><h1>2.效果展示</h1><h2>2.1.线下调试效果</h2><p>由慢到快，在无论低频高频的移动中，在光线很暗的情况下，识别准确，跟踪稳定</p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="3ef3f74117cbe2d92b420be1532dae5d" data-file-len="7270878" data-file-name="2026-07-15 17-31-16_40s-60s.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/d70f8e6a851b4e2d85a731fd5e9439581787451449139/2026-07-15 17-31-16_40s-60s.mp4" type="video/mp4"/></video>
+</div><p><br></p><h2>2.2.赛中跟踪效果</h2><p>我们实现了<strong>稳定的五阶段反制</strong>，不仅在低亮度下识别很稳定，也在小电脑<strong>纯CPU运算平台实现了极低的推理延迟</strong>。这是我们后续控制算法的基石。</p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="933250f1f55940754443c33a3b38bf01" data-file-len="8592043" data-file-name="cuas_20260807_205859_gamma06_first35s.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/24b73d6e938046dfa56247dd8d11e8381787390256971/cuas_20260807_205859_gamma06_first35s.mp4" type="video/mp4"/></video>
+</div><p><br></p><h2>2.3.成绩</h2><p>在全国赛中，我们的反无人机能够在适应性训练开始稳定的反制空中机器人五阶段。不过因为形变，在一场比赛中没有进行反制，最终在全国赛排名第五（除明星赛队伍），并参加了全明星赛的第二局。</p><p style="text-align: center;"><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/4928f21ba5e1469ba47b2c820db21efd1787389816657/20260822-170959.jpg" alt="20260822-170959.jpg" data-href="" data-file-md5="04e40128adaf5181f7212856c1f4a622" data-file-len="44039" style="width: 479.33px;height: 288.95px;"></p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e5e5fedb557942b6b1686eb82b0b50001787388976661/image.png" alt="image.png" data-href="" data-file-md5="f060bbcd918d618df2d7964712579784" data-file-len="123812" style=""/></p><h1>3.需求分析和方案开源</h1><p>分析整个项目任务的核心，本质是在<strong>远距离</strong>下实现<strong>低误差</strong>的跟踪，因此整个项目设计聚焦于两件事：</p><p>•<strong>如何在远距离下稳定的识别</strong></p><p>•<strong>如何使用控制精度不够的电机下在远距离的情况下实现低误差抖动的跟踪</strong></p><p>因此，我们设计了一套符合实际需求和开发情况的机械结构和算法，后续的算法介绍也会围绕这两点进行介绍。</p><h2>3.1.机械结构</h2><p>参考北京工业大学的赛季初开源方案<span id="referenceDom-1" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/1941689/1941689/1883343/1" data-order="1">[1]</span>，我们根据自己的想法，设计了光心与激光<strong>共轴</strong>的机械结构，且能实现先追踪无人机，再追踪激光模块的双阶段方案。经过我们的分析，因为分光镜会导致光线强度的大幅减弱，我们也采用了<strong>二向色镜</strong>进行反射官方规则要求内的激光，实现大致共轴。</p><p style="text-align: center;"><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c1d3b11e35084efaa382e3ba3cba6b531787472262619/c03eae6ab36a95cf11b9c90596c22122.png" alt="c03eae6ab36a95cf11b9c90596c22122.png" data-href="" data-file-md5="f932bfc0e552fca8d1487ce422e3f999" data-file-len="119461" style="width: 585.00px;height: 572.83px;"> </p><p> </p><h2>3.2.算法设计</h2><h3>3.2.1.算法开源文档</h3><p>请参考我们详细的开源报告了解更多。包括了完整的模型设计和控制律，以及虚拟调参。</p><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/ffc0729872704698ac8c4b783f70bd401787471536467/华南虎反无人机算法开源报告.pdf" data-file-name="华南虎反无人机算法开源报告.pdf" data-file-md5="584c6f19c9ed57dd25a5bdb751d14087" data-file-len="2396011" data-file-key="1787471378450-2396011-华南虎反无人机算法开源报告.pdf-l5p6NEedEM83FzqIN36Jt" data-file-state="uploadSuccess">华南虎反无人机算法开源报告.pdf</a></p><h3>3.2.2.可视化理解</h3><p><strong>系统架构图</strong></p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c6321132a1364dc5acc1d2b56c6588781787454280032/cuas-architecture.png" alt="cuas-architecture.png" data-href="" data-file-md5="e31aa1fd56ddf2b1ce8f5418dd9783e6" data-file-len="1234708" style=""/></p><p><strong>数据流图</strong></p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/2ba71684124a41a090967c8f6a76abfe1787454334266/cuas-dataflow.png" alt="cuas-dataflow.png" data-href="" data-file-md5="d37a4f7d18125b0aab2ec51aee096245" data-file-len="1183818" style=""/></p><h3>3.2.3.文件架构</h3><pre><code class="language-markdown">CUAS/
+├── README.md
+├── LICENSE                         # MIT
+├── cuas-host                       # x86 上位机
+│ ├── CMakeLists.txt                
+│ ├── app                           # 顶层编排
+│ │ ├── main.cpp                    # 主程序入口
+│ │ ├── include
+│ │ │ └── CuasApp.h                 # 应用接口
+│ │ ├── src
+│ │ │ └── CuasApp.cpp               # 感知线程、组包、内录
+│ │ └── crosshair_calibration.cpp   # 准心标定工具
+│ ├── common                        # 公共配置
+│ │ └── core
+│ │ ├── include
+│ │ │ └── Config.h                  # 配置结构
+│ │ └── src
+│ │ └── Config.cpp                  # YAML 装载
+│ ├── io                            # 硬件接入
+│ │ ├── camera                      # 相机取流
+│ │ │ ├── include
+│ │ │ │ ├── Frame.h                 # 一帧图像与时间戳
+│ │ │ │ └── FrameSource.h           # 最新帧信箱
+│ │ │ └── src
+│ │ │ ├── FrameSource.cpp           # 取流循环
+│ │ │ ├── hik
+│ │ │ │ └── camera_hik.cpp          # 海康 MVS
+│ │ │ └── camera_stub.cpp           # 无 SDK 空壳
+│ │ └── gimbal                      # 云台串口
+│ │ ├── include
+│ │ │ ├── Gimbal.h                  # 视觉帧
+│ │ │ └── Crc.h                     # CRC
+│ │ └── src
+│ │ └── Gimbal.cpp                  # 发测量、收遥测
+│ ├── modules
+│ │ └── vision                      # 检测与跟踪
+│ │ ├── include
+│ │ │ ├── Detector.h                # YOLO 检测接口
+│ │ │ ├── Tracker.h                 # 单目标跟踪
+│ │ │ └── VisionMeasBuilder.h       # 像素转角、组包
+│ │ └── src
+│ │ ├── Detector.cpp                # OpenVINO 推理
+│ │ └── Tracker.cpp                 # 关联与丢锁
+│ ├── config
+│ │ ├── cuas.yaml.example           # 配置模板
+│ ├── models                        # 权重说明
+│ └── datasets                      # 量化校准说明
+└── cuas-fw                         # STM32F405 固件
+ ├── CMakeLists.txt                 # 固件构建入口
+ ├── cmake
+ │ └── arm-none-eabi.cmake          # 交叉编译工具链
+ ├── app                            # 1 kHz 控制组装
+ │ ├── control_tick.h               # ControlTick 接口
+ │ └── control_tick.cpp             # 解包、ESKF、模式机、烧录默认
+ ├── control                        # 控制律
+ │ ├── eskf.h                       # 误差态 KF 接口
+ │ ├── eskf.cpp                     # 回退重放
+ │ ├── axis_controller.h            # 轴环接口
+ │ ├── axis_controller.cpp          # 位置/速度/摩擦装箱
+ │ ├── scan_pattern.h               # 扫描图案接口
+ │ ├── scan_pattern.cpp             # 螺旋/光栅
+ │ └── fmath.h                      # wrap、限幅
+ ├── comm                           # 视觉协议
+ │ ├── protocol.h                   # 结构体
+ │ ├── pc_vision.h                  # 解包接口
+ │ └── pc_vision.cpp                # 解包、CRC、遥测
+ ├── USP                            # 硬件胶水
+ │ ├── Application
+ │ │ ├── cuas_gimbal.h              # 电机/串口对接
+ │ │ ├── cuas_gimbal.cpp            # PLL、陀螺、CAN、调参表
+ │ │ ├── Service_Communication.cpp  # CAN/UART 任务
+ │ │ ├── Service_Device.cpp         # IMU 轮询
+ │ │ ├── Service_Debug.cpp          # VOFA 波形
+ │ │ ├── System_Config.cpp          # 任务创建
+ │ │ └── System_DataPool.cpp        # 电机对象
+ │ ├── app.h                        # USP 入口
+ │ ├── internal.h                   # 栈与优先级
+ │ └── srml_config.h                # 打开电机/IMU 模块
+ ├── Core                           # CubeMX：时钟、GPIO、CAN、UART
+ ├── Drivers                        # STM32 HAL / CMSIS
+ ├── Middlewares                    # FreeRTOS
+ ├── SRML                           
+ ├── flash.sh                       # OpenOCD 烧录
+ ├── openocd.cfg                    # OpenOCD 配置
+ ├── startup_stm32f405xx.s          # 启动文件
+ └── STM32F405RGTX_FLASH.ld         # 链接脚本</code></pre><h1>开源地址</h1><p>这是我们项目仓库的开源链接： <a href="https://github.com/TheDude-Nio/CUAS" target="_blank">https://github.com/TheDude-Nio/CUAS</a> </p><p>这是我们的机械结构开源：<a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/8677b6d8af754ada8d3a11e8ee704dda1787472823001/雷达云台.STEP" data-file-name="雷达云台.STEP" data-file-md5="178bb910e1b96e2055eae76dfaacf6df" data-file-len="21542489" data-file-key="1787472816159-21542489-雷达云台.STEP-NxBPfAv8lMnxKxm7FSqGt" data-file-state="uploadSuccess">雷达云台.STEP</a></p><h1>联系方式</h1><p>邮箱：nio777132@gmail.com</p><p>微信：Ra9nio666</p><h1>致谢</h1><p>本研究的完成离不开众多个人与团队的无私支持与贡献。首先感谢<strong>华南虎的队员</strong>，一直默默帮助我焊板子，为了雷达站上场还焊了两根5m的电源线。其次感谢在数据集上对我们无私提供的学校：<strong>华北理工大学</strong>，<strong>东北大学</strong>，<strong>西安电子科技大学</strong>。华北理工大学给我们无私的提供了数据集，东北大学和西安电子科技大学给我们提供了比赛内录，没有他们的帮助本项目的识别模型不可能这么完整和泛化性强。感谢<strong>北京工业大学</strong>的共轴机械方案，提供了宝贵的思路。<br><br>我们还要向所有公开分享技术的 RM 战队致以崇高敬意，我们从他们的杰出工作中汲取了丰富的灵感与经验。最后，感谢 RoboMaster 官方平台提供的比赛与数据支持。</p><h1></h1><p><br></p><p><br></p>
+  </div>
+</article>

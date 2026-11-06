@@ -1,0 +1,30 @@
+<!-- METADATA
+Tiêu đề: 仿人形七轴机械臂重力补偿算法详细推导
+Chuyên mục: Thị giác máy
+Tác giả: 通讯信息 微信：Nomad1191023
+Ảnh bìa: 
+Nguồn: https://bbs.robomaster.com/article/1970715
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p<br</p<h21. 简介</h2<p 本文是<a href="https://bbs.robomaster.com/article/1941628?source=8" target=""《仿人形七轴双臂机械臂控制技术开源》</a的补充，围绕其中的重力补偿方案，进一步说明 MDH 坐标系、质量与质心参数、势能求导以及七轴补偿力矩的计算过程。</p<p 原技术方案是建立在一定的质心分布假设下，将机械臂简化为上臂、前臂和末端三段等效质量。这种处理可以减少公式规模，但需要机械结构满足相应条件。当关节模组、连接件或末端负载的质心偏离假设位置时，
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 仿人形七轴机械臂重力补偿算法详细推导. Ứng dụng trong phân mảng Thị giác máy.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>仿人形七轴机械臂重力补偿算法详细推导</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1970715" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 通讯信息 微信：Nomad1191023</p>
+    <p><strong>Chuyên mục:</strong> Thị giác máy</p>
+  </div>
+  
+  
+  <hr>
+  <div class="article-body">
+<p><br></p><h2>1. 简介</h2><p> &nbsp; &nbsp;本文是<a href="https://bbs.robomaster.com/article/1941628?source=8" target="">《仿人形七轴双臂机械臂控制技术开源》</a>的补充，围绕其中的重力补偿方案，进一步说明 MDH 坐标系、质量与质心参数、势能求导以及七轴补偿力矩的计算过程。</p><p> &nbsp; &nbsp;原技术方案是建立在一定的质心分布假设下，将机械臂简化为上臂、前臂和末端三段等效质量。这种处理可以减少公式规模，但需要机械结构满足相应条件。当关节模组、连接件或末端负载的质心偏离假设位置时，需要逐组保留质量及完整的三维质心参数，重新计算各关节的重力贡献。</p><p> &nbsp; &nbsp;本次补充主要围绕以下内容展开：</p><ol><li><strong>明确简化模型的适用条件</strong>：说明哪些质量可以合并、哪些势能项可以省略，以及这些处理成立的前提。</li><li><strong>统一建模与参数表达</strong>：对应工程关节编号、MDH 输出坐标系和质心测量坐标系，说明固定角偏置与质心坐标转换。</li><li><strong>补齐计算与推导过程</strong>：从各组质心位置出发，推导总势能、七轴补偿力矩及递推形式，并给出详细的标量展开结果。</li></ol><p> &nbsp; &nbsp;本帖介绍主要思路与实现时需要注意的问题，完整矩阵计算和长公式见下方技术文档。</p><h2>2. 详细技术文档</h2><p> &nbsp; &nbsp;本次内容由一篇说明页和两篇详细推导组成：</p><table data-new-ship='yes' data-font-node='' data-topic='' style="width: 100%;table-layout: fixed;height:0"><colgroup contentEditable="false"><col width=90></col><col width=90></col></colgroup><tbody><tr><th colSpan="1" rowSpan="1" width="auto" style="">文档</th><th colSpan="1" rowSpan="1" width="auto" style="">主要内容</th></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);"><a href="https://my.feishu.cn/wiki/GhwrwC7Szi21pkk1IrtcVzrsn4c?fromScene=spaceOverview" target="">7轴机械臂重力补偿详细推导</a></td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">说明原三段等效质量模型的前置假设，以及采用逐组刚体建模的原因。</td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);"><a href="https://my.feishu.cn/wiki/FpTRw799Hijt1jkZ9DdcUMGBnQh?fromScene=spaceOverview" target="">7轴机械臂重力补偿：MDH 坐标系、质心与力矩推导</a></td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">建立坐标系与质量归属，推导质心位置、势能梯度、力臂形式和递推计算方法。</td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);"><a href="https://my.feishu.cn/wiki/ZHP6wjct5iIE14kspvpccIm5n7d?fromScene=spaceOverview" target="">7轴机械臂重力补偿：详细计算与全展开结果</a></td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">逐步代入 MDH 参数，给出累计变换、七组质心坐标、总势能及 J0～J6 补偿力矩的全展开结果。</td></tr></tbody></table><p> &nbsp; &nbsp;</p><h2>3. 主要补充内容</h2><h3>3.1 简化模型的适用条件</h3><p> &nbsp; &nbsp;原方案中的质量合并和省略，都依赖具体的质心位置。例如，质心位于固定肩中心的质量，其势能不随手臂关节角变化，可以省略对应的关节重力项；质心位于腕中心的质量，对穿过该点的腕部转轴不产生重力矩，但对肩、肘关节的贡献仍需保留。</p><p> &nbsp; &nbsp;当实际结构不满足这些条件时，应分别记录各活动刚体的质量和三维质心，并按运动链计算其影响。每份质量只计入一次，避免遗漏或重复计算。</p><h3>3.2 力矩推导与计算方法</h3><p> &nbsp; &nbsp;计算过程从各组质心在基座系中的位置开始，累加重力势能，再对各关节角求导，得到用于抵消重力的补偿力矩。</p><p> &nbsp; &nbsp;每个关节只累加受其带动的质量组，各组使用自己的质心力臂。例如，J3 考虑第 4～7 组质量，J6 只考虑第 7 组。</p><p> &nbsp; &nbsp;文档同时给出了递推形式：从基座向末端传递重力参考方向，再从末端向基座累积下游质量与一阶质量矩，计算七轴补偿力矩。左右臂安装方向不同，或腰部姿态变化时，通过更新各自基座系中的重力方向，沿用同一套计算方法。</p><h2>4. 声明与致谢</h2><p> &nbsp; &nbsp;本次补充文档属于北京理工大学 DreamChaser 追梦战队仿人形七轴双臂机械臂开源项目，项目归属及使用说明沿用原帖，内容用于技术交流。</p><p> &nbsp; &nbsp;感谢参与机械设计、电控开发、算法实现和整机联调的同学。欢迎对文档中的建模、推导和实现细节提出意见，也欢迎交流不同机械结构下的应用情况。</p>
+  </div>
+</article>

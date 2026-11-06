@@ -1,0 +1,40 @@
+<!-- METADATA
+Tiêu đề: 轮腿英雄机器人机械结构开源
+Chuyên mục: Cơ khí
+Tác giả: 穷鬼.
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/090af03300114c6a818e80dbcdc4410e1787454013109/image.png
+Nguồn: https://bbs.robomaster.com/article/1942003
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p </p<p<img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/090af03300114c6a818e80dbcdc4410e1787454013109/image.png" alt="image.png" data-href="" data-file-md5="6df3501c106894e758a234ac980285c7" data-file-len="821359" style=""/项目包含三个部分：三维模型、说明文档和效果展示。</p<p<br</p<p26赛季的规则要求英雄必须在近战和远程里二选
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 轮腿英雄机器人机械结构开源. Ứng dụng trong phân mảng Cơ khí.
+Tệp đính kèm: bai-viet-tai-nguyen.zip (Trực tuyến - 412.0 MB), bai-viet-tai-nguyen.step (Trực tuyến - 316.3 MB)
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>轮腿英雄机器人机械结构开源</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1942003" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 穷鬼.</p>
+    <p><strong>Chuyên mục:</strong> Cơ khí</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/090af03300114c6a818e80dbcdc4410e1787454013109/image.png" alt="轮腿英雄机器人机械结构开源" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
+    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
+    <ul style="margin-bottom:0;">
+      <li><a href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c517edb7b78049f79106b1ccce884eb31787460102128/复旦大学星云EGA战队-轮腿英雄机器人机械结构开源.zip" target="_blank"><strong>bai-viet-tai-nguyen.zip</strong></a> (🌐 Link tải trực tiếp - 412.0 MB)</li>
+      <li><a href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/83bc7f8654d5427cbfeaab4c547a3b0d1788172692239/轮腿英雄总装-26国赛版.STEP" target="_blank"><strong>bai-viet-tai-nguyen.step</strong></a> (🌐 Link tải trực tiếp - 316.3 MB)</li>
+    </ul>
+  </div>
+  <hr>
+  <div class="article-body">
+<p> </p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/090af03300114c6a818e80dbcdc4410e1787454013109/image.png" alt="image.png" data-href="" data-file-md5="6df3501c106894e758a234ac980285c7" data-file-len="821359" style=""/>项目包含三个部分：三维模型、说明文档和效果展示。</p><p><br></p><p>26赛季的规则要求英雄必须在近战和远程里二选一，且部署致盲大大增加了吊射的难度。我队25赛季并未在英雄吊射上积累太多的研发经验（毕竟只打了3v3），因此经讨论我们决定all in近战英雄，具体路线为先做舵轮近战英雄作为联盟赛保底，在做舵雄的过程中积累调试经验，同时等待队内步兵组轮腿控制方案成熟，待轮腿控制方案解决后，再做腿雄作为UC主车。经过舵雄V1（联盟赛）、舵雄V2（区域赛主车，国赛备车），腿雄V1（区域赛备车），腿雄V2（国赛主车），最终经过不断的试错和迭代（以及对开源的大量参考）终于做出来了一台性能勉强达标的缝合怪腿雄。</p><p>不过诚实的讲，由于队伍本身技术积累经验较少，26赛季又因为研发方向错误、造车周期短等问题耽误了不少时间，因此这台英雄做的并不算好，对其他队伍的参考价值不高，射击准度和运动能力都和顶级队伍有不小的差距，对枪之类的事情基本上是不太对得过的，只能帮忙续续堡垒或者削一下基地血量这样子，急了也能打打吊射英雄。本来想着27赛季能够继续迭代优化，结果规则一出，英雄直接变成棍木机器人了，实在是非常难绷。因此，与其说是开源分享，不如说是用开源的方式纪念一下我队英雄组的朋友们这一年来的付出，让这台英雄机器人以压缩包的形式完成它在赛事历史中的最后一舞吧。</p><p>尽管这台英雄后续的参考价值并不太大（毕竟大家也不需要做英雄了呜呜呜），但是如果有想交流的问题，也请随时联络交流！</p><p> </p><h2>效果说明</h2><p>上台阶、飞坡、翻倒自救基本没问题。由于车身较重，电容不足时飞坡容易超功率。卡弹问题不太存在，但是三包胶轴承限位较松，上下台阶容易磕出弹丸。</p><p> </p><h2>开源文件</h2><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c517edb7b78049f79106b1ccce884eb31787460102128/复旦大学星云EGA战队-轮腿英雄机器人机械结构开源.zip" data-file-name="复旦大学星云EGA战队-轮腿英雄机器人机械结构开源.zip" data-file-md5="e22147f739324fea8df5556ae50dd8f1" data-file-len="431998546" data-file-key="1787458667529-431998546-复旦大学星云EGA战队-轮腿英雄机器人机械结构开源.zip-oCeQIAFHzQUvl5i4TYYMK" data-file-state="uploadSuccess">复旦大学星云EGA战队-轮腿英雄机器人机械结构开源.zip</a></p><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/83bc7f8654d5427cbfeaab4c547a3b0d1788172692239/轮腿英雄总装-26国赛版.STEP" data-file-name="轮腿英雄总装-26国赛版.STEP" data-file-md5="8070ec0ebb3e89e2f7e597858632e4b4" data-file-len="331705929" data-file-key="1788171966914-331705929-轮腿英雄总装-26国赛版.STEP-03zmJKpQwgY-KKiW5rGDp" data-file-state="uploadSuccess">轮腿英雄总装-26国赛版.STEP</a></p><p> </p><h2 style="text-align: start;">声明</h2><p style="text-align: start; line-height: 2;">1.本次开源项目出自复旦大学星云EGA战队，作品仅用于技术交流，未经作者允许，不得作任何商业用途。</p><p style="text-align: start; line-height: 2;">2.本次开源文件的最终解释权归复旦大学星云EGA战队所有。</p><p style="text-align: start; line-height: 2;">3.开源目的在于加强参赛队之间交流，有助于提高自身和其他参赛队的水平。</p><p> </p><h2>参考文献</h2><p>本方案着重参考了：</p><p><span id="referenceDom-1" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/1942003/1942003/716376/1" data-order="1">[1]</span></p><p><span id="referenceDom-2" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/1942003/1942003/1889466/2" data-order="2">[2]</span></p><p><span id="referenceDom-3" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/1942003/1942003/803691/3" data-order="3">[3]</span></p><p>河南科技大学鼎行双创减速箱开源：减速箱开源QQ群号：719665469</p><p>此外，也参考了：</p><p><span id="referenceDom-4" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/1942003/1942003/8480/4" data-order="4">[4]</span></p><p><span id="referenceDom-5" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/1942003/1942003/803686/5" data-order="5">[5]</span></p><p> </p><p>从这些开源中我们学到了非常多设计经验。在此表示衷心的感谢！</p><h2>通讯信息</h2><p>张安 QQ：892961012</p><p>叶昱辰 QQ：70833983</p><p>唐晓瑄 QQ：3922316924</p><p>欢迎交流！ </p><p> </p>
+  </div>
+</article>

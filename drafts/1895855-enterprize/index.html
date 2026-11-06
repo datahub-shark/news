@@ -1,0 +1,38 @@
+<!-- METADATA
+Tiêu đề: 香港科技大学ENTERPRIZE战队
+Chuyên mục: Cơ khí
+Tác giả: 通讯信息 18565805677
+Ảnh bìa: 
+Nguồn: https://bbs.robomaster.com/article/1895855
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <h21. 摘要</h2<pRoboMaster 2026 赛季工程机器人新增的能量单元装配任务，对操作手操控机械臂进行接近、插入、位移、翻转等装配操作提出了较高要求。该项目尝试在不替代操作手主导控制的前提下，引入上位机辅助算法，完成装配站视觉定位、接近规划、受约束动作段规划、恢复动作和整个方案的仿真验证。</p<h22. 技术报告</h2<p更完整的工程说明见技术报告：</p<p<a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-ha
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 香港科技大学ENTERPRIZE战队. Ứng dụng trong phân mảng Cơ khí.
+Tệp đính kèm: rm2026-engineer-assembly-algorithm.pdf (Cục bộ - 4.04 MB)
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>香港科技大学ENTERPRIZE战队</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1895855" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 通讯信息 18565805677</p>
+    <p><strong>Chuyên mục:</strong> Cơ khí</p>
+  </div>
+  
+  
+  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
+    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
+    <ul style="margin-bottom:0;">
+      <li><a href="./attachments/rm2026-engineer-assembly-algorithm.pdf" target="_blank"><strong>rm2026-engineer-assembly-algorithm.pdf</strong></a> (📁 Đã tải trong thư mục attachments/ - 4.04 MB)</li>
+    </ul>
+  </div>
+  <hr>
+  <div class="article-body">
+<h2>1. 摘要</h2><p>RoboMaster 2026 赛季工程机器人新增的能量单元装配任务，对操作手操控机械臂进行接近、插入、位移、翻转等装配操作提出了较高要求。该项目尝试在不替代操作手主导控制的前提下，引入上位机辅助算法，完成装配站视觉定位、接近规划、受约束动作段规划、恢复动作和整个方案的仿真验证。</p><h2>2. 技术报告</h2><p>更完整的工程说明见技术报告：</p><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/7215161b04e244e990db66a2604a53471782305635317/RM2026-Engineer-Assembly-Algorithm.pdf" data-file-name="RM2026-Engineer-Assembly-Algorithm.pdf" data-file-md5="591991a31e8893f5419c3b2350377fe7" data-file-len="4239379" data-file-key="1782231793465-4239379-RM2026-Engineer-Assembly-Algorithm.pdf-5D6NWhLAF18ocIhxZsJ4L" data-file-state="uploadSuccess">RM2026-Engineer-Assembly-Algorithm.pdf</a></p><h2>3. 资源链接</h2><ul><li>我们使用 <a href="https://github.com/hkustenterprize/RM2026-Engineer-Assembly-Algorithm" target="_blank">Github </a>来管理并且维护开源项目, 点击以查看该项目详细信息, 欢迎大家一起学习交流分享。</li><li>已经在 Huggingface 上发布公开<strong>全部</strong><a href="https://huggingface.co/datasets/hkustenterprize/RM26_engineer_exchange" target="_blank">数据集</a>和<a href="https://huggingface.co/hkustenterprize/RM26_engineer_exchange_model" target="_blank">模型权重</a>。</li><li><s>[TODO] 数据生成管线的发布。</s>已经发布至 Github。</li><li>[TO<s>DO] 整理实际工程代码并发布。</s>已经发布至 Github。</li></ul><h2>4. 比赛实际效果展示</h2><div data-w-e-type="video" data-w-e-is-void>
+<iframe class="iframe_video" src="https://player.bilibili.com/player.html?bvid=BV11fVB6WEj8" width="auto" height="auto"></iframe>
+</div><p><em>由于开发时间比较仓促, 实际上场代码优化不是特别好, 参数也并非最优, 在有些位姿条件下算轨迹算得比较慢</em></p><p><br></p><h2>5. 致谢与后记</h2><ul><li>感谢ENTRERPRIZE 26工程组全体成员的付出, 没有你们确保基本功能的稳定, 整套上位机方案也无从谈起。</li><li>额外感谢 Mickey 协助整理数据集与训练神经网络; 感谢 Somo 和 ztr 对科技核心的精心建模, 为仿真数据集的研发奠定了坚实的基础。</li></ul><p><u><em>由此</em></u><u>, </u><u><em>为我四年的 RM 生活画上一个令人回味的句号。</em></u></p><p><br></p><h2>6. 联系方式</h2><p>非常感谢各位对香港科技大学 ENTERPRIZE 战队开源项目的关注与支持，欢迎通过以下方式联系我们, <strong>强烈推荐</strong>加入官方开源交流QQ群：</p><p>• 作者邮箱/微信/QQ: zguobd@connect.ust.hk/guozilin200429/1993286991 <span style="color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); font-size: 16px;"><u><em><strong>(</strong></em></u></span><span style="color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); font-size: 16px;"><em><strong>添加联系方式请备注 </strong></em></span><span style="color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); font-size: 16px;"><u><em><strong>姓名 学校 战队</strong></em></u></span><span style="color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); font-size: 16px;"><em><strong>)</strong></em></span></p><p>•<strong> </strong>战队交流QQ群: 581184202<em> </em><em><strong>(进群请备注 </strong></em><span style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-size: 14px;"><u><em><strong>学校/队名/职务</strong></em></u></span><span style="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); font-size: 14px;"><em><strong> 等身份信息)</strong></em></span></p><p>• 战队微信公众号: HKUST ENTERPRIZE (ID: gh_855d709c046e)</p><p>• 战队Bilibili官号: 港科大ENTERPRIZE战队 (UID: 634988052)</p><p>若您在机器人设计过程中受益于我们的项目，恳请在<strong>开源引用中注明我们的项目来源</strong>, 同时希望能够star⭐⭐我们 Github 项目❤️❤️。你们的支持是我们不断前行的动力。让我们携手共建一个鼓励<strong>创新、协作与超越</strong>的 RM 开源生态。</p>
+  </div>
+</article>

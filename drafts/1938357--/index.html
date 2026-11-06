@@ -1,0 +1,39 @@
+<!-- METADATA
+Tiêu đề: 仲恺农业工程学院-奇点战队
+Chuyên mục: Thị giác máy
+Tác giả: Radiance.
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/3b17296695cb434e9f03185bfe3ab59a1786631549232/MXeebHauiodekmx3GodcV0TUnOc
+Nguồn: https://bbs.robomaster.com/article/1938357
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <blockquote一支传统弱队前进的一小步</blockquote<p开源仓库：https://github.com/NOMANE-0/QD_Vision2026</p<p开源知识库：https://nomane-0.github.io/QD_Algorithm_Library/</p<h1项目介绍</h1<p该开源基于中南大学FYT战队24赛季自瞄开源。以下的差异均基于该开源。本项目的亮点在于搭建了一套量化调车准则，不再局限于虾调参</p<ul<li在保留大致框架的情况下重写了 armor_solver </li<ul<li移植了上海交通大学交龙战队24年开源 <a href="http
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 仲恺农业工程学院-奇点战队. Ứng dụng trong phân mảng Thị giác máy.
+Tệp đính kèm: tai-nguyen.pdf (Cục bộ - 5.67 MB)
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>仲恺农业工程学院-奇点战队</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1938357" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> Radiance.</p>
+    <p><strong>Chuyên mục:</strong> Thị giác máy</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/3b17296695cb434e9f03185bfe3ab59a1786631549232/MXeebHauiodekmx3GodcV0TUnOc" alt="仲恺农业工程学院-奇点战队" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
+    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
+    <ul style="margin-bottom:0;">
+      <li><a href="./attachments/tai-nguyen.pdf" target="_blank"><strong>tai-nguyen.pdf</strong></a> (📁 Đã tải trong thư mục attachments/ - 5.67 MB)</li>
+    </ul>
+  </div>
+  <hr>
+  <div class="article-body">
+<blockquote>一支传统弱队前进的一小步</blockquote><p>开源仓库：https://github.com/NOMANE-0/QD_Vision2026</p><p>开源知识库：https://nomane-0.github.io/QD_Algorithm_Library/</p><h1>项目介绍</h1><p>该开源基于中南大学FYT战队24赛季自瞄开源。以下的差异均基于该开源。本项目的亮点在于搭建了一套量化调车准则，不再局限于虾调参</p><ul><li>在保留大致框架的情况下重写了 armor_solver </li><ul><li>移植了上海交通大学交龙战队24年开源 <a href="https://github.com/julyfun/rm.cv.fans" target="_blank">rm.cv.fan</a> 的大部分算法设计（预测选板、降自由度求Yaw、重力补偿）</li><li>修改了整车模型以适配新前哨站</li><li>Matcher 改用马氏距离匹配</li><li>EKF 的 Q、R矩阵改用同济大学SuperPower战队25年开源里的</li></ul><li>改用单例模式部分代替 ROS 传输数据（图像传输链路部分）</li><li>加入了动态 MCAP 录包，避免没识别到目标一直记录无用数据</li><li>加入双摄像头共头逻辑，实现近处低焦距，远处高焦距打</li><li>使用深大开源的神经网络模型</li></ul><p><br></p><h1>项目成绩</h1><p>除了在区域赛时表现优异的哨兵外，其他时候的步哨均有20-29%的局均命中率，最高40%。<s>其实并不优秀，命中率不达预期</s></p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/3b17296695cb434e9f03185bfe3ab59a1786631549232/MXeebHauiodekmx3GodcV0TUnOc" alt="Image" data-href="" data-file-md5="" data-file-len="" style=""/></p><h1>什么人适合</h1><ul><li>没有一块好的标定板做手眼标定来调济瞄</li><li>留恋 rv 框架，想继续用 ROS2</li><li>想学习 rm.cv.fan 但苦于看不懂</li></ul><h1>2.7.3 经验总结</h1><p>由于在算法设计上我们并没有做出新颖的设计，取而代之地是我们对细节，对算法设计的深度理解，我认为这也是我们能做出优异自瞄的原因</p><p><br></p><p>算法组是建立在机械和嵌入式二者基础之上的，二者做不好也就没算法的事了。</p><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/d8f3647fd5544213963bb9b22b5993d01786631553756/UUsdb82T3o6PM9xVekPckh7Mn5c/自瞄指导书-机械、电控、操作手V1.0.pdf" data-file-name="自瞄指导书-机械、电控、操作手V1.0.pdf" data-file-md5="8dab182b005de0cb47d45ce11b4fe3a8" data-file-len="5945501" data-file-key="d8f3647fd5544213963bb9b22b5993d01786631553756/UUsdb82T3o6PM9xVekPckh7Mn5c/自瞄指导书-机械、电控、操作手V1.0.pdf" data-file-state="uploadSuccess">自瞄指导书-机械、电控、操作手V1.0.pdf</a></p><p><br></p><p>具体的自瞄调试指南请参见我们的知识库。我们为了稳定调出自瞄开发了一套相机内外参调试工具以快速部署。</p><h1>未来发展</h1><p>该项目总体来说是很稚嫩的，仍有很多地方待完善</p><ul><li>完善自身车辆建模，最基本的枪管需要有一个专门的坐标系，接下去是Yaw、Pitch轴的单独建模，需要自己实现一套运动学解析</li><li>更好的调试手段，我们希望调自瞄不只是让视觉来调，而是让不懂的人也能像使用 APP 那样轻松部署，以防止断代带来的技术倒退</li><li>更低的调试损耗，在测试中我们发现图像传输的数据量是真的大。我们希望通过硬件编码视频和RTP推流来实现一套无线低延迟高帧率的图像调试方法（谁动调车底盘疯车的痛）</li><li>引入一套基准测试工具，用于判断自瞄理论效果</li></ul><h1>总结</h1><p>感觉自己有好多想说的，但最终却写得三言两语。回望过去，这份开源的水准不过 24 赛季的水平。25赛季有轨迹规划，26赛季有 uv 观测系。这无时不刻在告诉我们，我们只是一个追赶者。当别人在使用大臂的时候，我们还在研发传统的龙门架；当别人在研发串联腿的时候，我们才刚研发并联腿；当别人狗洞步兵爽完，研发折叠步兵时，我们才刚造出一台合格的过洞步兵；当别人雷达站玩到头时，我们才刚起步。我们一直在追赶，又一直落后一步</p><p>回望我的参赛史，一开始就接手自瞄，后面听了其他师兄的说法才知道我们这届是天崩开局。上一届打不好直接导致这届直接没经费了，甚至这届打不上超对就要面临战队解散的问题，人员流失导致传承也跟着断了。好在的是这届真是齐心一条（<s>管理层也没想到用户黏性这么大</s>），虽然最终的赛果并不太好，但在下赛季时大多核心队员都留下来做研发了（弱队是真需要大三老登来顶天）</p><p>在此十分感谢中南大学FYT战队开源 <a href="https://github.com/CSU-FYT-Vision/FYT2024_vision" target="_blank">fyt-2024</a>，这是我们在完整形态快结束时由于自研效果不好而紧急移植的，这份开源成功挽救了我们的自瞄得分。但在此也暴露了一个问题，自研不如抄开源，这或许是一件挺伤心的事情</p><h1>参考文献</h1><p><span id="referenceDom-1" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/1938357/1938357/19374/1" data-order="1">[1]</span><span id="referenceDom-2" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/1938357/1938357/54091/2" data-order="2">[2]</span><span id="referenceDom-4" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/2/1938357/1938357/null/4" data-order="4">[4]</span><span id="referenceDom-3" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/1938357/1938357/803315/3" data-order="3">[3]</span></p>
+  </div>
+</article>

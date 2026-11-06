@@ -1,0 +1,35 @@
+<!-- METADATA
+Tiêu đề: 北京理工大学 DreamChaser 战队
+Chuyên mục: Thị giác máy
+Tác giả: Fallengold.
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e54f957c33674cb3bd81b25d9e82be441787147989480/20260819-215823.jpg
+Nguồn: https://bbs.robomaster.com/article/1940784
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p 北部分区赛结束后，由于种种原因，我们正式启动了工程视觉的开发工作。在这两个月的开发历程中，我们不仅积累了许多宝贵的知识与经验，也得到了众多院校同学以及各开源项目的热心帮助。</p<p 正因如此，尽管目前的方案仍有诸多不完善之处，我们仍决定将这两个月的全部开发成果，以及国赛实战中积累的上场经验完整开源。我们希望这份工作能为 27 赛季重装组的同学们提供一些方案选型方面、技术路线方向的思路与参考，也希望以自己的成果，回馈 RoboMaster 开源社区。</p<h3<strong场上效果展示</strong</h3<p白色框UI为相机视野<
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 北京理工大学 DreamChaser 战队. Ứng dụng trong phân mảng Thị giác máy.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>北京理工大学 DreamChaser 战队</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1940784" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> Fallengold.</p>
+    <p><strong>Chuyên mục:</strong> Thị giác máy</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e54f957c33674cb3bd81b25d9e82be441787147989480/20260819-215823.jpg" alt="北京理工大学 DreamChaser 战队" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <hr>
+  <div class="article-body">
+<p> &nbsp; &nbsp;北部分区赛结束后，由于种种原因，我们正式启动了工程视觉的开发工作。在这两个月的开发历程中，我们不仅积累了许多宝贵的知识与经验，也得到了众多院校同学以及各开源项目的热心帮助。</p><p> &nbsp; &nbsp;正因如此，尽管目前的方案仍有诸多不完善之处，我们仍决定将这两个月的全部开发成果，以及国赛实战中积累的上场经验完整开源。我们希望这份工作能为 27 赛季重装组的同学们提供一些方案选型方面、技术路线方向的思路与参考，也希望以自己的成果，回馈 RoboMaster 开源社区。</p><h3><strong>场上效果展示</strong></h3><p>白色框UI为相机视野</p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="071e920ea0ba76f5d2a7c7f747f50a0f" data-file-len="14807327" data-file-name="上场效果.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/f9de1f6c914946229766d7ff702061761787151560950/上场效果.mp4" type="video/mp4"/></video>
+</div><h3><strong>方案选择历程</strong></h3><p style="text-align: start;"><strong>方案一：端到端方案（分区赛前）</strong></p><p style="text-align: start;">分区赛前，我们最初选择的是类似 EfficientPose 的端到端方案。但由于当时没有实体科技核心，我们既无法实际拍摄数据集，也无从验证想法的可行性。分区赛期间，在与其他学校的交流中，我们发现几乎没有队伍选择端到端路线。同时，我们在分区赛现场拍摄的数据集质量较差，而科技核心的制作工期又较长——端到端方案高度依赖数据集质量，这意味着一旦数据集拍摄效果不佳，我们将无法通过调整代码来挽回精度。综合考虑，我们放弃了端到端方案。</p><p style="text-align: start;"><strong>方案二：点云配准方案（分区赛后）</strong></p><p style="text-align: start;">分区赛后，通过与其他学校的交流，我们转向了「点云粗配准 + 精配准」的解算方案，目标是求解兑换柱中心的 6DoF 位姿。硬件选型上，我们选择了留形科技的 Odin1 作为图像与点云的采集相机。然而，在编写了半个月代码、Odin1 到货试用后，我们发现它在近距离下的点云质量非常差：经 ROI 裁剪出兑换柱范围并可视化后，兑换柱的点云几乎完全是噪声，无法通过聚类、几何约束等手段修复。此时已是 7 月 20 日左右，无论时间还是经费都不允许再更换其他深度相机。因此，我们不得不放弃点云方案。</p><p style="text-align: start;"><strong>方案三：关键点 + PnP 方案（最终上场方案）</strong></p><p style="text-align: start;">放弃点云方案后，我们注意到了港科大 Enterprize 战队的开源代码。他们使用合成数据训练出了一个能够提取科技核心整体 12 个关键点的神经网络。经过试用，我们认为效果非常理想，于是基于港科的开源权重，补全了从关键点到 PnP 解算、再到位姿转换的完整流程。测试结果达到预期，这一版方案最终成为国赛上场方案，并在 16 进 8 的最后一场比赛中发挥了实际作用。</p><h3><strong>算法说明</strong></h3><p> &nbsp; &nbsp;本次开源，我们开源了点云方案和pnp方案的全部代码，使用python编写。</p><p> &nbsp; &nbsp;具体技术细节过于冗长，且需要结合代码观看，因此，我们将其放在各个代码仓库的README，注释中，不在此处详叙。如果有任何疑问和想法，欢迎随时与我们沟通、交流。</p><p> &nbsp; &nbsp; &nbsp; &nbsp;<a href="https://github.com/zz17360039377-sys/BIT_RM_eng_vision_odin" target="_blank">点云方案代码仓库</a> &nbsp; &nbsp; &nbsp; &nbsp; </p><p> &nbsp; &nbsp; &nbsp; &nbsp;<a href="https://github.com/luvlife4/BIT_RM_eng_vision " target="_blank">pnp方案代码仓库</a> &nbsp;<span id="referenceDom-1" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/1895855/1" data-order="1">[1]</span></p><h4> &nbsp;1.方案一 pipeline</h4><p> &nbsp; &nbsp;相机图像 → YOLO 2D 检测得到 ROI → 按 ROI 裁剪 Odin 点云 → FPFH 特征匹配加 RANSAC 粗配准 → Point-to-Plane ICP 精配准 → 配准结果取逆后经 TF 广播转换位姿 → 串口发送位姿到下位机。</p><h4> &nbsp;2.方案二 pipeline</h4><p> &nbsp; &nbsp;相机图像 → 关键点神经网络回归 12 个关键点 → 关键点筛选，12 点筛到 11 点 → RANSAC PnP 解算 → 滑动窗口滤波 → 相机系位姿经标定矩阵变换到车体系 → 串口发送位姿到下位机</p><h4><strong>对比与选型结论</strong></h4><h5>1. 对比</h5><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e54f957c33674cb3bd81b25d9e82be441787147989480/20260819-215823.jpg" alt="20260819-215823.jpg" data-href="" data-file-md5="4230ebc2eb568765dcccae3f4d1b3249" data-file-len="116496" style=""/></p><h5>2. 选型结论</h5><p>方案二并没有理论上更优，而是在本赛季硬件，经费，时间等条件下唯一能跑通的方案。方案一的失败不在算法，而在传感器与目标尺寸不匹配。选型结论是，约束条件决定方案上限，预研阶段要先用最坏工况验证传感器，再谈算法。</p><h3><strong>致谢</strong></h3><p>饮水思源，我们的成果离不开开源社区与各战队的支持，在此致以诚挚的感谢：</p><p><strong>感谢香港科技大学 Enterprize 战队</strong>慷慨开源的模型权重与技术方案，为我们的工作提供了宝贵的参考与起点。</p><p><strong>感谢西北工业大学 WMJ 战队、上海交通大学交龙战队、哈尔滨工业大学</strong>在项目过程中与我们进行的多次无私交流，你们的经验分享令我们受益匪浅。</p><p><strong>感谢北京理工大学追梦战队 26 赛季工程组的成员</strong>：</p><p>感谢秦沐阳、陈志鸿在工程视觉代码与仿真实验方面提供的支持与帮助；</p><p>感谢李宜蔓、简钰凡精心制作的1：1仿真科技核心；</p><p>感谢王博、王倍卓、孙仕铭、黄世杰、胡鑫科为 26 赛季两台工程机器人付出的辛勤努力与贡献；</p><p>特别感谢：传奇操作手潘志榛。</p><p>以上排名不分先后。</p><p>道阻且长，行则将至。愿与各战队共同进步，为 RoboMaster 开源生态贡献力量。</p><p><br></p><h3><strong>联系方式</strong></h3><p>梁思齐 &nbsp;微信 choose2be_sth</p><p>张 正 &nbsp; &nbsp; 微信 z17360039377</p>
+  </div>
+</article>

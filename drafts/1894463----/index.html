@@ -1,0 +1,33 @@
+<!-- METADATA
+Tiêu đề: -北京理工大学珠海学院-毅恒团队
+Chuyên mục: Cơ khí
+Tác giả: 关于作者 Amst_lang 5 关注Ta 1 文章 0 被引用 26 获赞 关注
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/cbad821832814e88b22a9ac439df17591782122076368/image.png
+Nguồn: https://bbs.robomaster.com/article/1894463
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p<span style="color: rgba(0, 0, 0, 0.85); background-color: rgb(255, 255, 255);"本次开源介绍</span一种简易部署，有效提高纯PID角速度环控制，未做质心配平云台的Pitch轴补偿公式。</p<h4<strong简易实现c语言代码：</strong</h4<p在PID速度环输出的控制值后添加该重力补偿前馈值</p<p达妙之类的支持扭矩控制电机，控制来说相对简单：</p<p公式介绍：</p<p重力补偿前馈值 = 云台Pitch负载质量（KG）* 9.8（重力加速度）*cos（云台Pitch角度 - 云台质心差角）
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: -北京理工大学珠海学院-毅恒团队. Ứng dụng trong phân mảng Cơ khí.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>-北京理工大学珠海学院-毅恒团队</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1894463" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 关于作者 Amst_lang 5 关注Ta 1 文章 0 被引用 26 获赞 关注</p>
+    <p><strong>Chuyên mục:</strong> Cơ khí</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/cbad821832814e88b22a9ac439df17591782122076368/image.png" alt="-北京理工大学珠海学院-毅恒团队" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <hr>
+  <div class="article-body">
+<p><span style="color: rgba(0, 0, 0, 0.85); background-color: rgb(255, 255, 255);">本次开源介绍</span>一种简易部署，有效提高纯PID角速度环控制，未做质心配平云台的Pitch轴补偿公式。</p><h4><strong>简易实现c语言代码：</strong></h4><p>在PID速度环输出的控制值后添加该重力补偿前馈值</p><p>达妙之类的支持扭矩控制电机，控制来说相对简单：</p><p>公式介绍：</p><p>重力补偿前馈值 = 云台Pitch负载质量（KG）* 9.8（重力加速度）*cos（云台Pitch角度 - 云台质心差角）* 力臂长度</p><p>G_Offset = m<em>* G * </em>arm_cos_f32(deg2rad(GIM_Pitch_Angle - Cog_Angle_offset</p><p>))*Cog_Distance;</p><p>参数含义：</p><p><strong>重力补偿前馈值（</strong>G_Offset <strong>）：</strong>公式计算出的结果，云台各个状态下的负载，即为重力补偿转矩值。将该值与PID的最终输出相加即可</p><p><strong>云台Pitch负载质量（m）</strong>：简易理解方式为即在Pitch轴旋转时，会动的部分即可视为负载部分（电机除外），但作者还是简易诸位有耐心的同学看一下下文的推导公式，理解公式由来后再做判断具体为哪些结构需要计算<strong>。</strong></p><p><strong>云台Pitch角度(</strong>GIM_Pitch_Angle<strong>)：</strong>向上旋转为正方向，在云台保持水平时为0°，尽量用陀螺仪，防止在非平整地形上出现错误补偿值</p><p><strong>云台质心差角(</strong>Cog_Angle_offset<strong>)：</strong>就是云台质心与云台转轴连线为线1，陀螺仪安装方向为线2，线1与线2的夹角云台质心差角</p><p><strong>力臂长度(</strong>Cog_Distance<strong>)：</strong>将云台理想化为质心后，质心与转轴的直线距离</p><p> 代码部署：</p><p>如下图所示</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/cbad821832814e88b22a9ac439df17591782122076368/image.png" alt="image.png" data-href="" data-file-md5="e8e7a6344ef853b57584cbf798279628" data-file-len="40803" style=""/></p><p>将G_Offset加到pid的输出值上即可</p><p>非达妙电机或接收的控制数据非扭矩值，如DJI的6020等设置值控制电机电流的控制模式，则需要输出的前馈值上乘以电机转矩系数</p><p><br></p><p>即 重力补偿前馈值 = 云台质量（KG）* 9.8（重力加速度）*cos（云台Pitch角度 - 云台质心差角）* 力臂长度 *<strong> 转矩系数</strong></p><p><br></p><p>重所周知，电机的电流即可视为电机输出的扭矩，两者之间可理想化为系数关系。</p><p>此时仅需再计算的补偿值上加入转矩系数即可，转矩系数计算方法为：查询手册找到电机的最大扭矩，电机的最大电流，还有电机的控制值的最大值</p><p>三者之间的关系，可计算出由控制值转电机输出的扭矩。</p><p>但是这有点麻烦，同时电机会随着使用的增加，同样设置值下的输出也会有所衰减，这就会导致电机的输出不符合预期，机械给出的质量M大多源于建模软件的计算，会和实际云台的质量不同。</p><p>可以通过用PID控制将云台的实际角度控制在趋近于水平左右（注意，不是目标值为水平，而是云台的实际角度为水平，以防止PID的稳态误差造成干扰），此时记录PID的输出值，然后再记录此时重补公式算出的扭矩值。</p><p>PID的输出值/重补公式算出的扭矩值 得出的值可视为理想转矩系数，但此参数并非真正的转矩系数，而是在转矩系数之上同时弥补了云台质量误差和力臂长度误差的特定系数，该参数应该视为重补系数。</p><p>同样的，如果是转矩控制电机，可以将结构质量M暂时设为1，用同样的方法校准结构质量。</p><p>重力参数和力臂长度还有质心差角都是需要调参的，调好的参数最终效果如视频所示，可以做到松手就停即可</p><p><a href="https://www.bilibili.com/video/BV17Y7K6dEFC/?spm_id_from=333.1387.homepage.video_card.click" target="">简易电控云台重力补偿公式开源-毅恒团队-北京理工大学珠海学院_哔哩哔哩_bilibili</a></p><p>调参简易详见公式推导后</p><h4><strong>公式推导：</strong></h4><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/fa1e96256219433b8919f7a71acd02861782121469308/image.png" alt="image.png" data-href="" data-file-md5="a2dc5fc2b60386ea93d36ddce02a3089" data-file-len="24428" style="width: 606.01px;height: 255.09px;"/></p><p>核心公式为：T=FL</p><p>T：电机输出的扭矩，单位为牛米</p><p>F：云台机械结构绕Pitch轴向下的力，单位为牛</p><p>L：云台质心到旋转轴的长度，单位为米</p><p>此时F=MG，M为云台Pitch轴负载的机械结构的总质量，G为重力加速度9.8</p><p>将F=MG带入，可得云台机构在理想水平状态下的电机负载扭矩为</p><p> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;F=MGL</p><p>此时如果云台抬升或者下降，云台在转轴上施加的力会变小</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/5e42dbd76b5e45e391a216b4d8c901971782125241081/image.png" alt="image.png" data-href="" data-file-md5="c17d03c8d110c454aed9413c5c7854dc" data-file-len="88161" style=""/></p><p>由几何关系推理可得∠α=∠β</p><p>即重力矩为F=MGL*cos（α），即云台补偿值</p><p>为了方便记忆和运用可直接理解为l是力臂杆长，是实际杆长在水平状态的投影，即云台杆长L*cos(云台角度)即可</p><h4><strong>调参建议：</strong></h4><p>调参方式：注释掉PID的计算，电机输出仅使用</p><p>如果在大多角度情况下，云台补偿都偏小，即往下掉，是云台质量或云台杆长的设置偏小，同样大多位置都往上即为偏大。</p><p>如果云台在水平偏上和偏下相同角度的时候会出现不正确补偿，大概率是云台质心差角出现误差。</p><p>若在某些特殊位置出现误差，可能是此处的机械摩擦力偏大，破坏了物理模型。</p><p>小Tips：可以在调完参数后，将重补公式中的云台角度替换为PID计算的目标角，可有效增加云台响应速度，但是不多。</p><p><br></p><p><span style="color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); font-size: 16px;">文中内容并非严格的理论推导，而是以实际应用为导向的经验总结，如有错误或不足之处，欢迎交流指正。</span></p><p><br></p><p style="text-align: start; line-height: 1.5;"><strong>注意事项：</strong></p><p style="text-align: start; line-height: 1.5;">1. 本开源仅限于Robomaster各参赛队之间交流使用，不允许用于任何商业用途。</p><p style="text-align: start; line-height: 1.5;">2. 转载需注明作者出处，对非法转载者，作者保留采用法律手段追究的权利。</p><p style="text-align: start; line-height: 1.5;">3. 本开源的最终解释权为北京理工大学珠海学院毅恒团队所有。</p><p><br></p><p><span style="color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); font-size: 16px;">作者联系方式 </span> （QQ不常用，如需交流和提问建议添加作者微信）</p><p><span style="color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); font-size: 16px;">微信：Amst_lang0432 </span></p><p>QQ：3255592719</p>
+  </div>
+</article>

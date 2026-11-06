@@ -183,9 +183,12 @@ export async function processArticleMedia(articleDir) {
 
   // Cập nhật ảnh trong thẻ <img> với fallback an toàn
   for (const [onlineUrl, localUrl] of imgUrlMap.entries()) {
-    // Thay thế src online thành src local, thêm onerror để fallback online nếu mở ngoài máy
-    const safeRegex = new RegExp(`src=["']${onlineUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["']`, 'g');
-    updatedHtml = updatedHtml.replace(safeRegex, `src="${localUrl}" onerror="this.onerror=null;this.src='${onlineUrl}'"`);
+    // Chỉ thay thế thuộc tính src="onlineUrl" của thẻ html (không thay bên trong onerror="this.src=...")
+    const escapedUrl = onlineUrl.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const safeRegex = new RegExp(`(?<!this\\.)src=["']${escapedUrl}["']`, 'g');
+    if (!updatedHtml.includes(`src="${localUrl}"`)) {
+      updatedHtml = updatedHtml.replace(safeRegex, `src="${localUrl}" onerror="this.onerror=null;this.src='${onlineUrl}'"`);
+    }
   }
 
   // Cập nhật video
