@@ -1,0 +1,30 @@
+<!-- METADATA
+Tiêu đề: HPM芯片开发经验与教程
+Chuyên mục: Cơ khí
+Tác giả: 通讯信息 QQ 1239656295
+Ảnh bìa: 
+Nguồn: https://bbs.robomaster.com/article/1401227
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p本教程基于 <strongHPMicro（先楫半导体）HPM5361</strong MCU，整理了一份先楫MCU的开发教程，供大家参考，快速上手先楫MCU的软件开发。</p<p同时也是为了后面开源ECAT2CAN硬件模块做个小小预告吧（嘻嘻）</p<h2教程背景</h2<p在 工程机器人中，常见的下位机问题包括：</p<ul<li电机数量多，CAN 资源不足 </li<li裁判系统、图传、遥控器等多路串口并发 </li<li多板通信带来系统复杂度上升、调试困难 </li<li实时性与代码可维护性难以兼顾 </li</ul<p在 25 赛季中
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: HPM芯片开发经验与教程. Ứng dụng trong phân mảng Cơ khí.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>HPM芯片开发经验与教程</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1401227" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 通讯信息 QQ 1239656295</p>
+    <p><strong>Chuyên mục:</strong> Cơ khí</p>
+  </div>
+  
+  
+  <hr>
+  <div class="article-body">
+<p>本教程基于 <strong>HPMicro（先楫半导体）HPM5361</strong> MCU，整理了一份先楫MCU的开发教程，供大家参考，快速上手先楫MCU的软件开发。</p><p>同时也是为了后面开源ECAT2CAN硬件模块做个小小预告吧（嘻嘻）</p><h2>教程背景</h2><p>在 工程机器人中，常见的下位机问题包括：</p><ul><li>电机数量多，CAN 资源不足 &nbsp;</li><li>裁判系统、图传、遥控器等多路串口并发 &nbsp;</li><li>多板通信带来系统复杂度上升、调试困难 &nbsp;</li><li>实时性与代码可维护性难以兼顾 &nbsp;</li></ul><p>在 25 赛季中，我们尝试并验证了 <strong>HPM5361 单板下位机方案</strong>，在不降低控制频率的前提下，完成了工程机器人全部下位机功能，并实现了稳定运行。</p><p>基于这套方案，我们将相关经验系统性整理为本教程，希望对其他队伍或个人开发者有所帮助。</p><h2>教程内容简介</h2><p>教程主要围绕 <strong>“如何把 HPM5361 真正用在工程项目中”</strong> 展开，重点包括：</p><ul><li>HPM SDK 的工程化使用方式 &nbsp;</li><li>中断系统与系统时基 </li><li>多路 CAN 的配置与高并发使用经验 &nbsp;</li><li>UART + DMA + 空闲中断在裁判系统中的应用 &nbsp;</li></ul><p>内容偏 <strong>工程实践</strong>，默认读者具备一定嵌入式基础。</p><h2>仓库与教程地址</h2><h3>📦 GitHub 仓库</h3><p>👉 <strong>仓库地址：</strong> &nbsp;<br><a href="https://github.com/HKUSTGZ-ROBOMASTER-PNX/HPM-MCU-Tutorial" target="_blank">https://github.com/HKUSTGZ-ROBOMASTER-PNX/HPM-MCU-Tutorial</a></p><p>仓库中包含：</p><ul><li>教程 Wiki</li><li>部分示例 / BSP 代码（位于 <code>example_code</code> 目录）</li><li>教程配套说明文件</li></ul><h3>📘 教程 Wiki（主要内容）</h3><p>👉 <strong>Wiki 阅读入口：</strong> &nbsp;<br><a href="https://github.com/HKUSTGZ-ROBOMASTER-PNX/HPM-MCU-Tutorial/wiki" target="_blank">https://github.com/HKUSTGZ-ROBOMASTER-PNX/HPM-MCU-Tutorial/wiki</a></p><p>当前已完成或规划的章节包括：</p><ul><li>00 前言与阅读指南 &nbsp;</li><li>01 HPMicro 简介与选型 &nbsp;</li><li>02 配置 HPM 开发环境 &nbsp;</li><li>03 中断系统 &nbsp;</li><li>04 CAN 使用经验 &nbsp;</li><li>05 UART 与 DMA 的使用 &nbsp;</li><li>06 时钟系统与系统时基 &nbsp;</li><li>07 开发工具与调试手段（规划中） &nbsp;</li><li>08 常见问题与工程经验（规划中） &nbsp;</li><li>09 参考资料与致谢 &nbsp;</li></ul><p>建议从 <strong>00 前言与阅读指南</strong> 开始顺序阅读。</p><h2>开源说明</h2><ul><li>本教程仅供 <strong>技术交流与学习使用</strong></li><li>不得将仓库内容用于商业培训、付费课程或其他商业用途</li></ul><h2>反馈与交流</h2><p>如果你在阅读或使用过程中发现问题，或有更好的工程实践经验：</p><ul><li>欢迎在 GitHub 提交 Issue </li><li>也欢迎在论坛帖下交流讨论或联系我。</li></ul><p>希望这份整理能为正在使用或考虑使用 HPM 平台的队伍提供一些参考。</p><p>祝各位调车顺利 🤝</p>
+  </div>
+</article>

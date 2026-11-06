@@ -1,0 +1,41 @@
+<!-- METADATA
+Tiêu đề: cmake编译在clion与vscode的使用教程（包括jlink,daplink,stlink的下载与下载器在ozone的使用）
+Chuyên mục: Cơ khí
+Tác giả: Xiao jie
+Ảnh bìa: 
+Nguồn: https://bbs.robomaster.com/article/1883992
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p前言：😀第一次开源有很多不合适的地方，大家体谅体谅，谢谢大家😁由于此文件不可以放入太多内容，我将教程放到了网站和github上 由于云服务器较差（上传文件多了会有问题），所以文件在此进行上传</p<p<a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c2671277cc2a40a6b6f17cd3df9474d91778339572826/jlink.zip" data
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: cmake编译在clion与vscode的使用教程（包括jlink,daplink,stlink的下载与下载器在ozone的使用）. Ứng dụng trong phân mảng Cơ khí.
+Tệp đính kèm: jlink.zip (Trực tuyến - 61.6 MB), daplink-2.cfg (Cục bộ - 0.00 MB), xpack-openocd-0.12.0-7-win32-x64.zip (Cục bộ - 3.08 MB), devenv.zip (Trực tuyến - 316.1 MB), stlink-1.cfg (Cục bộ - 0.00 MB), ozone.zip (Cục bộ - 17.37 MB)
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>cmake编译在clion与vscode的使用教程（包括jlink,daplink,stlink的下载与下载器在ozone的使用）</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1883992" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> Xiao jie</p>
+    <p><strong>Chuyên mục:</strong> Cơ khí</p>
+  </div>
+  
+  
+  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
+    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
+    <ul style="margin-bottom:0;">
+      <li><a href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c2671277cc2a40a6b6f17cd3df9474d91778339572826/jlink.zip" target="_blank"><strong>jlink.zip</strong></a> (🌐 Link tải trực tiếp - 61.6 MB)</li>
+      <li><a href="./attachments/daplink-2.cfg" target="_blank"><strong>daplink-2.cfg</strong></a> (📁 Đã tải trong thư mục attachments/ - 0.00 MB)</li>
+      <li><a href="./attachments/xpack-openocd-0.12.0-7-win32-x64.zip" target="_blank"><strong>xpack-openocd-0.12.0-7-win32-x64.zip</strong></a> (📁 Đã tải trong thư mục attachments/ - 3.08 MB)</li>
+      <li><a href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/f5743a0c8a9045328db72d1df13b84c01778339585828/DevEnv.zip" target="_blank"><strong>devenv.zip</strong></a> (🌐 Link tải trực tiếp - 316.1 MB)</li>
+      <li><a href="./attachments/stlink-1.cfg" target="_blank"><strong>stlink-1.cfg</strong></a> (📁 Đã tải trong thư mục attachments/ - 0.00 MB)</li>
+      <li><a href="./attachments/ozone.zip" target="_blank"><strong>ozone.zip</strong></a> (📁 Đã tải trong thư mục attachments/ - 17.37 MB)</li>
+    </ul>
+  </div>
+  <hr>
+  <div class="article-body">
+<p>前言：😀第一次开源有很多不合适的地方，大家体谅体谅，谢谢大家😁由于此文件不可以放入太多内容，我将教程放到了网站和github上 &nbsp; 由于云服务器较差（上传文件多了会有问题），所以文件在此进行上传</p><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c2671277cc2a40a6b6f17cd3df9474d91778339572826/jlink.zip" data-file-name="jlink.zip" data-file-md5="488e21ea265160c423c79b6f0dfd2434" data-file-len="64547853" data-file-key="1778326548027-64547853-jlink.zip-YEfyF4ySsiXcY9HKlSwZC" data-file-state="uploadSuccess">jlink.zip</a><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/5d98d8f49e6f4be191d7c22f4323437f1778339585450/daplink (2).cfg" data-file-name="daplink (2).cfg" data-file-md5="b50080f1e5c9ea517bc85407422aa79e" data-file-len="215" data-file-key="1778307144425-215-daplink (2).cfg-wYhkEb4b98GEpaene7alw" data-file-state="uploadSuccess">daplink (2).cfg</a><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/ed3596c08be04e6abb46b4fb783b17161778339643432/xpack-openocd-0.12.0-7-win32-x64.zip" data-file-name="xpack-openocd-0.12.0-7-win32-x64.zip" data-file-md5="d6002c6752fda21a4c5744dba000a0de" data-file-len="3225998" data-file-key="1778303957443-3225998-xpack-openocd-0.12.0-7-win32-x64.zip-lw6AaAgu-Hn3zNLFI2Fb3" data-file-state="uploadSuccess">xpack-openocd-0.12.0-7-win32-x64.zip</a><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/f5743a0c8a9045328db72d1df13b84c01778339585828/DevEnv.zip" data-file-name="DevEnv.zip" data-file-md5="dad3fccc423d8be0f3ea82135851f5d6" data-file-len="331450421" data-file-key="1778304125277-331450421-DevEnv.zip-aogO3QY81HrbNXaYwzB-p" data-file-state="uploadSuccess">DevEnv.zip</a><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/d8daf847c1a346dcb85102573feae5681778339584916/stlink (1).cfg" data-file-name="stlink (1).cfg" data-file-md5="4b3253582814ccd3fc4d8bb73164658d" data-file-len="234" data-file-key="1778307145950-234-stlink (1).cfg-LFyU1202zAao9Jldt8PXI" data-file-state="uploadSuccess">stlink (1).cfg</a><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c7ad7457ef944539887920fcc66f85ea1778339560202/ozone.zip" data-file-name="ozone.zip" data-file-md5="a0cb7c3dbe86d5742c9df36cd60a867b" data-file-len="18213421" data-file-key="1778326579495-18213421-ozone.zip-FMYV_upO_aWCIqhi1_FEp" data-file-state="uploadSuccess">ozone.zip</a></p><p>随着现代 AI 技术的普及，传统的 Keil 工具在性能和综合使用体验上逐渐显得力不从心。相比之下，Ozone 在调试体验和现代化工作流方面更加顺手；同时，CMake 结合 AI 命令行操作，也能更高效地促进 AI 与代码开发的融合，达到事半功倍的效果。</p><p>然而，对于许多新队伍或新生来说，大家可能还不太了解 CMake 的使用方法，也不熟悉如何使用 Ozone。本人在 XR 创始人刘佬以及 CaFeZn 等大佬的帮助下，逐步学习并掌握了 CMake 和 Ozone 的相关使用经验。</p><p>为了帮助更多人学习 CMake、Ozone，同时进一步了解 XR，也借此机会用于新生培训，并促进 RM 各团队之间的技术交流，现将我在学习和实践过程中积累的经验整理出来，与大家分享。</p><p>如有问题，欢迎大家通过 QQ：2413704818 与我交流反馈。大家可以通过访问网站 <a href="http://happyjie.cc/" target="_blank">http://happyjie.cc/</a><br><br> 在线学习，或通过 GitHub <a href="https://github.com/xiaoshuaijie/cmake下载到本地进行查看" target="_blank">https://github.com/xiaoshuaijie/cmake下载到本地进行查看</a></p><p>clion的cmake环境搭配 <a href="http://happyjie.cc/index.php/2026/04/19/hello-world/" target="_blank">clion的cmake环境搭配</a> &nbsp;</p><p>知乎地址 &nbsp; <a href="https://zhuanlan.zhihu.com/p/2036806739245393636" target="_blank">https://zhuanlan.zhihu.com/p/2036806739245393636</a></p><p>vscode的使用教程 <a href="http://happyjie.cc/index.php/2026/04/20/vscode%e7%9a%84cmake%e7%8e%af%e5%a2%83%e9%85%8d%e7%bd%ae/" target="_blank">vscode的使用教程</a> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </p><p>知乎地址 &nbsp; <a href="https://zhuanlan.zhihu.com/p/2036792891469734184" target="_blank">https://zhuanlan.zhihu.com/p/2036792891469734184</a></p><p>ozone的使用教程 <a href="http://happyjie.cc/index.php/2026/05/09/ozone%e7%9a%84%e4%bd%bf%e7%94%a8%e6%95%99%e7%a8%8b/" target="_blank">ozone的使用教程</a> </p><p>知乎地址 <br><a href="https://zhuanlan.zhihu.com/p/2036807616639266989" target="_blank">https://zhuanlan.zhihu.com/p/2036807616639266989</a></p><p><br></p><h6>网站最近刚搭建，用的云服务器也不是很好，如有不到之处，小弟在此提前向大家道歉了<span id="referenceDom-1" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/1883992/1883992/9270/1" data-order="1">[1]</span></h6><p><span id="referenceDom-3" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/1883992/1883992/18267/3" data-order="3">[3]</span><span id="referenceDom-2" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/1883992/1883992/557395/2" data-order="2">[2]</span></p><p><br></p>
+  </div>
+</article>

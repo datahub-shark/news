@@ -1,0 +1,41 @@
+<!-- METADATA
+Tiêu đề: 平动-自旋耦合目标下的火控拦截时间t解析与数值混合寻优策略
+Chuyên mục: Thị giác máy
+Tác giả: 米基哈哈
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b420db07fb9b4d7a827be993949c7d3f1776008245277/note.png
+Nguồn: https://bbs.robomaster.com/article/1883402
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p今天在实验室凑热闹时，看到组里的小灯在啃同济开源的自瞄预测代码，突然有点感慨。</p<p以前我也是小灯的时候，碰到这种问题简直就像见到了“米基哈哈追乌龟”的悖论：目标在动，子弹在飞，在这个无限套娃里根本找不到解出真正命中时间 t 的办法。当时实在搞不明白，最后只能简单粗暴地把“当前车距 / 弹速”当成 t 凑合用。</p<p现在回过头看，突然想头铁挑战一下，看看能不能纯靠数学把这个方程给解出来，而不是单纯当个黑盒去迭代。</p<p<strong必须提前声明下：在实际工程落地时，这套基于泰勒展开和牛顿迭代的算式，综合性能和鲁棒性大概率是打不过简单粗暴的 while 迭代的。但搞技术的嘛，有时
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 平动-自旋耦合目标下的火控拦截时间t解析与数值混合寻优策略. Ứng dụng trong phân mảng Thị giác máy.
+Tệp đính kèm: t-tai-nguyen.ggb (Cục bộ - 0.06 MB)
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>平动-自旋耦合目标下的火控拦截时间t解析与数值混合寻优策略</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1883402" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 米基哈哈</p>
+    <p><strong>Chuyên mục:</strong> Thị giác máy</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b420db07fb9b4d7a827be993949c7d3f1776008245277/note.png" alt="平动-自旋耦合目标下的火控拦截时间t解析与数值混合寻优策略" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
+    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
+    <ul style="margin-bottom:0;">
+      <li><a href="./attachments/t-tai-nguyen.ggb" target="_blank"><strong>t-tai-nguyen.ggb</strong></a> (📁 Đã tải trong thư mục attachments/ - 0.06 MB)</li>
+    </ul>
+  </div>
+  <hr>
+  <div class="article-body">
+<p>今天在实验室凑热闹时，看到组里的小灯在啃同济开源的自瞄预测代码，突然有点感慨。</p><p>以前我也是小灯的时候，碰到这种问题简直就像见到了“米基哈哈追乌龟”的悖论：目标在动，子弹在飞，在这个无限套娃里根本找不到解出真正命中时间 t 的办法。当时实在搞不明白，最后只能简单粗暴地把“当前车距 / 弹速”当成 t 凑合用。</p><p>现在回过头看，突然想头铁挑战一下，看看能不能纯靠数学把这个方程给解出来，而不是单纯当个黑盒去迭代。</p><p><strong>必须提前声明下：在实际工程落地时，这套基于泰勒展开和牛顿迭代的算式，综合性能和鲁棒性大概率是打不过简单粗暴的 while 迭代的。但搞技术的嘛，有时候就是想追求个底层的明白。写下这篇推导，主要是希望能给大家抛砖引玉，提供点不一样的解题思路。</strong></p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b420db07fb9b4d7a827be993949c7d3f1776008245277/note.png" alt="note.png" data-href="" data-file-md5="0d71af66225f4c8a576e05acf4ef6c0b" data-file-len="767665" style="width: 864.97px;height: 5782.43px;"/>在GGB上的测试视频(vx=vy=3,omega=8)，左下角Error_NR即简单的误差计算。</p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="b670d32904cbf0da60a69d5a066f2cb6" data-file-len="3559452" data-file-name="ggb测试.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/23b2bebce21245a3b453cbca5f5a0ac11776008310449/ggb测试.mp4" type="video/mp4"/></video>
+</div><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b5da0e92ac7e44cebe593c5b0b95d6181776008348327/解析解弹道预测.ggb" data-file-name="解析解弹道预测.ggb" data-file-md5="59a1208afae8b4bda7939be0aaa59f81" data-file-len="67551" data-file-key="1775982866775-67551-解析解弹道预测.ggb-u6sPEihMZL6Liccl6pGmM" data-file-state="uploadSuccess">解析解弹道预测.ggb</a></p>
+  </div>
+</article>

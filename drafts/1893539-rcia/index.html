@@ -1,0 +1,73 @@
+<!-- METADATA
+Tiêu đề: 深圳职业技术大学 RCIA战队
+Chuyên mục: Điều khiển
+Tác giả: 通讯信息 wx：neko011006
+Ảnh bìa: 
+Nguồn: https://bbs.robomaster.com/article/1893539
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p<br</p<p项目开源地址： <a href="https://github.com/BenmaoNeko/RCIA_Benmao_Vision" target="_blank"https://github.com/BenmaoNeko/RCIA_Benmao_Vision</a </p<p效果演示：</p<div data-w-e-type="video" data-w-e-is-void<video poster="" controls="true" width="auto" height="auto" data-file-md5="bc98b58cd0f503da3a687b707
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 深圳职业技术大学 RCIA战队. Ứng dụng trong phân mảng Điều khiển.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>深圳职业技术大学 RCIA战队</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1893539" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 通讯信息 wx：neko011006</p>
+    <p><strong>Chuyên mục:</strong> Điều khiển</p>
+  </div>
+  
+  
+  <hr>
+  <div class="article-body">
+<p><br></p><p>项目开源地址： <a href="https://github.com/BenmaoNeko/RCIA_Benmao_Vision" target="_blank">https://github.com/BenmaoNeko/RCIA_Benmao_Vision</a> </p><p>效果演示：</p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="bc98b58cd0f503da3a687b707ea3ef1e" data-file-len="26561075" data-file-name="2026-06-20 00-25-33.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/ade808b1e267489799666b644b43c0ca1781899285540/2026-06-20 00-25-33.mp4" type="video/mp4"/></video>
+</div><h3>1.项目背景：</h3><p>由于26赛季工程机器人对矿取矿形式大改，曾经的矿石识别算法已经成为历史。同时由于本赛季的的矿石修改成类似圆柱体无任何视觉特征点的能量单元。简单识别提取特征点进行定位的方式已无方向，因此诞生了识别其6dof的想法</p><p>本项目的目标是使用 RGB-D 相机对能量单元进行 6DoF 位姿初始化与实时跟踪。当前主路线为：</p><pre><code class="language-text language-text">RealSense D435 RGB-D
+  -&gt; YOLO 2D 检测
+  -&gt; SAM 分割
+  -&gt; FoundationPose 6DoF 初始化
+  -&gt; M3T/SRT3D 风格模型跟踪
+  -&gt; tracking supervisor 状态融合与重初始化管理
+  -&gt; 置信度 6DoF 位姿输出 / 可视化</code></pre><h3>2.硬件设备</h3><p>相机：realsense D435</p><h2>3.环境准备</h2><h4>基础环境</h4><ul><li>Ubuntu 22.04</li><li>ROS2 Humble</li><li>Python 3.10</li><li>NVIDIA GPU + CUDA</li><li>RealSense D435 / <code>librealsense2</code></li><li>OpenCV、CMake、colcon</li></ul><p>常用依赖：</p><pre><code class="language-bash language-bash">sudo apt update
+sudo apt install -y \
+  ros-humble-desktop \
+  python3-colcon-common-extensions \
+  build-essential cmake \
+  libopencv-dev libeigen3-dev \
+  libglew-dev libglfw3-dev \
+  librealsense2-dev</code></pre><h3>2. FoundationPose 环境</h3><p>可直接运行安装脚本：</p><pre><code class="language-bash language-bash">cd /path/to/RCIA_Energy_trace
+bash scripts/setup_foundationpose_ros_env.sh</code></pre><p>安装后验证：</p><pre><code class="language-bash language-bash">conda activate foundationpose_ros
+source /opt/ros/humble/setup.bash
+source scripts/foundationpose_env.sh
+python scripts/verify_foundationpose_ros_env.py</code></pre><h3>3. 模型文件</h3><p>仓库会保留项目自有模型，保证基础 demo 资源完整：</p><pre><code class="language-text language-text">models/object/Str3D.obj
+models/object/Str3D_</code></pre><h3>基础环境</h3><pre><code class="language-text language-text">
+models/yolo/best-v2.pt</code></pre><p>以下公开权重不直接提交到 Git，使用脚本下载：</p><pre><code class="language-text language-text">models/sam/sam_vit_b_01ec64.pth
+foundation_pose/weights/*/model_best.pth</code></pre><p>下载命令：</p><pre><code class="language-bash language-bash">bash scripts/download_public_weights.sh</code></pre><p>公开来源：</p><ul><li>SAM 官方仓库：<a href="https://github.com/facebookresearch/segment-anything" target="_blank">https://github.com/facebookresearch/segment-anything</a></li><li>SAM ViT-B 权重：<a href="https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth" target="_blank">https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth</a></li><li>FoundationPose 官方仓库：<a href="https://github.com/NVlabs/FoundationPose" target="_blank">https://github.com/NVlabs/FoundationPose</a></li><li>FoundationPose 官方 Google Drive 权重：<a href="https://drive.google.com/drive/folders/1DFezOAD0oD1BblsXVxqDsl8fj0qzB82i?usp=sharing" target="_blank">https://drive.google.com/drive/folders/1DFezOAD0oD1BblsXVxqDsl8fj0qzB82i?usp=sharing</a></li><li>FoundationPose HuggingFace 镜像：<a href="https://huggingface.co/gpue/foundationpose-weights" target="_blank">https://huggingface.co/gpue/foundationpose-weights</a></li></ul><p><br></p><h2>4.项目结构</h2><pre><code class="language-text language-text">RCIA_Energy_trace/
+├── CMakeLists.txt          # 旧版非 ROS M3T demo 的 CMake 构建入口
+├── README.md               # 项目说明、系统架构、运行流程和开源注意事项
+├── foundation_pose/        # FoundationPose 本地集成代码、推理组件和权重目录
+├── m3t_app/                # 旧版非 ROS M3T 跟踪 demo，保留作最小 C++ 示例
+├── models/                 # 目标 3D 模型、M3T 预计算模型、YOLO/SAM 权重
+├── ros2/                   # ROS2 功能包，包含相机发布、初始化、跟踪、状态机和可视化节点
+├── scripts/                # 算法工具、状态融合、验证逻辑、LINEMOD 实验和环境脚本
+├── tests/                  # Python 单元测试和模块级回归测试
+├── third_party/            # 第三方源码依赖，当前主要是 M3T
+├── tip/                    # 本地调试命令、参数组合和运行经验记录
+└── runtime/                # 运行时输出、诊断图、缓存和实验结果，默认不提交</code></pre><p><br></p><h2>5.实现流程</h2><h4>1. RGB-D 采集</h4><p><code>realsense_rgbd_publisher_node</code> 打开 RealSense D435，发布以下话题：</p><pre><code class="language-text language-text">/camera/color/image_raw
+/camera/aligned_depth_to_color/image_raw
+/camera/color/camera_info
+/camera/depth/camera_info</code></pre><p>使用的是彩色相机光心坐标系：</p><pre><code class="language-text language-text">camera_color_optical_frame</code></pre><p>因此输出的 6DoF 位姿默认表示为：</p><pre><code class="language-text language-text">object_in_camera_color_optical_frame</code></pre><h4>2. YOLO 目标检测</h4><p>这里的yolo是作为检测部分的第一部分，如果yolo模型本身效果很好的话可以少很多后续的验证算法</p><p><code>foundationpose_init_node.py</code> 内部加载 YOLO 模型，对 RGB 图像进行目标检测。</p><p>YOLO 的作用是：</p><ul><li>在初始化前提供目标 bbox。</li><li>给 SAM 一个分割提示区域。</li><li>给 tracking supervisor 一个“目标可能存在”的观测信号。</li></ul><p>注意：YOLO 不是 6DoF 位姿来源，也不是目标是否存在的绝对真值。因为我的训练数据有限，当目标被遮挡、旋转到特殊角度、只露出侧面或远离训练分布时，YOLO 可能漏检；也可能在背景上误检。</p><h4>3. SAM 分割</h4><p>SAM 使用 YOLO bbox 生成目标 mask。</p><p>SAM mask 的作用是：</p><ul><li>限制 FoundationPose 注册区域。</li><li>减少背景对 6DoF 初始化的干扰。</li></ul><h4>4. FoundationPose 初始化</h4><p>这里解释一下，其实是使用Foundtionpose就已经可以得到较为准确的6dof位姿了，但是由于Foundtionpose算法对显卡的强依赖且追踪效果一般。因此决定仅仅作为全局初始化工具使用，减少Foundtionpose的大量参与。</p><p>FoundationPose 使用：</p><ul><li>RGB 图像。</li><li>对齐深度图。</li><li>相机内参。</li><li>SAM mask。</li><li><code>models/object/Str3D.obj</code>。</li><li>FoundationPose 预训练权重。</li></ul><p>输出一个候选 6DoF 位姿。</p><p>当前系统中，FoundationPose 默认不直接长期接管跟踪，只是作为全局初始化器使用。初始化节点把结果发布到：</p><pre><code class="language-text language-text">/energy/foundationpose_candidate_pose
+/energy/foundationpose_candidate_status</code></pre><h4>5. Initialization Gate</h4><p><code>tracking_supervisor_node.py</code> 收到 FoundationPose candidate 后，会通过 <code>scripts/initialization_gate.py</code> 做一个轻量初始化 gate。</p><p>gate 只检查：</p><ul><li>位姿矩阵是否为合法 4x4 齐次矩阵。</li><li>是否全部为有限数值。</li><li>最后一行是否为 <code>[0, 0, 0, 1]</code>。</li><li>candidate 是否过旧，以及是否启用强制 freshness。</li></ul><h4>6. M3T 跟踪</h4><p>这里使用M3T的原因最主要的原因就是其强大的追踪能力，对设备的要求也相对要低。只要给一个相对准确的初始化位姿态，基本就可以实现很不错的跟踪能力</p><p><code>m3t_ros_tracking_node</code> 订阅 <code>/energy/initial_pose</code>，在对应 RGB-D 帧附近启动 M3T。<br><br>##使用时还是建议先进行手眼标定，在相机坐标系下会出现Foundtionpose的初始化由于相机坐标系的改变而被错误的输入到m3t当中</p><p>M3T 使用：</p><ul><li><code>models/object/Str3D.obj</code>。</li><li><code>models/m3t/Str3D_region.bin</code>。</li><li><code>models/m3t/Str3D_depth.bin</code>。</li><li>实时 RGB-D 帧。</li><li>FoundationPose 给出的初始位姿。</li></ul><p>M3T 启动后持续输出：</p><pre><code class="language-text language-text">/energy/m3t_pose
+/energy/m3t_status
+/energy/diagnostics/m3t_overlay</code></pre><p>这里的overlay 会显示彩色模型叠加和目标模型重心处的 XYZ 坐标轴。</p><h4>7. Tracking Health</h4><p>M3T 启动后，系统每帧对当前 M3T pose 生成健康度观测。</p><p>主要证据包括：</p><ul><li><code>depth_ratio</code>：按当前 M3T pose 渲染目标深度，与真实深度图比较的一致比例。</li><li><code>black_white_ok</code>：投影区域是否符合黑白目标的低饱和和黑白亮度分布特征。</li><li><code>projection_iou</code>：M3T 投影 bbox 与 YOLO bbox 的重合程度。</li><li><code>projection_center_ok</code>：投影中心与 YOLO bbox 中心是否差距过大。</li><li><code>projection_area_ok</code>：投影面积与 YOLO bbox 面积是否差距过大。</li><li><code>smoothness_ok</code>：当前 M3T pose 相对上一帧是否存在异常跳变。</li><li><code>rendered_pixel_count</code>：当前位姿下目标投影是否仍有足够像素落在画面内。</li></ul><p>这些条件不会被简单理解为单项失败就杀死 M3T。它们只是带噪声的证据而已。</p><h4>8. 权重状态机 / Tracking State Filter</h4><p>这里就是对整个m3t追踪器的监管器了，m3t本身是不知道自己到底是不是追踪的正不正确的，而且当创建完一次实例之后也是不会自动销毁其实例的，导致出问题之后没办法重新初始化。因此设计的一个管理层。这里说一下，一开始的版本是采用强门控的，但是效果并不理想，经常误杀，所以采用了现在这一版本将每一个可以作为观测的证据进行打分，这部分可以升级成卡尔曼滤波，对整个m3t的追踪状态进行信念分布从而进行更好的状态管理。</p><p><code>scripts/tracking_state_filter.py</code> 是当前系统的跟踪生命周期管理器。核心思想是：</p><p>不把 YOLO、深度一致性、黑白外观、投影 IoU 任意一个单项条件当作真值；<br><br>而是把它们融合成目标存在分数和跟踪健康分数，再通过连续帧状态决定是否保留、怀疑、重初始化或销毁 M3T。</p><p>状态包括：</p><pre><code class="language-text language-text">M3T_STARTING
+M3T_OWNED
+M3T_SUSPECT
+REINIT_NEEDED
+LOST</code></pre><p>状态含义：</p><ul><li><code>M3T_STARTING</code>：已向 M3T 发送初始位姿，等待 M3T 输出稳定跟踪。</li><li><code>M3T_OWNED</code>：M3T 已接管跟踪，系统发布可信 pose。</li><li><code>M3T_SUSPECT</code>：M3T 仍可能正确，但部分验证条件持续偏弱，进入观察状态。</li><li><code>REINIT_NEEDED</code>：目标大概率还在画面内，但 M3T 当前实例不可信，需要停止旧实例并重新请求 FoundationPose 初始化。</li><li><code>LOST</code>：目标大概率离开画面，或 M3T 无有效 pose 且没有目标存在证据，需要销毁实例并回到搜索。</li></ul><p>状态机维护两类分数：</p><ul><li><code>target_presence_score</code>：目标是否仍在画面内的置信度。</li><li><code>tracker_health_score</code>：当前 M3T 跟踪是否可信的置信度。</li></ul><p>还维护连续帧计数：</p><ul><li><code>m3t_good_streak</code>：M3T 连续健康帧数。</li><li><code>m3t_bad_streak</code>：M3T 连续异常帧数。</li><li><code>external_conflict_streak</code>：外部证据与 M3T 明显冲突的连续帧数。</li><li><code>out_of_view_streak</code>：目标离开视野证据的连续帧数。</li><li><code>weak_validation_fail_streak</code>：弱验证持续失败的连续帧数。</li></ul><p>典型策略：</p><ul><li>YOLO 检测到目标时，提高目标存在置信度，但不单独决定 M3T 正确。</li><li>YOLO 未检测到目标时，不立即认为目标消失，因为可能是遮挡、特殊角度或 YOLO 数据集不足。</li><li>M3T pose 平滑且没有强视觉矛盾时，倾向继续保留 M3T。</li><li>深度一致性极低、黑白外观失败、投影异常、pose 不平滑且连续多帧出现时，认为 M3T 可能跟丢或误跟踪。</li><li>目标仍可能在画面内但 M3T 不可信时，进入 <code>REINIT_NEEDED</code>，请求 FoundationPose 重新初始化。</li><li>目标和 M3T 投影都缺少有效证据，并持续多帧时，进入 <code>LOST</code>，停止 M3T 实例。</li></ul><p>这个设计是为了解决两个矛盾：</p><ol><li>YOLO 不稳定，不能因为 YOLO 漏检就立刻杀死正常 M3T。</li><li>M3T 也可能跟丢、停在错误位置或跟到错误目标，不能无条件永久保留 M3T 实例。</li></ol><p><br></p><h2>6.终语</h2><p>25赛季大一刚入队的时候就是担任的工程视觉这一角色，当时还是简单的对矿石和兑换站进行特征识别，但是由于26赛季的规则大改导致了最终还是胎死腹中。后面做了许多东西，反小自瞄，大符自瞄，由于人手紧缺最终还去担任了工程的电控，但是也许是些许执念作祟还是想要将工程视觉做出来。结果由于RCIA26赛季完整形态挂了导致我的RM生涯也是就此结束了，可谓是令人感叹。此开源更多是想要纪念我的RM经历，同时希望可以实现抛砖引玉的效果。</p><p><span style="color: rgb(255, 255, 255);">e 6DoF 初始化</span></p><p><span style="color: rgb(255, 255, 255);"> -&gt; M3T/SRT3D 风格模型跟踪</span></p><p><span style="color: rgb(255, 255, 255);"> -&gt; tracking supervisor 状态融合与重初始化管理</span></p><p><span style="color: rgb(255, 255, 255);"> -&gt; 置信度 6DoF 位姿输出 / 可视化</span></p><p><span style="color: rgb(255, 255, 255);">```</span></p><p><span style="color: rgb(255, 255, 255);">由于26赛季工程机器人对矿取矿形式大改，曾经的矿石识别算法已经成为历史。同时由于本赛季的的矿石修改成类似圆柱体无任何视觉特征点的能量单元。简单识别提取特征点进行定位的方式已无方向，因此诞生了识别其6dof的想法</span></p>
+  </div>
+</article>

@@ -229,6 +229,12 @@ export async function crawlBatch(limit = 40) {
       console.log(`📥 [${results.length}/${limit}] [${item.id}] ${title.slice(0, 48)}...`);
       console.log(`   └─ ${category} | Tác giả: ${author} | Bìa: ${coverImage ? '✅' : '⚪ Để trống'}`);
 
+      // Lưu định kỳ mỗi 10 bài để đảm bảo an toàn dữ liệu
+      if (results.length % 10 === 0) {
+        fs.writeFileSync(HISTORY_FILE, JSON.stringify([...seenUrls], null, 2), 'utf8');
+        fs.writeFileSync(OUTPUT_FILE, JSON.stringify(existingArticles, null, 2), 'utf8');
+      }
+
       await sleep(350);
     } catch (err) {
       console.error(`⚠️ Lỗi khi cào ${url}: ${err.message}`);

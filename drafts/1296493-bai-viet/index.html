@@ -1,0 +1,116 @@
+<!-- METADATA
+Tiêu đề: 滤波器设计教程
+Chuyên mục: Điều khiển
+Tác giả: 通讯信息 qq 1727334304
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a59c74f6b61347089a2bed6cad9965601775320534818/2.png
+Nguồn: https://bbs.robomaster.com/article/1296493
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <blockquote学习数字信号处理的时候，发现该理论可用于单片机。然而上网寻找，发现相关开源过于少了，没有滤波器设计的系统学习路线。于是先开一个坑。<br笔者时间不足，大部分会在寒假更新完成。</blockquote<h2仓库地址</h2<pgithub仓库地址：<a href="https://github.com/NCST-Horizon-RM/Filter_Design" target=""NCST-Horizon-RM/Filter_Design: stm32单片机实现传统滤波器，现代滤波器设计</a</p<pgitee仓库地址： <a href="https://gi
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 滤波器设计教程. Ứng dụng trong phân mảng Điều khiển.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>滤波器设计教程</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1296493" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 通讯信息 qq 1727334304</p>
+    <p><strong>Chuyên mục:</strong> Điều khiển</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a59c74f6b61347089a2bed6cad9965601775320534818/2.png" alt="滤波器设计教程" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <hr>
+  <div class="article-body">
+<blockquote>学习数字信号处理的时候，发现该理论可用于单片机。然而上网寻找，发现相关开源过于少了，没有滤波器设计的系统学习路线。于是先开一个坑。<br>笔者时间不足，大部分会在寒假更新完成。</blockquote><h2>仓库地址</h2><p>github仓库地址：<a href="https://github.com/NCST-Horizon-RM/Filter_Design" target="">NCST-Horizon-RM/Filter_Design: stm32单片机实现传统滤波器，现代滤波器设计</a></p><p>gitee仓库地址： &nbsp;<a href="https://gitee.com/cofallen/Filter_Design" target="">Cofallen/Filter_Design</a></p><p><br></p><h1>数字滤波器从入门到实践：信号、卷积与IIR滤波器实现</h1><blockquote>使用MATLAB，fdatool 迅速实现传统滤波器设计。 本教程不涉及原理，若读者尽量实现测试，只看本文件即可。</blockquote><h2>练习目标</h2><p>通过下面的学习，你将学会设计一个滤波器，将下面含有两个频率分量的频率提取出低频信号。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a59c74f6b61347089a2bed6cad9965601775320534818/2.png" alt="2.png" data-href="" data-file-md5="216729bece33dae765149564287e8780" data-file-len="156042" style=""/></p><h2>一、使用MATLAB fdatool设计滤波器</h2><h3>基础页面认识</h3><ul><li>在MATLAB中的 <strong>命令行</strong> 输入 <code>fdatool</code>，打开滤波器设计器。</li></ul><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/5617182421454669a8338daea0eb75c91775320547510/1.png" alt="1.png" data-href="" data-file-md5="4544a63d690f5d9c734000ba4a289739" data-file-len="95557" style=""/></p><p>观看我们采样信号的频率分量，很明显，噪声是高频率的小信号，且振幅远小于主频率信号振幅（传统滤波器滤波实际上是压小不需要频率的振幅，不可能完全滤除，所以传统滤波器的局限性就是对于噪声幅值较大的信号，滤波效果不太理想，后续教程将说明）.</p><ul><li>因此选取低通滤波器, 为后续考虑, 选择截止频率为30Hz. (实际使用中建议通过fft获取信号频率, 再给出截止频率选取)</li><li>在左下区域选择第一个选项低通, 下面选择IIR滤波器, 选择巴特沃斯滤波器, 阶数设置默认最小阶.</li></ul><p>下面的表格给出IIR, FIR, 以及巴特沃斯等模型的区别. </p><table data-new-ship='yes' data-font-node='' data-topic='' style="width: 100%;table-layout: fixed;height:0"><colgroup contentEditable="false"><col width=90></col><col width=90></col><col width=90></col></colgroup><tbody><tr><th colSpan="1" rowSpan="1" width="auto" style="">特性</th><th colSpan="1" rowSpan="1" width="auto" style="">FIR 滤波器</th><th colSpan="1" rowSpan="1" width="auto" style="">IIR 滤波器</th></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">反馈结构</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">无反馈（非递归）</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">有反馈（递归）</td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">相位特性</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">可严格线性相位</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">非线性相位</td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">达到相同指标阶数</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">高（需数百阶）</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">低（通常 4~8 阶）</td></tr></tbody></table><table data-new-ship='yes' data-font-node='' data-topic='' style="width: 100%;table-layout: fixed;height:0"><colgroup contentEditable="false"><col width=90></col><col width=90></col><col width=90></col><col width=90></col><col width=90></col></colgroup><tbody><tr><th colSpan="1" rowSpan="1" width="auto" style="">特性</th><th colSpan="1" rowSpan="1" width="auto" style="">巴特沃斯</th><th colSpan="1" rowSpan="1" width="auto" style="">切比雪夫Ⅰ型</th><th colSpan="1" rowSpan="1" width="auto" style="">切比雪夫Ⅱ型</th><th colSpan="1" rowSpan="1" width="auto" style="">椭圆滤波器</th></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">通带特性</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);"><strong>最平坦（无纹波）</strong></td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">等波纹</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">无纹波</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">等波纹</td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">阻带特性</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">单调下降</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">单调下降</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">等波纹</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">等波纹</td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">过渡带陡峭度</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">最缓</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">中等</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">中等</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);"><strong>最陡</strong></td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">达到相同指标所需阶数</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">最高</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">较低</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">较低</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);"><strong>最低</strong></td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">相位非线性</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">较平滑</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">严重</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">严重</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">最严重</td></tr></tbody></table><p>根据上面表格，我们选取IIR滤波器的原因在于：IIR阶数低，资源消耗低，本测试环境中不怎么考虑相位畸变。</p><p>选取巴特沃斯原因：我们希望能够完美滤除噪声高频信号，不要产生纹波。</p><ul><li>在 <strong>频率设定</strong> 中，选取 Fs (采样频率) 为1000Hz，$F_{pass}$ 为15，$F_{stop}$ 为50. (因为模拟滤波器和理想滤波器是有差距的，理想滤波器的频域图为一个阶跃，但是模拟的频域图为一个斜着的台阶，这两个参数就是这两个台阶下降到0.707 和 0.1 的截止频率)，<strong>这两个数设置过程中保证平均值在你的理想截止频率左右即可</strong>。</li><li>后面的<strong>幅值设定</strong>，是通带阻带的振幅压缩倍率，默认即可，我们选择改成20以减小阶数。</li><li>点击最下面的<strong>设计滤波器</strong>，滤波器的幅频图就显示出来了，注意纵轴单位为dB.</li><li>为了简化计算，我们选择<strong>一阶串联型</strong>。按照下面图片选择1-&gt;2-&gt;3，其中2选项选择第一个 <code>直接1型</code> ，注意转化后是否稳定，若不稳定可以考虑增大过渡带频率或者增大A_stop。</li></ul><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/9225ec7e7c8b44ca996bf97949adbb251775320556629/5.png" alt="5.png" data-href="" data-file-md5="3891f79b7b52d712a8509b3c2b7b1f3d" data-file-len="99605" style=""/></p><ul><li>图片中3选项，选择第一个 <code>生成C头文件</code>，保存至代码中即可。（这就是卷积所使用的参数）。</li></ul><h2>二、实现滤波</h2><ul><li>观察我们生成的5阶滤波器的参数，将生成的系数中的 <code>real64_T</code> 改成 <code>double</code> ，粘贴到 iir.c 文件中。（在最后）。这是我生成的参数.</li></ul><pre><code class="language-c language">const int NL = 6;
+const double NUM[6] = {
+  8.128524167437e-07,4.064262083718e-06,8.128524167437e-06,8.128524167437e-06,
+  4.064262083718e-06,8.128524167437e-07
+};
+const int DL = 6;
+const double DEN[6] = {
+                   1,   -4.592519754058,     8.45186748933,   -7.790520040485,
+      3.596249128499,   -0.665050812009
+};</code></pre><ul><li>修改滤波器结构体的长度为12。（你设计的滤波器阶数+1）</li></ul><pre><code class="language-c language">typedef struct
+{
+    double xhist[6];  // 改为double保持精度
+    double yhist[6];  // 改为double保持精度
+    double y;
+} Filter_t;</code></pre><ul><li>在你的需要滤波的参数中调用该函数，输入值为采样信号，输出值为滤波后的值。</li></ul><pre><code class="language-c language">#include "iir.h"
+
+float input_signal = xxx_motor.data.current;   // 某个采样值
+double output = butterOrdF(input_signal);</code></pre><p>观察 <code>output</code> 和 <code>input_signal</code> 的波形，与预想是否一致。</p><h2>三、结果与改进</h2><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/d920a48f666144cab8a0a37fa5f7e5011775320563505/6.png" alt="6.png" data-href="" data-file-md5="81feaea07ed1d93b288853e4701b1868" data-file-len="185045" style=""/></p><p>可以看到效果还可以。</p><ul><li>提示: 本篇教程以低通滤波器设计为主. 读者可以改成高通, 带通, 带阻滤波器来查看信号提取效果. 对于有的信号来说(比如说摩擦轮电流), 要想精确捕捉到阶跃值, 不仅需要低通分量, 也需要高通分量. 读者可自行选择其他类型的滤波器, 观察效果. </li></ul><h2>四、 课后思考</h2><ul><li>读者可尝试一下: 当滤波器的截止频率和待提取信号的频率接近时, 滤波后的信号时什么样子? 有没有量化的参数来衡量滤波器的安全滤波的频率 (即效果最好)?</li><li>阶跃信号通过滤波器（给一个阶跃信号做滤波处理），效果是什么样？为什么？有什么解决方案？</li><li>该方案的局限性是什么？</li></ul><p><br></p><h2>卷积代码</h2><p><br></p><pre><code class="language-c">#include "main.h"
+#include "iir.h"
+
+const int NL = 6;
+const double NUM[6] = {
+  8.128524167437e-07,4.064262083718e-06,8.128524167437e-06,8.128524167437e-06,
+  4.064262083718e-06,8.128524167437e-07
+};
+const int DL = 6;
+const double DEN[6] = {
+                   1,   -4.592519754058,     8.45186748933,   -7.790520040485,
+      3.596249128499,   -0.665050812009
+};
+
+
+typedef struct
+{
+    double xhist[6];  // 改为double保持精度
+    double yhist[6];  // 改为double保持精度
+    double y;
+} Filter_t;
+
+Filter_t filter = {
+    .xhist = {0},
+    .yhist = {0}
+};
+
+// /*  hz=DEN/NUM
+//     使用直接型差分方程实现：
+//  *  y[n] = sum_{k=0..NL-1} NUM[k]*x[n-k] - sum_{k=1..DL-1} DEN[k]*y[n-k]
+//  */
+double butterOrdF(float input)
+{
+    double input_d = (double)input;  // 转换为double
+    
+    // 更新历史缓冲区
+    for (int i = NL-1; i &gt; 0; i--)
+    {
+        filter.xhist[i] = filter.xhist[i-1];
+    }
+    filter.xhist[0] = input_d;
+    
+    for (int i = DL-1; i &gt; 0; i--)
+    {
+        filter.yhist[i] = filter.yhist[i-1];
+    }
+    
+    // 计算分子部分 (与输入历史卷积)
+    double numerator = 0.0;
+    for (int k = 0; k &lt; NL; k++)
+    {
+        numerator += NUM[k] * filter.xhist[k];
+    }
+    
+    // 计算分母部分 (与输出历史卷积)
+    double denominator = 0.0;
+    for (int k = 1; k &lt; DL; k++)  // 从1开始，因为DEN[0]=1
+    {
+        denominator += DEN[k] * filter.yhist[k];
+    }
+    
+    // 计算当前输出: y[n] = numerator - denominator
+    filter.yhist[0] = numerator - denominator;
+    filter.y = filter.yhist[0];
+    
+    return filter.y;
+}</code></pre><p>Q1：为什么要写这个？当前谁还用这些老掉牙的东西？</p><p>A1：你知道你常用的算术平均值滤波其实是低通滤波吗，你知道他的通带阻带可以计算吗，你知道算术平均滤波的长度决定什么吗。这是我在组员间的交流中得知，绝大多数新生还是不知道的，因此本仓库主要做的是启蒙，帮助要学习滤波器设计的同学。</p><p>Q2：学习这个有什么用？</p><p>A2：引用玺佬的一句话：知识从来都不是孤立的。学习完传统滤波器设计后，你就可以尝试学习经典控制理论中的频率法，进而正式入门控制学科。现代滤波器部分，你就会发现滤波从另一个角度来考虑问题，能补充传统滤波器的不足。</p><p>ps：笔者只是一个小菜鸡，代码不合规范处，求大佬轻喷。</p><p>更新：发现麻神的教程和我做的有部分重合，因此传统滤波器部分和卡尔曼滤波器部分会少一点理论推导，多一点代码设计。后面的现代滤波器部分会着重讲解。</p><p><br></p><p><span id="referenceDom-1" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/4064/1" data-order="1">[1]</span><span id="referenceDom-2" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/520/2" data-order="2">[2]</span><span id="referenceDom-3" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/311/3" data-order="3">[3]</span></p>
+  </div>
+</article>

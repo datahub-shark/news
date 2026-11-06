@@ -1,0 +1,30 @@
+<!-- METADATA
+Tiêu đề: 西安电子科技大学 IRobot战队
+Chuyên mục: Robot di động
+Tác giả: 通讯信息 微信：lunarifish12345
+Ảnh bìa: 
+Nguồn: https://bbs.robomaster.com/article/1889974
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <h2 <a href="https://github.com/DU-IRobot/librm" target="_blank"Github</a <a href="https://librm.duirobot.cc/" target="_blank"文档页</a </h2<p<br</p<p直到 2024 赛季，IRobot 队内仍然没有一个全队统一的稳定上游中间件。设备驱动、PID 等基础模块散落在各个项目里，缺乏统一维护和更新。如果代码本身不出 bug、不追加新功能，且战队没有人员轮换，这种工作方式或许暂时不会暴露问题。然而，这些毫无体系化的代码完全无法被下一届队员接手，也没办法引入那
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 西安电子科技大学 IRobot战队. Ứng dụng trong phân mảng Robot di động.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>西安电子科技大学 IRobot战队</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1889974" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 通讯信息 微信：lunarifish12345</p>
+    <p><strong>Chuyên mục:</strong> Robot di động</p>
+  </div>
+  
+  
+  <hr>
+  <div class="article-body">
+<h2> <a href="https://github.com/XDU-IRobot/librm" target="_blank">Github</a> | <a href="https://librm.xduirobot.cc/" target="_blank">文档页</a> </h2><p><br></p><p>直到 2024 赛季，IRobot 队内仍然没有一个全队统一的稳定上游中间件。设备驱动、PID 等基础模块散落在各个项目里，缺乏统一维护和更新。如果代码本身不出 bug、不追加新功能，且战队没有人员轮换，这种工作方式或许暂时不会暴露问题。然而，这些毫无体系化的代码完全无法被下一届队员接手，也没办法引入那些在行业中已被广泛采用的软件工程实践。队伍名义上有着近十年的积淀，实际上每过两三年就会经历一次事实上的"重启"。</p><p><br></p><p>参赛时间越久，就越能体会到一点：备赛过程中，嵌入式软件的工作是自下而上的。只有在驱动框架、算法库等基础设施建设完善之后，队伍才有可能在此基础上开发出更复杂的功能模块，推动整体技术水平不断提升。这些所谓"重要的杂活"，单拎一项出来做并不难，但难在体系化，并且往往需要耗费大量精力反复打磨和修复，才能让它稳定且完善（即所谓time-tested，按我的经验和理解，至少需要一个赛季的迭代）。这部分工作耗尽的，恰好是真正决定比赛胜负的战术策略与业务逻辑开发的时间。出于这个认识，librm项目应运而生。</p><p><br></p><p>经过调研，彼时已经有XRobot<span id="referenceDom-1" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/2/1889974/1889974/null/1" data-order="1">[1]</span>、rm-control<span id="referenceDom-2" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/2/1889974/1889974/null/2" data-order="2">[2]</span>以及basic-framework<span id="referenceDom-3" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/2/1889974/1889974/null/3" data-order="3">[3]</span>等数个成熟的类似项目，最终仍选择从零开始，主要是出于在功能性和易用性之间寻求平衡的考量。前两者或是从OS抽象层写起，或是配有全套配套工具，搭建这样一个极其完备的框架固然符合行业最佳实践，但基于以下两点，当时没有采纳这些现有方案：</p><ol><li>它应该不过多“发明工具”，在现有主流CubeMX+HAL库工作流上延伸太远。前两者对维护者和使用者的水平要求过高，会把新队员的培训周期拉得过长，难以满足队伍的实际用人节奏；</li><li>在此基础上，仍需具备一定的架构设计和跨平台能力，为后续计划的单元测试和无下位机控制方案铺路。basic-framework的开发目标足够"聚焦"和"务实"，就是为了在STM32 HAL环境下做到非常易用，但它本身只是一个CubeMX工程，无法满足这一条需求。</li></ol><p><br></p><p>三年参赛生涯即将结束。如果要挑选一项我的代表性工作，那么一定是librm。从启动开发到全队普及，经过两个赛季的迭代，它已经走了很远。功能足够丰富、运行稳定，且维持着比较清晰的架构。25、26赛季的赛场上，它完成了为队伍电控水平兜底的任务。从现在开始，希望它可以成为IRobot下一代电控组继续进步的起点；也希望它能帮到那些与我们一样，长期徘徊在及格线附近的队伍，更快地进入状态。</p>
+  </div>
+</article>

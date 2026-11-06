@@ -1,0 +1,802 @@
+<!-- METADATA
+Tiêu đề: 东南大学3SE 程浩 无线键轴大能量机关系统开源
+Chuyên mục: Thị giác máy
+Tác giả: 平海
+Ảnh bìa: https://bbs-web-static.robomaster.com/bbs-prod/3bc1393ea99d4704a5feacecd3d85cb8
+Nguồn: https://bbs.robomaster.com/article/21094
+Tên nguồn: RoboMaster BBS
+Tóm tắt: 一、技术背景概述本人在东南大学3SE战队的RoboMaster开发经历中，针对能量机关控制系统电气接线冗杂、击打识别不精准、视觉特征不明显的一系列问题，创新性地设计了能量机关系统软硬件架构。目前设计方案均已交付使用，推动了本赛季我队能量机关击打研发。接下来我将详细阐述这个项目遭遇的技术痛点。演示视频：445490fa31a5db32a8815fca4ba69325.mp4(https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/263a712dbb6b4133ae837e7b2b257500.mp4)!17187023
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 东南大学3SE 程浩 无线键轴大能量机关系统开源. Ứng dụng trong phân mảng Thị giác máy.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>东南大学3SE 程浩 无线键轴大能量机关系统开源</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/21094" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 平海</p>
+    <p><strong>Chuyên mục:</strong> Thị giác máy</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://bbs-web-static.robomaster.com/bbs-prod/3bc1393ea99d4704a5feacecd3d85cb8" alt="东南大学3SE 程浩 无线键轴大能量机关系统开源" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <hr>
+  <div class="article-body">
+<h1>一、技术背景概述</h1><p>本人在东南大学3SE战队的RoboMaster开发经历中，针对能量机关控制系统电气接线冗杂、击打识别不精准、视觉特征不明显的一系列问题，创新性地设计了能量机关系统软硬件架构。目前设计方案均已交付使用，推动了本赛季我队能量机关击打研发。接下来我将详细阐述这个项目遭遇的技术痛点。</p><p>演示视频：</p><p><br></p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="" data-file-len="" data-file-name=""><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/263a712dbb6b4133ae837e7b2b257500.mp4" type="video/mp4"/></video>
+</div><p><br></p><p><img src="https://bbs-web-static.robomaster.com/bbs-prod/3bc1393ea99d4704a5feacecd3d85cb8" alt="1718702390867.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><blockquote>所有源码、PCB工程、脚本、操作说明和环境配置、Visio流程图都可以在https://github.com/ChenYuWuAi/powerrune24 href="https://github.com/ChenYuWuAi/powerrune24" rel="noopener noreferrer" target="_blank"&gt; 中获取。</blockquote><h2>1.1 大能量机关系统新架构设计</h2><p>在2023年RoboMaster比赛中，组委会修改了大能量机关的机制，参赛队伍需要通过分别激活所在方的五个机关靶，根据击打的环数成绩来为全队提供攻击或防御的加成。这对于比赛中的团战发动时机和战术选择至关重要。为了顺利击打能量机关，需要在机器人上研制一种新的视觉识别系统，并根据击打能量机关的环数来判断视觉算法开发的效果和未来的迭代方向。除了视觉方面的需求，弹道补偿系统、机器人操作手链路控制系统也需要实弹击打大能量机关来进行调试。</p><p>基于以上需求，设计一套与官方在视觉特征，激活规则，运动规律等完全一致的能量机关系统，以供平时调试使用。</p><p>我队在2023年针对规则修改后设计的能量机关系统，虽然能实现最基本的旋转和击打灯效，但是由于设计仓促，存在以下缺点：</p><ol><li>数据获取不准确。</li><ul><li>单扇叶仅设计有五个同心环，实际识别击打位置不够精确，无法如规则要求识别从边缘到中心的十环击打。</li><li>环数检测的结果没有回传，无法进行实时的读取，仅能通过目视估计击打的环数。</li></ul><li>软件系统交互性差，功能不全面，只有大能量机关模式，不支持比赛中的正反方向控制、大小能量机关模式控制。</li><ul><li>调试情况下需要能量机关以特殊的方式运转，如只显示灯效而不旋转，或者其他并没有在程序中进行预先编写的需求。这种需求在现有的大能量机关上实现非常困难，要重新烧录多份代码，烧录代码需要大量拆卸。</li><li>旧的能量机关的颜色控制是通过杜邦线控制GPIO高低电平，并在系统上电时进行初始化时才能确定颜色，无法在运行时动态改变颜色。操作时，需要绕开正在旋转的机关靶进行重新上下电。此操作繁琐而且存在一定的危险性。</li></ul><li>电源系统混乱。</li><ul><li>旧的大能量机关供电系统由R标锂电池、电机电控电池、机关靶电池三部分组成，然而，2023年的调试场地离办公实验室非常远，使用电池供电的方式，需要经常跨场地更换电池，带来了极大的不便。</li><li>机关靶的靶面部分使用的LED电源为5V，灯条电源12V，需要两种电源线以及多种降压模块，故障率高而且不便检修。</li></ul><li>维护困难</li><ul><li>机关靶的通讯采用粗放的GPIO控制，接线十分复杂，总共有十几对通信、电源线路需要连接，任何一根线路的接触不良都需要大量的排查工作。</li><li>因为资金和工艺限制，击打采样使用了简单的微动开关采样方式。而微动开关在弹丸击打的恶劣工况中极易损坏，维护需要完全拆除能量机关靶进行维护，效率低下。</li><li>在程序控制上，由于大能量机关的充分保护，所有接口都进行了隐藏，无法在无拆除的情况下完成细节功能的修改。</li></ul></ol><h1>二、技术详细方案</h1><h3>2.1 机关靶的靶面迭代</h3><h4>2.1.1 方案调研</h4><p>在2023年的大能量机关设计中，使用了简单的微动开关采样方式，微动开关在弹丸击打的恶劣工况中极易损坏，需要经常完全拆除能量机关靶进行维护，维护效率低下。通过调研其它学校的技术方案，发现深圳大学RobotPilots战队开源的大能量机关使用了同样检测方式，而在他们的调试过程中，也遇到了类似的问题，即微动开关检测方案是不可持续的。</p><ul><li>首先，由于结构过于简单，微动开关并不适用于弹丸击打的大冲量工况。</li><li>其次，微动开关由直插过孔焊接在PCB上，损坏时必须拆除PCB才能更换。</li></ul><p>必须寻找一种同微动开关一样简单，但是更加稳定的检测方案。已有能量机关设计中，有以下主流方案：</p><blockquote>电阻屏/应变片方案：电阻屏/应变片可以实现高精度的击打检测，但是由于机关靶的结构复杂，电阻屏/应变片的安装、校准和数据读取难度较大，且在弹丸击打的恶劣工况下有损坏的风险；单片制造成本高昂，不适合低成本、短交付周期的需求。 微动开关：已在1.1节分析过，不适合需求，不再赘述。 机械键盘轴方案：机械键盘轴是一种高可靠性的开关，可以通过机械键盘轴的按压触发电平变化，来检测弹丸击打。此外，机械键盘轴可以与键轴座结合，打造一套即插即用的检测方案，方便从上层进行维护和更换。在弹簧和靶面亚克力的限位作用下，键轴不易脱落，可以保持稳定。但是，键轴的体积较大，对于机关靶面的设计提出了一定的挑战。</blockquote><p>新靶面使用键轴方案，制造灯环一体化、键轴可拆卸设计的PCB，以实现高精度、高可靠性的击打检测。</p><p>靶面上沿用WS2812的串行控制方式，只需要一个IO口即可驱动一串灯链，适用于大多数MCU。但在选定了靶面的检测方案后，还需要修改LED的选型，以匹配更大体积的键轴。</p><h4>2.1.2 方案可行性</h4><p>设计一块3环的小型键轴载板PCB，通过可制造性验证，检验键轴方案空间布局和触发操作的可行性。同时，在LED选型上，将所有12V的灯珠都更换成为了更容易级联和显示图像的WS2812，将统一使用5V供电，初步减少电源树的复杂度。</p><p>考虑到键轴的体积问题，以及均光性对识别影响较小，没有做均光设计。</p><p>考虑到键轴有一定的高度和不透明度，使用直插封装的WS2812灯珠，它具有足够的高度，可以减小键轴在灯珠散射角上的遮挡。然而，在实际组装测试中，由于该灯珠体积过大，不支持现代化的贴片制造工艺，可制造性差。但是测试发现键轴的运动非常顺畅，在手动的击打下可以准确触发，并且键轴轴体摘取方便，不易损坏。<br><br>该测试板验证了方案的可行性，但LED的选型还需进一步向小型化迭代。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/7e037fda4b0d44feb7acecb0ac3010d7.png" alt="1718551569957.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><p>在客制化市场调研发现，有一种键轴“水晶轴”使用了透明的键轴壳，灯珠的散射光可以直接透过键轴壳，这样就可以提高灯珠的密度和分辨率，给键轴的安装留下更多的空间，提高了设计的灵活性。于是，在第二版设计中，使用了更小的贴片灯珠WS2812-3520，并且在键轴布局布线、缓冲弹簧布局、抗小弹丸击打测试、灯效显示效果测试等方面进行了测试，取得了很好的效果。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/2a00ff221e8640a7962fc42764f30454.png" alt="1718601547860.png" data-href="" data-file-md5="" data-file-len="" style=""/><br><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/1b73f9b2ce994edc8443685fd589c80a.png" alt="1718601888628.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><p>测试中发现，由于键轴的触发行程长，容易造成电平跳动。于是在验证版外串联了一个RC滤波器，通过示波器观察，选择了一个合适的时间常数，抑制了电平跳动。在后续正式的PCB绘制中，在所有环的键轴链中都按这个参数加入了滤波器网络。<img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/4cef5f706a1c4fdcb00be05f3982ec65.png" alt="1718703189173.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><h3>2.2 机关靶电气系统和控制系统设计</h3><p>在电气系统和控制系统设计中，需解决以下几个问题：靶面电机驱动、通讯思路和通讯协议、MCU选型、电气设计、固件管理、软件设计、人机交互设计。</p><h4>2.2.1 电机驱动</h4><p>经过计算，大能量机关新的结构设计的转动惯量为4.814kg/m^2，使用一个3508电机结合减速同步带轮驱动即可达到大符正弦曲线转动中的峰值加速度要求。出于保险起见，设计中预留了另一个3508电机的安装位置。</p><h4>2.2.2 通讯和MCU选型</h4><p>需选定系统的控制链路，以及各个模块之间的通信链路，这是降低维护成本、提高控制效率的关键。主流的控制器有STM32、ESP32、Arduino等，通信方式有CAN、I2C、SPI、UART、WLAN等。在这里，我们需要考虑以下几个问题：</p><p>若运用STM32，则需要引入额外的无线通讯模块，例如NRF24L01，这会增加系统的复杂度。与此同时，STM32在Logging，OTA，WS2812驱动，GPIO MUX等方面的原生支持并不友好。</p><p>但ESP系列芯片能完美满足上述需求：</p><ol><li>通信集成优秀。 ESP32作为SoC芯片，集成了Wi-Fi和蓝牙，可以实现2.4G通信，这就为提供OTA源、人机接口实现提供了便利。同时，依托乐鑫公司开发的ESP-NOW协议，可以利用802.11协议实现无连接的多机通信，支持广播信道和单播信道，可以作为可靠的通信链路。</li><li>外设丰富。 ESP32S3 Soc模组具有串行信号发生器(可以通过DMA生成单线通讯时序)、多达40路I/O口、USB内建JTAG调试器，可以满足检测、灯效需求； ESP32C3 Soc模组具有CAN驱动器、蓝牙BLE、硬件随机数生成器，可以满足通讯、控制需求。 更重要的是，ESP32全系配置了可编程的GPIO MUX，支持在运行时绑定引脚功能，对PCB绘制、功能扩展和维护带来了极大的便利。这样，就可以在进行较少事前验证工作的情况下，只通过一次打板，一次性设计出满足需求的PCB，而不用担心接线错接引脚，导致飞线或者被迫重新打板的情况。GPIO MUX支持的的最高信号频率为20MHz，已经达到要求。</li><li>自带Bootloader和FreeRTOS支持，可以实现OTA升级。 ESP32使用的官方IDF开发框架原生支持FreeRTOS SMP，可以实现多核并行调度，提高系统的实时性。 IDF自带Bootloader，所有程序的启动均通过二级Bootloader引导，通过分区表配置A/B分区，可以实现带异常回滚功能的OTA升级功能，方便进行远程固件更新，提高维护效率。</li><li>日志系统和NVS Flash支持完善。 IDF框架提供了系统级日志功能和NVS Flash功能，可以实现系统级的日志记录和PID、亮度比例等参数存储，方便进行调试和参数配置。</li><li>开发生态完善。 ESP32的软硬件开发生态均表现优秀，一方面，它文档相对完善，而且有丰富的库函数和示例代码，可以快速上手开发，缩短研发周期；另一方面，乐鑫官方提供了ESP32邮票孔SoC核心板，可以很方便地融合到PCB设计，减少贴片元器件数量，降低PCB焊接成本。</li></ol><p>综合以上考虑，选择ESP32S3作为靶面的MCU，作为IO控制的主要参与者；选择ESP32C3作为系统电机控制MCU和主控制MCU，分别安装在3508电机驱动板和位于正面的R标灯板上。使用ESP-NOW的广播信道来建立机关靶之间的通信链路，然后通过私有信道传输链路中的数据，为未来可能运用ESP-NOW协议的情况减少信道干扰。同时，使用蓝牙BLE来建立能量机关控制MCU与用户端的通信链路，可以与Android、Windows PC等常见设备交互，随时可以开发上位机软件。</p><h4>2.2.3 硬件设计</h4><p>系统框架图如下：</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/00339de6643e4c4a8f2b84131266399f.png" alt="1718703553413.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><p>需要一套简单、稳定的电源供应架构，以保证机关靶的正常运转。<br><br>硬件部分整个流程比较常规。所有PCB以低速数字电路外围元件布置为主，比较简单，但是一次性出正常工作的板子，是一件很有挑战性的事情。因为大型的PCB通常价格高昂，靶面PCB单价大约在450元左右，五个就是2250元，预算并不宽裕。所以，在设计PCB时，格外注意设计的可拓展性。接下来简要介绍设计硬件的关键过程。</p><p>首先需要确定元件数量和尺寸，才能第一时间与结构同步需求；元件数量确定好之后即可着手做各模块的原理图设计，然后进行PCB布线，最后进行PCB打样。</p><p>确定元件数量和尺寸很重要。为此，首先进行了完整十环的灯珠和键轴布局，得到了准确的灯珠数据，查询数据手册，估测最大功率：<br><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/fc7c97ef5fe7456f80a462996a70374d.png" alt="1718631280868.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><p>总功率：P总=5<em>P单靶面+P电机+PR标+P预留=5</em>45W + 24V*20A(电机实际功率远小于此) + 1W + 3.5W = 709.5W</p><p>随后，根据架构图进行电源树和散热设计。根据功率数据，倾向于选择更高的电压和更小的电流：根据市场调查，低电压高电流的开关电源价格昂贵，而且对PCB分线板走线的要求较严格。于是，选择了220V转24V开关电源作为总供电，在分布式控制的每一个节点进行Buck取电，24V降压到5V。这样做，</p><ul><li>一方面，与现有的TB47电池兼容，便于脱机单板调试。</li><li>一方面，同功率下，24V开关电源电流较低，减少研发成本，可以减少线路的损耗。</li></ul><p>当然，对于电机控制板和R标控制板而言，它们的功率都相对小，可以直接使用5V的开关电源供电。由于结构的精巧设计，5V电源可以从24V分线板的板载DCDC引出，穿过轴系中空的轴心，直接供电给R标板。</p><p>综上，选择了24V@30A共720W的开关电源，作为总供电。<br><br>但是这也为Buck设计带来了挑战，根据销量、参数和工况，在主靶面上选择了XL4016E1作为Buck芯片。芯片最高支持电流8A，固定开关频率180kHz，外围简单，封装为TO220-5，有很好的散热面积，也方便安装散热设备。然而当初的想法确实过于简单，在后续的测试中，我发现XL4016E1的开关频率低、效率并不高，在高负载下会有明显的热失效。在所有灯保持白光负载时(40W满载)，无散热工况下开关电源温度超过137℃，轻松融化低温锡膏；使用了大型电解电容，容易因保护不当，受到弹丸冲击而出现短暂接触不良的情况下，由于电感续流旁路了电容，瞬间产生大电流，导致炸管甚至炸板。更有甚者，由于缺少肖特基的保护，开关电源下电时会产生浪涌，灌入Type-C接口后，可能导致笔记本的南桥异常甚至烧毁。<br><br>后续通过飞线补充了24V输入端口和5V输出端口肖特基保护电路、安装了5V散热风扇、要求结构负责人加强全包保护，才解决了这些问题。</p><p>接下来，进行了PCB布线设计。值得注意的是：</p><ul><li>热设计：考虑到R标板较为密闭、灯珠密集，R标板的背面预留了安装风扇的空间。事实上，这个R标板稍加改动就是一盏全色温物联网台灯，发热量可观。</li><li>接口预留：所有靶面PCB都预留了串口、USB JTAG接口，方便电脑有线调试和蓝牙串口无线调试。</li><li>简化IO口：大符的灯效可以分为：靶环、上灯条、下灯条、周围灯条、流水灯效五个区域，其中只有流水灯区域需要实时刷新，其他的区域只需要在状态机发生状态转换时执行更新即可。通过乐鑫的文档，得知ESP32S3的串行信号发生器只有1个DMA通道可以实现传输，所以，设计的所有靶面PCB都使用了一个74HC4051D DEMUX芯片，可以通过GPIO控制，实现了串行信号发生器DMA通道IO口的分时复用，实测实时性相当优秀。</li><li>调试开关：考虑到软件上电单板调试需要，将DEMUX的芯片使能脚引出，设计一个开关，可以选择串行信号发生器的输出信号是否通过DEMUX输出。这样的意义在于，无电池供电时，可以通过电脑5V供电，测试板子的其他功能，而不用担心程序中点亮灯珠，导致电流过载。</li><li>调试LED：在所有PCB上都预留了一个统一的LED灯，用于显示单板工作状态：Wifi连接&OTA升级（闪烁）、通讯链路连接建立（常亮或呼吸）、靶面ID（建立链路后，按照ID号按相应频率闪烁）等信息，便于快速排错。</li><li>预留了所有电压测试点。</li></ul><p>这里提供PCB文件核心部分：<img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/4b036de5f6e9412ca90195feb21d92d4.png" alt="1718697861154.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><h4>2.2.4 固件管理、软件设计和人机交互设计</h4><p>对ESP32开发，自然选择ESP-IDF框架，提供充足的底层基础接口、menuconfig配置、集成JTAG调试桥，比Arduino或者PlatformIO更加友好。</p><p>编程语言的选择上，使用C++，便于通过面向对象的方法抽象外设、线程和控制器，提高代码的复用率。<br><br>使用UML图设计类。在设计类的时候，先对外设硬件封装，然后对硬件守护线程进行封装。最终效果是：</p><ul><li>对一个类初始化的同时，就可以启动一个守护线程，对外设和类内接口进行初始化。</li><li>类内接口通过线程安全的任务通知或者信号量，对守护进程进行异步控制。</li><li>类销毁时，可以安全地销毁守护线程，释放资源。</li><li>所有类通过宏定义判断设备类型，决定对外封装什么样的接口，这样编写的类就可以在整套系统上使用同一套代码。</li></ul><p>不过，为了节省堆空间，推荐声明全局静态类、使用工厂方法初始化类实例，而非使用new动态生成。</p><p>类图举例如下：</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/f500eb1c3b624d34b5540ac6f4497018.png" alt="1718699712026.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/46165c2e8c534f4dbe5921ca21f91e85.png" alt="1718699722775.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><p><img src="https://bbs-web-static.robomaster.com/bbs-prod/03cfd801fbe446aa96f7685ff01010c5" alt="1718699730982.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><p>同时，使用事件驱动的设计模式，将各个分布式节点按照C/S架构进行抽象，节点之间通过发送事件ID和事件参数实现Server和Client之间的互相访问、回传。</p><p>通过这个方式，靶面代码的main函数只有以下操作：</p><pre><code class="language-c++ language">// LED指示灯 & LED灯链 init
+led = new LED(GPIO_NUM_48, 1, LED_MODE_ON, 1); // 这里可以改成全局静态类，节省堆空间
+
+// 启动事件循环
+esp_event_loop_args_t loop_args = {
+    .queue_size = 10,
+    .task_name = "pr_events_loop",
+    .task_priority = 5,
+    .task_stack_size = 4096,
+};
+ESP_ERROR_CHECK(esp_event_loop_create(&loop_args, &pr_events_loop_handle));
+
+// 固件管理&配置信息 init
+Firmware firmware;
+
+// ESP-NOW init
+espnow_protocol = new ESPNowProtocol(beacon_timeout); // 这里可以改成全局静态类，节省堆空间
+
+// ID设置完成，开启led blink
+if (config-&gt; != 0xFF)
+    led-&gt; config-&gt;
+else
+    led-&gt; 0);
+
+// Armour控制器 init
+PowerRune_Armour armour;
+
+// 注册大符通讯协议事件
+// 发送事件
+ESP_ERROR_CHECK(esp_event_handler_register_with(pr_events_loop_handle, PRA, PRA_HIT_EVENT, ESPNowProtocol::tx_event_handler, NULL));
+ESP_ERROR_CHECK(esp_event_handler_register_with(pr_events_loop_handle, PRC, OTA_BEGIN_EVENT, Firmware::global_pr_event_handler, NULL));
+ESP_ERROR_CHECK(esp_event_handler_register_with(pr_events_loop_handle, PRC, OTA_COMPLETE_EVENT, ESPNowProtocol::tx_event_handler, NULL));
+ESP_ERROR_CHECK(esp_event_handler_register_with(pr_events_loop_handle, PRC, CONFIG_COMPLETE_EVENT, ESPNowProtocol::tx_event_handler, NULL));
+
+// Register beacon timeout event handlers.
+ESP_ERROR_CHECK(esp_event_handler_register_with(pr_events_loop_handle, PRC, BEACON_TIMEOUT_EVENT, beacon_timeout, NULL));
+
+// Main函数结束，防止线程退出回收资源
+vTaskSuspend(NULL);</code></pre><p>为了与装配进度配合，固件管理工作被优先实现。</p><ul><li>在结构装配靶面、保护所有接口之前，根据乐鑫的开源文档编写了一套固件管理类，用于远程固件更新和NVS Flash参数维护。</li><li>生产了两块主控板，由于IDF架构使用HAL库封装，两板代码可以无损烧录到其他板子上，可直接进行通讯框架的调试。除了这两块板子，其他板子都可以在烧录OTA基本程序后安装上靶。</li></ul><p>这一套OTA程序在系统上电时连接固件参数内的WLAN网络，并访问自建GitLab服务器的固件仓库，比对版本号、验证固件可启动性，如有更新则下载最新的固件，通过ESP-IDF的Flash接口进行A/B分区固件更新。固件仓库根据设备类型分为靶面、电机控制板、R标板设备，每个设备的固件存在独立的二进制文件中，OTA接口统一、操作统一。</p><p>接下来，使用两个主控板，调通了双板通信。然而，这一套通讯库没有封装CRC检验、数据包重发、数据包丢弃、丢包检测、链路建立的功能，所以在传输层上封装了一套链路层和一套应用层通讯协议，如图所示：<br><br>链路层负责维护CRC校验，丢包检测，重发，链路建立操作。<br><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/bf15ac9749ab40378792760148441e64.png" alt="1718688757730.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><p>链路层的操作代码较为冗长，通过一个espnow_protocol类，维护了一个链路层的IO守护进程，通过异步收发、信号量同步、ID协商、异常处理等设计，实现了链路层的功能。</p><p>为了检测失联，仿照WiFi通讯协议，设计了一套Beacon机制（启用会影响实时性，生产版本已经禁用），如果某一节点离线，则重置链路、初始化状态机。</p><p>关键代码如下：</p><pre><code class="language-c++ language">void ESPNowProtocol::parse_data_task(void *pvParameter)
+{
+
+    received_struct *received_data = (received_struct *)malloc(sizeof(received_struct));
+
+    while (1)
+    {
+        if (xQueueReceive(espnow_rx_queue, received_data, portMAX_DELAY) != pdTRUE)
+        {
+            ESP_LOGE(TAG_MESSAGER, "Failed to receive data from espnow_rx_queue");
+            continue;
+        }
+        uint8_t *data = received_data-&gt;
+        ESP_LOGD(TAG_MESSAGER, "[parse_task] Received %i bytes from " MACSTR, received_data-&gt; MAC2STR(received_data-&gt;
+        log_raw_packet(data, received_data-&gt;
+
+        // 小端发送
+        uint16_t header = (data[1] &lt;&lt; 8) | data[0];
+        // 解析大符事件数据包
+        if (header == POWERRUNE_DATA_HEADER)
+        {
+            espnow_DATA_pack_t *espnow_data_pack = (espnow_DATA_pack_t *)malloc(received_data-&gt;);
+            memset((void *)espnow_data_pack, 0, received_data-&gt;
+            // 按字节解析
+            espnow_data_pack-&gt; = header;
+            espnow_data_pack-&gt; = (data[3] &lt;&lt; 8) | data[2];
+            memcpy(espnow_data_pack-&gt;nt_base, data + 6, 4);
+            espnow_data_pack-&gt; = data[12];
+
+// ID校验
+#if CONFIG_POWERRUNE_TYPE == 1 // 主设备
+            // PING包交给establish_peer_list处理
+            if ((espnow_data_pack-&gt; == 'A' && espnow_data_pack-&gt; == PRA_PING_EVENT) || (espnow_data_pack-&gt; == 'M' && espnow_data_pack-&gt; == PRM_PING_EVENT))
+            {
+                ESP_LOGD(TAG_MESSAGER, "Received PING packet from " MACSTR ", sending RESPONSE packet", MAC2STR(received_data-&gt;
+                // data的第三个变量是地址位
+                send_data(received_data-&gt; PRC, RESPONSE_EVENT, NULL, 0, 0, 0); // 注意包的TX ID是大一的
+
+                // 处理ID，将rx_id更新为pack_id - 1
+                packet_rx_id[mac_to_address(received_data-&gt; = espnow_data_pack-&gt; - 1;
+
+                free(received_data-&gt;
+                free(espnow_data_pack);
+                continue;
+            }
+            // 接到的包ID小于等于系统记录已经接收的包ID，说明这个包已经无效
+            if (espnow_data_pack-&gt; &lt;= packet_rx_id[mac_to_address(received_data-&gt;_MAC)])
+            {
+                ESP_LOGE(TAG_MESSAGER, "packet %i ID check failed, current rx_id %i", espnow_data_pack-&gt; packet_rx_id[mac_to_address(received_data-&gt;
+                // 发送ACK_FAIL，提示ID已更新，但不处理
+                send_ACK(packet_rx_id[mac_to_address(received_data-&gt; + 1, received_data-&gt; ACK_FAIL);
+                // 直接丢包，释放内存
+                free(received_data-&gt;
+                free(espnow_data_pack);
+                continue;
+            }
+#endif
+#if ((CONFIG_POWERRUNE_TYPE == 2) || (CONFIG_POWERRUNE_TYPE == 0)) // 从设备
+            // RESPONSE包用于维护beacon time
+            if (espnow_data_pack-&gt; == RESPONSE_EVENT && espnow_data_pack-&gt; == 'C') // PRC:RESPONSE_EVENT
+            {
+                beacon_time = xTaskGetTickCount();
+                ESP_LOGI(TAG_MESSAGER, "update beacon: %i", (int)beacon_time);
+#if CONFIG_POWERRUNE_TYPE == 0 // Armour
+                // 开启led blink
+                if (config-&gt; != 0xFF)
+                    led-&gt; config-&gt;
+                else
+                    led-&gt; 0);
+#endif
+#if CONFIG_POWERRUNE_TYPE == 2 // Motor
+                // 开启led fade
+                led-&gt; 0);
+#endif
+                // 更新ID
+                packet_rx_id = espnow_data_pack-&gt; - 1;
+                free(received_data-&gt;
+                free(espnow_data_pack);
+                continue;
+            }
+            // 已发送的包ID小于等于接收的包ID，说明这个包已经无效
+            if (espnow_data_pack-&gt; &lt;= packet_rx_id)
+            {
+                ESP_LOGE(TAG_MESSAGER, "DATA packet %i ID check failed, current rx_id %i", espnow_data_pack-&gt;k_id, packet_rx_id);
+                // 发送ACK_FAIL，更新ID，但不处理
+                send_ACK(packet_rx_id + 1, received_data-&gt; ACK_FAIL);
+                // 直接丢包，释放内存
+                free(received_data-&gt;
+                free(espnow_data_pack);
+                continue;
+            }
+            // 接包，说明beacon正常
+            beacon_time = xTaskGetTickCount();
+            ESP_LOGI(TAG_MESSAGER, "update beacon: %i", (int)beacon_time);
+#endif
+
+            uint16_t crc16_pack = (data[5] &lt;&lt; 8) | data[4];
+            espnow_data_pack-&gt;nt_data_len = (data[11] &lt;&lt; 8) | data[10];
+            // 拷贝事件数据
+            memcpy(espnow_data_pack-&gt;nt_data, data + 13, espnow_data_pack-&gt;
+            // CRC校验
+            log_raw_packet((uint8_t *)espnow_data_pack, 13 + espnow_data_pack-&gt;
+            uint16_t crc16 = esp_crc16_le(UINT16_MAX, (uint8_t *)espnow_data_pack, 13 + espnow_data_pack-&gt;
+            log_packet(espnow_data_pack, crc16_pack);
+
+            if (crc16 != crc16_pack)
+            {
+                ESP_LOGE(TAG_MESSAGER, "DATA packet %i CRC16 check (result: 0x%04X) failed", espnow_data_pack-&gt; crc16);
+                // 发送ACK_FAIL，然后丢包
+                send_ACK(espnow_data_pack-&gt; received_data-&gt; ACK_FAIL);
+                // 释放内存
+                free(received_data-&gt;
+                free(espnow_data_pack);
+                continue;
+            }
+            else
+            {
+// 包有效，更新ID
+#if CONFIG_POWERRUNE_TYPE == 1 // 主设备
+                uint8_t address = mac_to_address(received_data-&gt;
+                packet_rx_id[address] = espnow_data_pack-&gt;
+                // 将Address存入事件数据
+                espnow_data_pack-&gt; = address;
+#else
+                packet_rx_id = espnow_data_pack-&gt;
+                espnow_data_pack-&gt; = 0x06; // 表示从主控发出
+#endif
+                ESP_LOGD(TAG_MESSAGER, "DATA packet %i CRC16 check success, address %i", espnow_data_pack-&gt; espnow_data_pack-&gt;
+                // 发送ACK_OK
+                send_ACK(espnow_data_pack-&gt; received_data-&gt; ACK_OK);
+                esp_event_base_t base = NULL;
+                switch (espnow_data_pack-&gt;
+                {
+                case 'A':
+                    base = PRA;
+                    break;
+                case 'M':
+                    base = PRM;
+                    break;
+                case 'C':
+                    base = PRC;
+                    break;
+                default:
+                    break;
+                }
+                // 发送到事件循环
+                esp_event_post_to(pr_events_loop_handle, base,
+                                  espnow_data_pack-&gt; espnow_data_pack-&gt;
+                                  espnow_data_pack-&gt;
+                                  CONFIG_ESPNOW_TIMEOUT / portTICK_PERIOD_MS);
+                // 释放内存
+                free(received_data-&gt;
+                free(espnow_data_pack);
+                continue;
+            }
+        }
+        // 正在等待ACK的包
+        else if (header == POWERRUNE_ACK_OK_HEADER && (xEventGroupGetBits(send_state) & SEND_ACK_PENDING_BIT))
+        {
+            ESP_LOGD(TAG_MESSAGER, "Received ACK_OK packet");
+            // 这是一个ACK_OK包,
+            ACK_OK_pack_t ack_ok_pack = {0};
+            ack_ok_pack.header = header;
+            ack_ok_pack.pack_id = (data[5] &lt;&lt; 24) | (data[4] &lt;&lt; 16) | (data[3] &lt;&lt; 8) | data[2];
+            log_packet(&ack_ok_pack);
+            // ID校验，丢弃过期ACK包
+#if CONFIG_POWERRUNE_TYPE == 1 // 主设备
+            if (ack_ok_pack.pack_id &lt; packet_tx_id[mac_to_address(received_data-&gt;_MAC)] + 1)
+            {
+                ESP_LOGE(TAG_MESSAGER, "ACK_OK packet %i ID check failed", ack_ok_pack.pack_id);
+                // 释放内存
+                free(received_data-&gt;
+                continue;
+            }
+#endif
+#if ((CONFIG_POWERRUNE_TYPE == 2) || (CONFIG_POWERRUNE_TYPE == 0)) // 从设备
+            if (ack_ok_pack.pack_id &lt; packet_tx_id + 1)
+            {
+                ESP_LOGE(TAG_MESSAGER, "ACK_OK packet %i ID check failed", ack_ok_pack.pack_id);
+                // 释放内存
+                free(received_data-&gt;a);
+                continue;
+            }
+#endif
+            // 发送ACK_OK
+            xEventGroupSetBits(send_state, SEND_ACK_OK_BIT);
+#if CONFIG_POWERRUNE_TYPE == 0 || CONFIG_POWERRUNE_TYPE == 2 // Armour || Motor
+            // 视作beacon更新依据
+            beacon_time = xTaskGetTickCount();
+            ESP_LOGI(TAG_MESSAGER, "update beacon: %i", (int)beacon_time);
+#endif
+            // 释放内存
+            free(received_data-&gt;
+        }
+        else if (header == POWERRUNE_ACK_FAIL_HEADER && (xEventGroupGetBits(send_state) & SEND_ACK_PENDING_BIT))
+        {
+            // 这是一个ACK_FAIL包
+            ACK_FAIL_pack_t ack_fail_pack = {0};
+            ack_fail_pack.header = header;
+            ack_fail_pack.pack_id = (data[5] &lt;&lt; 24) | (data[4] &lt;&lt; 16) | (data[3] &lt;&lt; 8) | data[2];
+            log_packet(&ack_fail_pack);
+#if CONFIG_POWERRUNE_TYPE == 0 || CONFIG_POWERRUNE_TYPE == 2 // Armour || Motor
+            // 视作beacon更新依据
+            beacon_time = xTaskGetTickCount();
+            ESP_LOGI(TAG_MESSAGER, "update beacon: %i", (int)beacon_time);
+#endif
+            // ID校验，丢弃过期ACK包
+#if CONFIG_POWERRUNE_TYPE == 1 // 主设备
+            if (ack_fail_pack.pack_id &lt; packet_tx_id[mac_to_address(received_data-&gt;_MAC)])
+            {
+
+#elif ((CONFIG_POWERRUNE_TYPE == 2) || (CONFIG_POWERRUNE_TYPE == 0)) // 从设备
+            if (ack_fail_pack.pack_id &lt; packet_tx_id)
+            {
+#endif
+                ESP_LOGE(TAG_MESSAGER, "ACK_FAIL packet %i ID check failed", ack_fail_pack.pack_id);
+                // 释放内存
+                free(received_data-&gt;a);
+                continue;
+            }
+
+#if CONFIG_POWERRUNE_TYPE == 1 // 主设备
+            else if (ack_fail_pack.pack_id &gt; packet_tx_id[mac_to_address(received_data-&gt; + 1)
+            {
+                // 更新ID
+                packet_tx_id[mac_to_address(received_data-&gt; = ack_fail_pack.pack_id - 1;
+                ESP_LOGW(TAG_MESSAGER, "ACK_FAIL packet %i ID check failed, TX id updated to %i", ack_fail_pack.pack_id, packet_tx_id[mac_to_address(received_data-&gt;
+#elif ((CONFIG_POWERRUNE_TYPE == 2) || (CONFIG_POWERRUNE_TYPE == 0)) // 从设备
+            else if (ack_fail_pack.pack_id &gt; packet_tx_id + 1)
+            {
+                // 更新ID
+                packet_tx_id = ack_fail_pack.pack_id - 1;
+                ESP_LOGW(TAG_MESSAGER, "ACK_FAIL packet %i ID check failed, TX id updated to %i", ack_fail_pack.pack_id, packet_tx_id);
+#endif
+                xEventGroupSetBits(send_state, SEND_ACK_FAIL_ID_BIT);
+                free(received_data-&gt;
+            }
+            else
+            {
+                // 发送ACK_FAIL
+                xEventGroupSetBits(send_state, SEND_ACK_FAIL_BIT);
+                // 释放内存
+                free(received_data-&gt;
+            }
+        }
+        else
+        {
+            // 收到未知包，丢弃
+            ESP_LOGE(TAG_MESSAGER, "Unknown packet header: 0x%04X", header);
+            // 释放内存
+            free(received_data-&gt;
+            continue;
+        }
+    }
+}
+
+esp_err_t ESPNowProtocol::send_data(uint8_t *dest_mac, esp_event_base_t event_base, int32_t event_id, void *data, uint16_t data_len, uint8_t wait_ack, uint8_t mutex, uint8_t id_plus)
+{
+    /*
+    发送DATA包时自动申请tx id
+    关于ID的说明
+    1. 调用函数时传参使用的ID会在未收到ACK_FAIL的情况下始终被发送循环使用
+    2. 收到ACK_FAIL后，如果ACK_FAIL的ID大于当前ID，说明对方重启，在parse_data_task中会更新ID，本函数中则直接选取更新后的ID进行重传
+    关于data_len的说明
+    data_len应该与事件数据结构体内的data_len一致，即事件结构体的大小
+    */
+
+    // 清除ACK_OK和ACK_FAIL
+    xEventGroupClearBits(send_state, SEND_ACK_OK_BIT | SEND_ACK_FAIL_BIT);
+    EventBits_t bits;
+    // 编码包数据
+    espnow_DATA_pack_t *packet = (espnow_DATA_pack_t *)malloc(sizeof(espnow_DATA_pack_t));
+    // 谨慎操作，因为malloc没有完全包含整个espnow_DATA_pack_t结构体
+    // assert if malloc failed
+    assert(packet != NULL);
+
+    packet-&gt; = POWERRUNE_DATA_HEADER;
+    packet-&gt; = data_len;
+    memcpy(packet-&gt; data, data_len);
+    memcpy(packet-&gt; event_base, 4);
+    packet-&gt; = event_id;
+    // CRC置零后进行运算
+    packet-&gt; = 0;
+    log_raw_packet((uint8_t *)packet, 13 + data_len);
+    // 申请ID
+#if CONFIG_POWERRUNE_TYPE == 1
+    uint8_t address = mac_to_address(dest_mac);
+    if (address == 0xFF)
+    {
+        ESP_LOGE(TAG_MESSAGER, "Failed to find address of " MACSTR, MAC2STR(dest_mac));
+        free(packet);
+        return ESP_FAIL;
+    }
+    packet-&gt; = id_plus ? ESPNowProtocol::packet_tx_id[address] + 1 : ESPNowProtocol::packet_tx_id[mac_to_address(dest_mac)];
+#else
+    packet-&gt; = id_plus ? ESPNowProtocol::packet_tx_id + 1 : ESPNowProtocol::packet_tx_id;
+#endif
+    // 将CRC16校验和添加到数据包
+    packet-&gt; = esp_crc16_le(UINT16_MAX, (uint8_t *)packet, 13 + data_len);
+    log_raw_packet((uint8_t *)packet, 13 + data_len);
+    memcpy(packet-&gt; dest_mac, ESP_NOW_ETH_ALEN);
+    log_packet(packet, packet-&gt;
+    // 调用发送函数，含超时重传
+    for (uint8_t trial = 0; trial &lt; RETRY_COUNT; trial++)
+    {
+#ifdef HEAPDEBUG
+        heap_caps_check_integrity_all(1);
+#endif
+        if (wait_ack)
+            // 置位使能ACK等待
+            xEventGroupSetBits(send_state, SEND_ACK_PENDING_BIT);
+
+        // 发送锁
+        // 获取互斥锁
+        if (xSemaphoreTake(tx_semaphore, mutex ? portMAX_DELAY : CONFIG_ESPNOW_TIMEOUT / portTICK_PERIOD_MS) != pdTRUE)
+        {
+            ESP_LOGE(TAG_MESSAGER, "Failed to take tx_semaphore");
+            return ESP_FAIL;
+        }
+
+        esp_err_t err = esp_now_send(dest_mac, (uint8_t *)packet, 13 + data_len);
+        if (err != ESP_OK)
+        {
+            xEventGroupClearBits(send_state, SEND_ACK_PENDING_BIT);
+            ESP_LOGE(TAG_MESSAGER, "packet %i send error %s, trial %i", packet-&gt;k_id, esp_err_to_name(err), trial);
+            // 释放互斥锁
+            xSemaphoreGive(tx_semaphore);
+            continue;
+        }
+        // 等待发送成功或失败
+        bits = xEventGroupWaitBits(send_state, SEND_COMPLETE_BIT | SEND_FAIL_BIT, pdFALSE, pdFALSE, CONFIG_ESPNOW_TIMEOUT / portTICK_PERIOD_MS);
+
+        if (bits & SEND_COMPLETE_BIT)
+        {
+            ESP_LOGD(TAG_MESSAGER, "packet %i send success", packet-&gt;
+            trial = 0; // 重置重传次数
+
+            xEventGroupClearBits(send_state, SEND_COMPLETE_BIT);
+            // 释放互斥锁
+            xSemaphoreGive(tx_semaphore);
+            if (wait_ack == 0)
+            {
+                free(packet);
+                return ESP_OK;
+            }
+        }
+        else if (bits & SEND_FAIL_BIT)
+        {
+            ESP_LOGE(TAG_MESSAGER, "packet %i send error in tx callback, trial %i", packet-&gt; trial);
+            xEventGroupClearBits(send_state, SEND_FAIL_BIT);
+            // 释放互斥锁
+            xSemaphoreGive(tx_semaphore);
+            // 等待100ms
+            vTaskDelay(100 / portTICK_PERIOD_MS);
+            continue;
+        }
+        else
+        {
+            ESP_LOGE(TAG_MESSAGER, "packet %i send timeout, trial %i", packet-&gt; trial);
+            // 释放互斥锁
+            xSemaphoreGive(tx_semaphore);
+            xEventGroupClearBits(send_state, SEND_COMPLETE_BIT | SEND_FAIL_BIT);
+            continue;
+        }
+
+        // 等待ACK_OK或ACK_FAIL，原则上只有一个线程在等待，所以不需考虑线程安全
+        bits = xEventGroupWaitBits(send_state, SEND_ACK_OK_BIT | SEND_ACK_FAIL_BIT | SEND_ACK_FAIL_ID_BIT, pdFALSE, pdFALSE, CONFIG_ESPNOW_TIMEOUT / portTICK_PERIOD_MS);
+
+        if (bits & SEND_ACK_OK_BIT)
+        {
+            ESP_LOGD(TAG_MESSAGER, "packet %i ACK_OK received", packet-&gt;
+#if CONFIG_POWERRUNE_TYPE == 1
+            ESPNowProtocol::packet_tx_id[mac_to_address(dest_mac)]++;
+#else
+            ESPNowProtocol::packet_tx_id++;
+#endif
+            xEventGroupClearBits(send_state, SEND_COMPLETE_BIT | SEND_ACK_PENDING_BIT);
+            free(packet);
+            return ESP_OK;
+        }
+        else if (bits & SEND_ACK_FAIL_BIT)
+        {
+            ESP_LOGE(TAG_MESSAGER, "packet %i ACK_FAIL received", packet-&gt;
+            xEventGroupClearBits(send_state, SEND_ACK_FAIL_BIT | SEND_FAIL_BIT | SEND_COMPLETE_BIT | SEND_ACK_PENDING_BIT);
+            // 重传
+            continue;
+        }
+        else if (bits & SEND_ACK_FAIL_ID_BIT)
+        {
+            ESP_LOGE(TAG_MESSAGER, "packet %i ACK_FAIL received, ID updated", packet-&gt;
+            xEventGroupClearBits(send_state, SEND_ACK_FAIL_ID_BIT | SEND_FAIL_BIT | SEND_COMPLETE_BIT | SEND_ACK_PENDING_BIT);
+            // 判断ID是否需要更改，如果对方的ID更大，说明ACK丢包，则丢包后更新ID
+            free(packet);
+            return ESP_OK;
+        }
+        else
+        {
+            ESP_LOGE(TAG_MESSAGER, "packet %i ACK timeout", packet-&gt;
+            xEventGroupClearBits(send_state, SEND_COMPLETE_BIT | SEND_ACK_PENDING_BIT | SEND_ACK_OK_BIT | SEND_ACK_FAIL_BIT);
+            // 重传
+            continue;
+        }
+    }
+    // 超时重传次数用完
+    xEventGroupSetBits(send_state, SEND_ACK_TIMEOUT_BIT);
+    xEventGroupClearBits(send_state, SEND_COMPLETE_BIT | SEND_ACK_OK_BIT | SEND_ACK_FAIL_BIT);
+    ESP_LOGE(TAG_MESSAGER, "packet %i send failed", packet-&gt;
+    free(packet);
+    return ESP_FAIL;
+}
+
+esp_err_t ESPNowProtocol::send_ACK(uint16_t packet_tx_id, uint8_t *dest_mac, PacketType type)
+{
+    bool mutex_flag = true;
+    // 获取互斥锁
+    if (xSemaphoreTake(tx_semaphore, CONFIG_ESPNOW_TIMEOUT / portTICK_PERIOD_MS) != pdTRUE)
+    {
+        ESP_LOGE(TAG_MESSAGER, "Failed to take tx_semaphore, forbid operation to EventGroup");
+        mutex_flag = false; // 互斥锁获取失败，不进行互斥操作，进行风险发送操作
+    }
+    ACK_OK_pack_t *packet = (ACK_OK_pack_t *)malloc(sizeof(ACK_OK_pack_t));
+    packet-&gt; = (type == ACK_OK) ? POWERRUNE_ACK_OK_HEADER : POWERRUNE_ACK_FAIL_HEADER;
+    packet-&gt; = packet_tx_id;
+    memcpy(packet-&gt; dest_mac, ESP_NOW_ETH_ALEN);
+    // send
+    esp_err_t err = esp_now_send(packet-&gt; (uint8_t *)packet, sizeof(ACK_OK_pack_t) - 6);
+    if (err != ESP_OK)
+    {
+        ESP_LOGE(TAG_MESSAGER, "ACK %i packet %i send error %s", type, packet_tx_id, esp_err_to_name(err));
+        free(packet);
+        return err;
+    }
+    if (mutex_flag)
+    {
+        // 等待发送成功或失败
+        xEventGroupWaitBits(send_state, SEND_COMPLETE_BIT | SEND_FAIL_BIT, pdFALSE, pdFALSE, CONFIG_ESPNOW_TIMEOUT / portTICK_PERIOD_MS);
+        if (xEventGroupGetBits(send_state) & SEND_COMPLETE_BIT)
+        {
+            ESP_LOGD(TAG_MESSAGER, "ACK %i packet %i send success", type, packet_tx_id);
+            xEventGroupClearBits(send_state, SEND_COMPLETE_BIT);
+        }
+        else if (xEventGroupGetBits(send_state) & SEND_FAIL_BIT)
+        {
+            ESP_LOGE(TAG_MESSAGER, "ACK %i packet %i send error in tx callback", type, packet_tx_id);
+            xEventGroupClearBits(send_state, SEND_FAIL_BIT);
+            free(packet);
+            return ESP_FAIL;
+        }
+        else
+        {
+            ESP_LOGE(TAG_MESSAGER, "ACK %i packet %i send timeout", type, packet_tx_id);
+            xEventGroupClearBits(send_state, SEND_COMPLETE_BIT | SEND_FAIL_BIT);
+            free(packet);
+            return ESP_FAIL;
+        }
+    }
+    free(packet);
+    // 释放互斥锁
+    if (mutex_flag)
+        xSemaphoreGive(tx_semaphore);
+    return ESP_OK;
+}
+
+void ESPNowProtocol::tx_callback(const uint8_t *mac_addr, esp_now_send_status_t status)
+{
+    if (status == ESP_NOW_SEND_SUCCESS)
+    {
+        xEventGroupSetBitsFromISR(send_state, SEND_COMPLETE_BIT, &xHigherPriorityTaskWoken);
+        ESP_LOGD(TAG_MESSAGER, "Send packet successfully in tx callback");
+    }
+    else
+    {
+        xEventGroupSetBitsFromISR(send_state, SEND_FAIL_BIT, &xHigherPriorityTaskWoken);
+        ESP_LOGE(TAG_MESSAGER, "Sending data to " MACSTR " failed", MAC2STR(mac_addr));
+    }
+}</code></pre><p>应用层规定了编码事件数据格式。<br><br>以靶面MCU程序为例：</p><pre><code class="language-c++ language">#pragma pack(1)
+// 事件循环Handle
+extern esp_event_loop_handle_t pr_events_loop_handle;
+// ADDRESS
+// 5个ESP32S3[0:4], 1个ESP32C3[5]
+
+enum RUNE_MODE
+{
+    PRA_RUNE_BIG_MODE,
+    PRA_RUNE_SMALL_MODE,
+};
+
+enum RUNE_COLOR
+{
+    PR_RED,
+    PR_BLUE,
+};
+
+// 每一个事件都有专属于此的结构体。
+struct PRA_START_EVENT_DATA
+{
+    uint8_t address;                                  // 设备地址ID
+    uint8_t data_len = sizeof(PRA_START_EVENT_DATA);  // 应用层包的长度
+    uint8_t mode = PRA_RUNE_BIG_MODE;                 // 大符模式
+    uint8_t color = PR_RED;                           // 颜色
+};</code></pre><p>事件发送只需要调用：</p><pre><code class="language-c++ language">// 发送START事件
+PRA_START_EVENT_DATA pra_start_event_data = {
+  .address = 0,
+  .data_len = sizeof(PRA_START_EVENT_DATA),
+  .mode = value[1],
+  .color = value[0],
+};
+pra_start_event_data.address = expected_id - 1;
+esp_event_post_to(pr_events_loop_handle, PRA, PRA_START_EVENT, &pra_start_event_data, sizeof(PRA_START_EVENT_DATA), portMAX_DELAY);
+// 等待通信ACK
+xEventGroupWaitBits(espnow_protocol-&gt; espnow_protocol-&gt; pdTRUE, pdTRUE, portMAX_DELAY);</code></pre><p>依据此设计，绘制上电和通讯时序图，并一一实现：<img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/57efd8e6325b4cc5b67d25c5b7f2761c.png" alt="1718699476267.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/a3ad060bbefd4e3788d5eb2cf2eeb311.png" alt="1718699484859.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/dff00880f6b144ceb0bb4c2ae9a614c9.png" alt="1718699510631.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><p><img src="https://bbs-web-static.robomaster.com/bbs-prod/8ce11cb37d31403ca68fc72cfd53edd0" alt="1718699520805.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><p>除了这些，此系统在初次上电时会进行ID分配，类似RoboMaster装甲模块的ID重置操作，通过依次击打靶面，主控MCU会自动分配ID并写入各个靶面的NVS Flash，随后每次上电都会按照既有ID初始化，除非ID冲突产生或者出现没有ID的靶面。此举主要目的是尽可能减少烧录的次数，拒绝各种往程序里写MAC地址的繁琐操作，保证同一套固件代码的通用性。<br><br>其关键代码如下：</p><pre><code class="language-c++ language">/*首先，给出NVS Flash内容的定义*/
+
+
+#if CONFIG_POWERRUNE_TYPE == 1
+void ESPNowProtocol::reset_id_PRA_HIT_handler(void *event_handler_arg,
+                                              esp_event_base_t event_base,
+                                              int32_t event_id,
+                                              void *event_data)
+{
+    reset_armour_id_t *reset_armour_id_data = (reset_armour_id_t *)event_handler_arg;
+    PRA_HIT_EVENT_DATA *pra_hit_event_data = (PRA_HIT_EVENT_DATA *)event_data;
+    if (pra_hit_event_data-&gt; &gt; 4)
+    {
+        ESP_LOGE(TAG_MESSAGER, "[Reset ID] Address %i out of range", pra_hit_event_data-&gt;
+        return;
+    }
+
+    ESP_LOGI(TAG_MESSAGER, "[Reset ID] Hit event received from address %i", pra_hit_event_data-&gt;
+
+    EventBits_t n = xEventGroupGetBits(reset_armour_id_data-&gt;
+    // 数已激活设备数
+    uint8_t count = 0;
+    while (n)
+    {
+        count++;
+        n &= (n - 1);
+    }
+    // 判断是否重复
+    if (xEventGroupGetBits(reset_armour_id_data-&gt; & (1 &lt;&lt; pra_hit_event_data-&gt;ress))
+    {
+        ESP_LOGW(TAG_MESSAGER, "[Reset ID] Hit event from address %i repeated", pra_hit_event_data-&gt;
+        // 更新ID
+        reset_armour_id_data-&gt; = packet_rx_id[pra_hit_event_data-&gt;
+        reset_armour_id_data-&gt; = packet_tx_id[pra_hit_event_data-&gt;
+        return;
+    }
+    // 写入新MAC
+    memcpy(reset_armour_id_data-&gt; + count, mac_addr[pra_hit_event_data-&gt; ESP_NOW_ETH_ALEN);
+    // 写入新Config
+    memcpy(reset_armour_id_data-&gt; + count, config-&gt; sizeof(PowerRune_Armour_config_info_t));
+    reset_armour_id_data-&gt; = count + 1; // 1 2 3 4 5
+    // 写入新ID
+    reset_armour_id_data-&gt; = packet_rx_id[pra_hit_event_data-&gt;
+    reset_armour_id_data-&gt; = packet_tx_id[pra_hit_event_data-&gt;
+    xEventGroupSetBits(reset_armour_id_data-&gt; 1 &lt;&lt; pra_hit_event_data-&gt;ress); // 0 1 2 3 4
+    ESP_LOGD(TAG_MESSAGER, "[Reset ID] Hit bits: %i, counts %i", (int)xEventGroupGetBits(reset_armour_id_data-&gt; count);
+    if (count == 4)
+        esp_event_handler_unregister_with(pr_events_loop_handle, PRA, PRA_HIT_EVENT, reset_id_PRA_HIT_handler);
+}
+
+esp_err_t ESPNowProtocol::reset_armour_id()
+{
+    // DEBUG TODO
+    // return ESP_OK;
+    ESP_LOGI(TAG_MESSAGER, "[Reset ID] Resetting PowerRune Armour ID...");
+
+    // 事件位和任务通知序列
+    EventGroupHandle_t reset_armour_id_event_group = xEventGroupCreate();
+    reset_armour_id_t reset_armour_id_data;
+    reset_armour_id_data.event_group = reset_armour_id_event_group;
+    // 交换配置信息
+    PowerRune_Armour_config_info_t *config_info = new PowerRune_Armour_config_info_t[5];
+    reset_armour_id_data.armour_config = config_info;
+
+    // 注册所需事件
+    esp_event_handler_register_with(pr_events_loop_handle, PRA, PRA_START_EVENT, tx_event_handler, NULL);
+    esp_event_handler_register_with(pr_events_loop_handle, PRC, CONFIG_EVENT, tx_event_handler, NULL);
+    esp_event_handler_register_with(pr_events_loop_handle, PRA, PRA_STOP_EVENT, tx_event_handler, NULL);
+    esp_event_handler_register_with(pr_events_loop_handle, PRA, PRA_HIT_EVENT, reset_id_PRA_HIT_handler, &reset_armour_id_data);
+
+    // 遍历address_old中的五个armour_id
+    PRA_START_EVENT_DATA pra_start_event_data;
+    for (size_t i = 0; i &lt; 5; i++)
+    {
+        pra_start_event_data.address = i;
+        esp_event_post_to(pr_events_loop_handle, PRA, PRA_START_EVENT, &pra_start_event_data, sizeof(PRA_START_EVENT_DATA), portMAX_DELAY);
+        xEventGroupWaitBits(ESPNowProtocol::send_state, ESPNowProtocol::SEND_ACK_OK_BIT, pdTRUE, pdTRUE, portMAX_DELAY);
+    }
+    // 等待全部击中，0b11111
+    xEventGroupWaitBits(reset_armour_id_event_group, 0b11111, pdTRUE, pdTRUE, portMAX_DELAY);
+    ESP_LOGI(TAG_MESSAGER, "[Reset ID] All PowerRune Armour ID hit");
+    // 写入新MAC、新ID和新配置
+    memcpy(mac_addr, reset_armour_id_data.mac_addr_new, 5 * ESP_NOW_ETH_ALEN);
+    update_mac_to_address_map();
+    memcpy(packet_rx_id, reset_armour_id_data.rx_id_new, 5 * sizeof(uint16_t));
+    memcpy(packet_tx_id, reset_armour_id_data.tx_id_new, 5 * sizeof(uint16_t));
+
+    CONFIG_EVENT_DATA pra_config_event_data;
+    memcpy(&pra_config_event_data.config_common_info, config-&gt;_config_common_info_pt(), sizeof(PowerRune_Common_config_info_t));
+
+    for (size_t i = 0; i &lt; 5; i++)
+    {
+        memcpy(config-&gt;_config_armour_info_pt(i), reset_armour_id_data.armour_config + i, sizeof(PowerRune_Armour_config_info_t));
+        pra_config_event_data.address = i;
+        memcpy(&pra_config_event_data.config_armour_info, reset_armour_id_data.armour_config + i, sizeof(PowerRune_Armour_config_info_t));
+        // 发送CONFIG_EVENT
+        esp_event_post_to(pr_events_loop_handle, PRC, CONFIG_EVENT, &pra_config_event_data, sizeof(CONFIG_EVENT_DATA), portMAX_DELAY);
+        xEventGroupWaitBits(ESPNowProtocol::send_state, ESPNowProtocol::SEND_ACK_OK_BIT, pdTRUE, pdTRUE, portMAX_DELAY);
+    }
+
+    ESP_LOGI(TAG_MESSAGER, "[Reset ID] PowerRune Armour ID reset done");
+    // 给所有设备发送PRA_STOP_EVENT
+    PRA_STOP_EVENT_DATA pra_stop_event_data;
+    for (size_t i = 0; i &lt; 5; i++)
+    {
+        pra_stop_event_data.address = i;
+        esp_event_post_to(pr_events_loop_handle, PRA, PRA_STOP_EVENT, &pra_stop_event_data, sizeof(PRA_STOP_EVENT_DATA), portMAX_DELAY);
+        xEventGroupWaitBits(ESPNowProtocol::send_state, ESPNowProtocol::SEND_ACK_OK_BIT, pdTRUE, pdTRUE, portMAX_DELAY);
+    }
+    // 释放内存
+    delete[] config_info;
+    vEventGroupDelete(reset_armour_id_event_group);
+
+    return ESP_OK;
+}
+#endif</code></pre><p>最后，进行人机交互设计，补上最后一块拼图。<br><br>首先，定义蓝牙BLE的GATT服务和特征值，并实现其回调函数，调用上述的事件发送函数。篇幅所限，不再赘述。<br><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/e1a4026420ab406492d0a837197338d3.png" alt="1718700523293.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><p>随后，实现PC上位机。上位机有如下可能的技术路径：</p><table data-new-ship='yes' data-font-node='' data-topic='' style="width: 100%;table-layout: fixed;height:0"><colgroup contentEditable="false"><col width=90></col><col width=90></col><col width=90></col></colgroup><tbody><tr><th colSpan="1" rowSpan="1" width="auto" style="">技术路径</th><th colSpan="1" rowSpan="1" width="auto" style="">优点</th><th colSpan="1" rowSpan="1" width="auto" style="">缺点</th></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">CLI</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">开发简易</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">操作困难</td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">Textual等终端界面</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">开发简易，跨平台，支持键盘鼠标操作，基于纯终端</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">不明显</td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">PyQt</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">功能强大，支持图形化</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);">开发复杂，依赖于X Server等图形环境，不支持纯终端</td></tr></tbody></table><p>综上，选择Python Textual库，实现了一个基于终端的跨平台图形化上位机，可以在Windows和Linux(NUC，NX，Android)上运行。<br><br>控制台-未启动状态：<br><img src="https://bbs-web-static.robomaster.com/bbs-prod/2b90656adf2d4e768cfd0a7243b21fce" alt="1718700797956.png" data-href="" data-file-md5="" data-file-len="" style=""/><br><br>控制台-启动状态：</p><p><img src="https://bbs-web-static.robomaster.com/bbs-prod/ed66997c783344feac7961d557d6bd12" alt="1718700808426.png" data-href="" data-file-md5="" data-file-len="" style=""/><br><br>控制台-日志查看：</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/f0067fbfc1f14c6fbb334a9d079ae5f9.png" alt="1718700816601.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><p>为了交付方便，提供了一份环境配置脚本，可在Windows和Linux上运行，自动安装所需的Python库。<img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/d8c1311338684ecfb16e0900eed450ef.png" alt="1718701659814.png" data-href="" data-file-md5="" data-file-len="" style=""/></p><h4>2.2.5 键轴损毁检测</h4><p>我们没有测试键轴的具体击打寿命。虽然键轴比微动开关具有更高的结构强度，抗击打能力很强，但仍然面临损坏的情况。</p><p>键轴损坏会有以下表现：</p><ol><li>持续处于激活状态</li><li>一直处于抖动状态</li><li>在靶面振动时概率误触发</li></ol><p>这种表现会导致大符被一直自触发，丧失了击打的意义，需要拆机维护，花费大量时间检查损坏的键轴并更换。但通过设计键轴损毁检测算法，自动识别并屏蔽损坏键轴环，可以让能量机关系统扛过国赛6天-7天由多个学校的队伍轮流使用的高强度工况，没有发生需要拆机维护的情况。该算法也允许将损坏环的信息通过灯效等方式反馈出来，可以让维护人员快速定位损坏环，减少维护时间。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bbs-prod/cbce252bbd1b4238ac3e5f22ede6fe8f.jpg" alt="5423b4ddde8f9371b45cdd157039265.jpg" data-href="" data-file-md5="" data-file-len="" style=""/></p><p>使用带键轴损毁检测的GPIO守护进程检测所有击打，并维护一个键轴损毁状态变量。在系统OTA以及上电配对的过程中，显示键轴损毁的灯效，以便维护人员快速定位损坏环。</p><p>损毁检测算法的设计如下，由于注释详细，不再赘述：</p><pre><code class="language-c++ language">// 键轴损毁状态变量
+bool valid[10] = {true, true, true, true, true, true, true, true, true, true};
+
+
+// 带键轴损毁检测的GPIO守护进程
+void PowerRune_Armour::GPIO_polling_service(void *pvParameter)
+{
+    uint8_t io_valid_state[10] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+    uint8_t io_last_valid_state[10] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+    uint8_t io_last_reading[10] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+    TickType_t last_jump_time[10] = {0};
+    TickType_t bounce_time[10] = {0};
+    TickType_t activation_time[10] = {0};
+    TickType_t last_activation_time = 0;
+    uint32_t bounce_count[10] = {0}; // 消抖计数
+
+    ESP_LOGI(TAG_ARMOUR, "GPIO polling service start");
+    TickType_t start_time = xTaskGetTickCount() * portTICK_PERIOD_MS;
+    while (1)
+    {
+        TickType_t current_time = xTaskGetTickCount() * portTICK_PERIOD_MS;
+        for (uint8_t i = 0; i &lt; 10; i++)
+        {
+            int reading = gpio_get_level(TRIGGER_IO[i]);
+
+            // 去抖动处理
+            if (reading != io_last_reading[i] && valid[i])
+            {
+                last_jump_time[i] = current_time;
+                bounce_count[i]++;
+                ESP_LOGI(TAG_ARMOUR, "GPIO %d, Bounce Count: %d", (int)TRIGGER_IO[i], (int)bounce_count[i]);
+                io_last_reading[i] = reading;
+            }
+
+            if ((current_time - last_jump_time[i]) &gt; 1) // 消抖时间
+            {
+                if (valid[i] && (reading != io_valid_state[i])) // 有效触发
+                {
+                    if (reading == 0 && current_time - last_activation_time &gt; 1000) // LOW level，触发间隔需大于1s
+                    {
+                        io_valid_state[i] = reading;
+                        last_activation_time = current_time;
+                        activation_time[i] = current_time;
+                        ESP_LOGI(TAG_ARMOUR, "GPIO %d, Score IO %d Triggered", (int)TRIGGER_IO[i], (int)TRIGGER_IO_TO_SCORE[i]);
+                    }
+                    else if (reading == 1)
+                    {
+                        io_valid_state[i] = reading;
+                        ESP_LOGI(TAG_ARMOUR, "GPIO %d, Score IO %d Released", (int)TRIGGER_IO[i], (int)TRIGGER_IO_TO_SCORE[i]);
+                    }
+                }
+            }
+
+            // 持续低电平激活检测
+            if (io_valid_state[i] == 0 && current_time - activation_time[i] &gt; 1000 && valid[i])
+            {
+                valid[i] = false;
+                ESP_LOGI(TAG_ARMOUR, "GPIO %d damaged: Low level detected for too long.", TRIGGER_IO[i]);
+                io_valid_state[i] = 1;
+            }
+
+            // 跳变检测，防止键轴卡阻
+            if ((current_time - bounce_time[i]) &lt; 5000 && valid[i])
+            {
+                if (bounce_count[i] &gt; 10) // 5秒内跳变次数超过15次，认为是键轴卡阻
+                {
+                    valid[i] = false;
+                    ESP_LOGI(TAG_ARMOUR, "GPIO %d damaged: Frequent bouncing detected.", TRIGGER_IO[i]);
+                    io_valid_state[i] = 1;
+                    bounce_count[i] = 0;
+                    bounce_time[i] = current_time;
+                }
+            }
+            else if (valid[i])
+            {
+                bounce_count[i] = 0;
+                bounce_time[i] = current_time;
+            }
+            else if (!valid[i])
+            {
+                bounce_count[i] = 0;
+            }
+
+            if ((xTaskGetTickCount() * portTICK_PERIOD_MS - start_time) &gt; 2000) // 预留2s供按键检测
+            {
+                if (io_valid_state[i] == 0 && valid[i] && io_last_valid_state[i] == 1) // 下升沿触发，保证实时性
+                {
+                    ESP_LOGI(TAG_ARMOUR, "GPIO %d, Score IO %d Sending event...", TRIGGER_IO[i], TRIGGER_IO_TO_SCORE[i]);
+                    // 发送事件
+                    PRA_HIT_EVENT_DATA hit_event_data;
+                    hit_event_data.address = config-&gt; - 1;
+                    hit_event_data.score = TRIGGER_IO_TO_SCORE[i];
+                    esp_event_post_to(pr_events_loop_handle, PRA, PRA_HIT_EVENT, &hit_event_data, sizeof(PRA_HIT_EVENT_DATA), portMAX_DELAY);
+                    io_last_valid_state[i] = io_valid_state[i];
+                }
+                else if (io_valid_state[i] == 1 && valid[i] && io_last_valid_state[i] == 0)
+                {
+                    io_last_valid_state[i] = io_valid_state[i];
+                }
+            }
+        }
+        vTaskDelay(1 / portTICK_PERIOD_MS);
+    }
+    vTaskDelete(NULL);
+}</code></pre><h2>2.3 未来展望</h2><p>本项目是我进队以来初次完整完成的项目，从需求分析到设计、开发、测试、交付，全程参与。在此过程中，我学到了很多，也发现了很多不足。对这个项目，具体未来展望如下：</p><ol><li><s>能量机关在激活后的闪烁灯效不同步，原因为串行发送的数据包在传输过程中会有一定的延迟。可以通过切换到广播信道发送总激活命令，达到同步。</s>（通过对延时进行预测，实现了闪烁灯效的同步。）</li><li>开关电源选取较为草率，可以考虑使用更安全、更稳定的TPS系列电源管理芯片。</li><li>通讯协议的设计可以更进一步，事件驱动的设计可以进阶为发布-订阅模式，减少代码耦合。</li><li>上位机并没有实现全部的接口，可以将亮度调整、上电OTA使能等接入上位机。</li><li>项目中各部分公用代码虽然完全一致，但是没有配置到同一份文件上。可通过配置CMakelist文件将公用代码集中存储。</li></ol><h1>三、参考资料</h1><ol><li>乐鑫IDF参考文档：<a href="https://docs.espressif.com/projects/esp-idf/zh_CN/latest/" target="_blank">https://docs.espressif.com/projects/esp-idf/zh_CN/latest/</a></li><li>【RM2023-可环数检测能量机关开源】深圳大学-RobotPilots战队：<a href="https://bbs.robomaster.com/article/9457" target="_blank">https://bbs.robomaster.com/article/9457</a></li></ol><h1>四、开源RoadMap及个人联系方式</h1><h2>RoadMap</h2><ol><li><s>飞镖无线供电&无线充电&远程开关系统</s></li><li>基于ROS2的飞镖现场调参上位机</li></ol><h2>联系方式</h2><ul><li>邮箱 chengnangong@163.com</li><li>欢迎交流！因时间有限，所以回复可能不算及时。</li></ul><h1>五、开源声明</h1><p>1.开源文件的最终解释权归 东南大学3SE战队 所有。<br><br>2.开源目的在于加强参赛队之间交流，有助于提高自身和其他参赛队的水平。<br><br>3.开源项目遵循MIT开源协议。</p><h1>六、常见问题</h1><ol><li>随着IDF框架的更新，原有API的行为可能会被变更，开发时使用的是IDF v5.1，请以此为准。</li><li>硬件电路图请自行修改，尤其需要加强电源部分的保护，并单独验证。</li><li>代码中有单元测试内容，务必完成每个单板的单元测试之后再联调，遇到问题优先查看串口日志，必要时自行添加测试/日志等。</li><li>OTA地址随学校服务器关停已经失效，可以在menuconfig中替换为自己的服务器，也可以不使用OTA功能。</li><li>机械图纸已经失传，机械/轴系设计/保护加强相关的问题请自行解决。</li><li>作为参考，我们选用的是高特的五脚海洋轴，因为这种类青轴触发克数较大，而且透明，不会挡光。</li><li>保护板建议使用PC板，亚克力板强度不够用。</li></ol>
+  </div>
+</article>

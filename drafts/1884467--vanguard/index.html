@@ -1,0 +1,39 @@
+<!-- METADATA
+Tiêu đề: 华南师范大学（佛山）-VANGUARD战队
+Chuyên mục: Cơ khí
+Tác giả: 我不是Tom
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a2a7c9b50276423cacd491cd5c94dd581780592518934/1280X1280.PNG
+Nguồn: https://bbs.robomaster.com/article/1884467
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <blockquote使用前务必看清楚文档！使用前务必看清楚文档！使用前务必看清楚文档！</blockquote<blockquoteRM2026-VESC_TINY-更适合RM“体积狗”使用的无感FOC电调</blockquote<h1开源链接</h1<p<a href="https://oshwhub.com/supervisor-jerry-bite/vesc" target="_blank"https://oshwhub.com/supervisor-jerry-bite/vesc</a</p<h1项目简介</h1<pVESC作为目前最成熟、生态最完善的开源电调项目之一，为无数电机控制
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 华南师范大学（佛山）-VANGUARD战队. Ứng dụng trong phân mảng Cơ khí.
+Tệp đính kèm: vanguard-tai-nguyen.zip (Cục bộ - 18.03 MB)
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>华南师范大学（佛山）-VANGUARD战队</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1884467" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 我不是Tom</p>
+    <p><strong>Chuyên mục:</strong> Cơ khí</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a2a7c9b50276423cacd491cd5c94dd581780592518934/1280X1280.PNG" alt="华南师范大学（佛山）-VANGUARD战队" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
+    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
+    <ul style="margin-bottom:0;">
+      <li><a href="./attachments/vanguard-tai-nguyen.zip" target="_blank"><strong>vanguard-tai-nguyen.zip</strong></a> (📁 Đã tải trong thư mục attachments/ - 18.03 MB)</li>
+    </ul>
+  </div>
+  <hr>
+  <div class="article-body">
+<blockquote>使用前务必看清楚文档！使用前务必看清楚文档！使用前务必看清楚文档！</blockquote><blockquote>RM2026-VESC_TINY-更适合RM“体积狗”使用的无感FOC电调</blockquote><h1>开源链接</h1><p><a href="https://oshwhub.com/supervisor-jerry-bite/vesc" target="_blank">https://oshwhub.com/supervisor-jerry-bite/vesc</a></p><h1>项目简介</h1><p>VESC作为目前最成熟、生态最完善的开源电调项目之一，为无数电机控制项目提供了优秀的软硬件基础。其是由Benjamin Vedder开发的一个开源无刷直流电机控制器，基于ChibiOS/RT，带有PPM信号(RC伺服)，ADC，UART, I2C, USB或CAN总线接口，开源项目在6.0版本开始不再开源PCB文件，但是相关源代码和原理图依旧开源，本项目基于VESC官方开源的原理图绘制，针对于RoboMaster比赛场景，对比原版有一些功能上的修改。项目目前已应用于华南师范大学（佛山校区） VANGUARD 战队 2026 赛季RMUC的步兵机器人与空中机器人的发射机构中，在不到 30 元的 BOM 成本下，本项目依然具备优秀的性能与可靠性，值得各战队参考。</p><p><br></p><hr/><p><br></p><h1>项目参数</h1><p>与常规 VESC 项目不同，本项目主要针对 RoboMaster 比赛中的摩擦轮电机工况进行设计与优化，重点关注体积和成本控制</p><ul><li style="text-align: left;">电流采样方案采用 INA240A2（50V/V）搭配 1mR 采样电阻进行相电流采样</li><li style="text-align: left;">支持无感 FOC 控制（HFI和磁链观测器）</li><li style="text-align: left;">采用紧凑型四层 PCB 设计，可以在嘉立创进行免费打板</li><li>MOSFET选用APG035N04Q（Qg:20.3nC@10V;Rds_on:2.8mΩ@10V）</li><li>长38.5mm,宽28.5mm,很“TINY"</li><li style="text-align: left;">BOM 成本控制在 30 元以内（极限可压缩至20元以内，不含部分外围器件）</li></ul><h1>实物照片</h1><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a2a7c9b50276423cacd491cd5c94dd581780592518934/1280X1280.PNG" alt="1280X1280.PNG" data-href="" data-file-md5="3ad7204661e2456b1e64bfe014794c94" data-file-len="1227031" style="width: 847.00px;height: 452.56px;"/><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/eb6cdc8c929148b7ace5b629131307501780592539951/1280X1280.PNG" alt="1280X1280.PNG" data-href="" data-file-md5="8099d433ca301d392d92f09f379cc4ab" data-file-len="1244125" style="width: 390.98px;height: 340.79px;"/><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/f8b2ce06e0084fc8b52409b610fefc6a1780592565717/1280X1280.PNG" alt="1280X1280.PNG" data-href="" data-file-md5="da27c4a33d044d205b6acee06b0d0eef" data-file-len="1400064" style="width: 450.98px;height: 333.54px;"/></p><h1>注意事项</h1><p>项目所使用到的INA240在立创商城上价格较高（且tb上拆机/翻新的较多），建议使用国产型号进行平替（如<strong>CSA221NATSSOP8、RSA240BXQ等型号</strong>）</p><p>本项目目前仍处于持续迭代阶段，项目时间线如下：</p><ul><li style="text-align: left;">项目立项：2026 赛季初</li><li style="text-align: left;">DEMO 版本：2026 RMUC 完整形态视频考核后完成</li><li style="text-align: left;">第一版正式上场版本（V1.0.0.20260414)：2026 RMUL 四川站后一周完成</li></ul><p style="text-align: left;">目前已知问题包括：</p><ul><li style="text-align: left;">10V-5V 电源部分采用 XX1117 系列 LDO，存在较大的线性稳压损耗（约 0.4W）</li><li style="text-align: left;">当前仅支持无感模式，暂不支持有感控制</li><li style="text-align: left;">大部分阻容采用 0402 封装，对焊接工艺要求较高（建议开钢网进行手工贴片）</li></ul><h1>附件说明</h1><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/dfc23bb28db2471e83e1280bf6d9974e1780593593629/VESC资料.zip" data-file-name="VESC资料.zip" data-file-md5="129f446c2a3da36d1e943a5121797797" data-file-len="18902218" data-file-key="1780593399627-18902218-VESC资料.zip-dnp90Sdua_rRFkK2LKsNp" data-file-state="uploadSuccess">VESC资料.zip</a></p><p>附件中包含本项目相关的全部资料，包括：</p><ul><li>电调快速调试手册</li><li>vesc_tools_6.06上位机</li><li style="text-align: left;">基于达妙 MC_02 开发板的 CAN 控制例程</li><li style="text-align: left;">适配本项目硬件参数的 VESC 固件</li><li style="text-align: left;">VESC CAN 通讯帧格式说明</li><li>RoboMaster SNAIL KV2400电机的Motor_Config&App_Config参数</li><li style="text-align: left;">朗宇 2212电机的Motor_Config&amp;App_Config参数</li></ul><h1>致谢</h1><p>感谢MPS(芯源系统）、类比半导体、GATEMODE(捷茂微电子)、Coilcraft(线艺)、ALLPOWER(铨力)对本项目提供的物料支持，感谢福建理工大学 zsh 为本项目提供的修改建议！</p><p><br></p>
+  </div>
+</article>

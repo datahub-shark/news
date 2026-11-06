@@ -1,0 +1,41 @@
+<!-- METADATA
+Tiêu đề: 共轴双桨构型空中机器人开源
+Chuyên mục: Cơ khí
+Tác giả: 通讯信息 3359424857
+Ảnh bìa: 
+Nguồn: https://bbs.robomaster.com/article/1884482
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p前言：<strong8是陷阱！！！</strong</p<p26赛季就这么结束了，1-3，原因十分复杂，既有不合理的赛制，又有抽象的队伍管理，抽象的队友，竟无语凝噎。身陷如此混沌，属实心累，也罢，既然飞机成绩不错，还上了官方的宣传片，就先开源一下吧。</p<p<br</p<p<strong机架：</strong采用了经典的2+2中心板设计，机臂碳管选择了外径30 壁厚1的碳方管，未使用管夹，直接将电机固定在机臂上，没有遇到过桨平面的问题（方管是对的）；中心板有点镂空过度，导致机架刚性一般，但共轴双桨对抗扭要求低的性质刚好弥补了这一点，并未在飞行上遇到什么问题；尝试使用了碳管框架以提高机架结
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 共轴双桨构型空中机器人开源. Ứng dụng trong phân mảng Cơ khí.
+Tệp đính kèm: bai-viet-tai-nguyen.zip (Cục bộ - 3.18 MB), bai-viet-tai-nguyen.zip (Cục bộ - đã có sẵn trên máy)
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>共轴双桨构型空中机器人开源</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1884482" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 通讯信息 3359424857</p>
+    <p><strong>Chuyên mục:</strong> Cơ khí</p>
+  </div>
+  
+  
+  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
+    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
+    <ul style="margin-bottom:0;">
+      <li><a href="./attachments/bai-viet-tai-nguyen.zip" target="_blank"><strong>bai-viet-tai-nguyen.zip</strong></a> (📁 Đã tải trong thư mục attachments/ - 3.18 MB)</li>
+      <li><a href="./attachments/bai-viet-tai-nguyen.zip" target="_blank"><strong>bai-viet-tai-nguyen.zip</strong></a> (📁 Đã tải trong thư mục attachments/ - đã có sẵn trên máy)</li>
+    </ul>
+  </div>
+  <hr>
+  <div class="article-body">
+<p>前言：<strong>x8是陷阱！！！</strong></p><p>26赛季就这么结束了，1-3，原因十分复杂，既有不合理的赛制，又有抽象的队伍管理，抽象的队友，竟无语凝噎。身陷如此混沌，属实心累，也罢，既然飞机成绩不错，还上了官方的宣传片，就先开源一下吧。</p><p><br></p><p><strong>机架：</strong>采用了经典的2+2中心板设计，机臂碳管选择了外径30 壁厚1的碳方管，未使用管夹，直接将电机固定在机臂上，没有遇到过桨平面的问题（方管是对的）；中心板有点镂空过度，导致机架刚性一般，但共轴双桨对抗扭要求低的性质刚好弥补了这一点，并未在飞行上遇到什么问题；尝试使用了碳管框架以提高机架结构强度，由于未进行对比测试所以没法判断是否有用，但确实给的框架有些厚重了。</p><p><strong>桨保（脚架）：</strong>大部分采用外径16壁厚0.5的碳管，与机架三层立体连接（十X十三层），此外选择了将脚架放置在桨保上，使得脚架对飞机下方近处没有任何遮挡，对于远处目标也只有右前45度一根碳管的遮。</p><p><strong>云台：</strong>前期规划的三摩擦由于DM2325的抽象质量宣告失败，后期更换常规的3508双摩擦，pitch轴选择了DM4310大力出奇迹，直驱并没有设计重力补偿，yaw轴选择6020直驱，为了提高yaw轴相应，选择了pitch轴后偏置，降低云台整体转动惯量，控制板竖置，提高空间利用率，综合设计实现了8m一个小装甲板的散步，15度仰角，90度俯角，左90度右180度的大范围活动云台</p><p><br></p><p><strong>比赛效果：</strong></p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="c19991e2c819acdcff2032bcc0623192" data-file-len="105890484" data-file-name="video_20260605_162137.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c5666b718575462dbedcee5977a2de7d1780647764419/video_20260605_162137.mp4" type="video/mp4"/></video>
+</div><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="b12da561f6348474f884b7c82d49c689" data-file-len="101320808" data-file-name="video_20260605_162510.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/bd595f10674541278f4dc0e3589c7de51780647977363/video_20260605_162510.mp4" type="video/mp4"/></video>
+</div><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/ed041fac74154bc58d1347e6c22402f11780721387669/8孔拨盘1.5.zip" data-file-name="8孔拨盘1.5.zip" data-file-md5="199198c752463737eaa024ddb52f302c" data-file-len="3329245" data-file-key="1780721314005-3329245-8孔拨盘1.5.zip-JH772kjj1bTDznA1CYMiy" data-file-state="uploadSuccess">8孔拨盘1.5.zip</a>（2006联轴器后改用成品联轴器）</p><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/aa61b2b90cdf4736aea7521293a47bac1780643996331/26飞机2.0代.zip" data-file-name="26飞机2.0代.zip" data-file-md5="867512d5a15836ea3aa0ff3239d23b17" data-file-len="215930391" data-file-key="1780643703096-215930391-26飞机2.0代.zip-O_qhbtCcl8O3_J6XFmHIH" data-file-state="uploadSuccess">26飞机2.0代.zip</a></p><p>#注意：图里有屎，仅供参考（实在懒得铲了，各位见笑，有问题可以qq联系，欢迎交流）</p><h3><strong>致谢：</strong></h3><p>飞机今年的效果离不开fhr的优秀自瞄算法，离不开飞手老马的选型与调试飞行，离不开鹏的雷达定高，离不开gc的云台调试和发射优化，离不开xzh的视觉调试，感谢吉甲26届飞机组的全体成员</p><p>感谢桨保群等RM交流群，正如群友所说，只要你在这个群里，即使你什么也不说，也会学到很多</p><p>感谢老师，感谢赞助商师姐，搭建了吉甲这个平台</p><p><br></p><p><span style="color: rgba(0, 0, 0, 0.65); background-color: rgb(255, 255, 255); font-size: 14px;">[1] fsk.[RM2026-步兵自瞄/能量机关算法完整开源] 吉林大学TARS Go战队[EB/OL].(2026-05-06)[2026-06-05].https://bbs.robomaster.com/article/1883887?source=1.</span></p><p><span style="color: rgba(0, 0, 0, 0.65); background-color: rgb(255, 255, 255); font-size: 14px;">[1] 风之影.【2024赛季-空中机器人开源】哈尔滨工程大学[EB/OL].(2025-05-12)[2026-06-05].https://bbs.robomaster.com/article/43411?source=4.</span></p><p><span style="color: rgba(0, 0, 0, 0.65); background-color: rgb(255, 255, 255); font-size: 14px;">[1] 卡卡.【RM2023-空中机器人机械设计开源】南京航空航天大学[EB/OL].(2023-09-20)[2026-06-05].https://bbs.robomaster.com/article/9472?source=4.</span></p><p>[1] 杨三十.【分享帖】完全自制电池架结构开源[EB/OL].(2024-07-12)[2026-06-05].<a href="https://bbs.robomaster.com/article/9680?source=4" target="_blank">https://bbs.robomaster.com/article/9680?source=4</a>.</p><p><br></p><h3>通讯信息：</h3><p>孙煦朝</p><p>QQ：3359424857</p>
+  </div>
+</article>

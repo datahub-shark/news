@@ -1,0 +1,71 @@
+<!-- METADATA
+Tiêu đề: 中国科学技术大学 RoboWalker战队
+Chuyên mục: Thị giác máy
+Tác giả: Trojan
+Ảnh bìa: 
+Nguồn: https://bbs.robomaster.com/article/1883870
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <h21 项目简介</h2<p style="tet-align: start;"SerialPlotter 是一个无需后端框架的浏览器端工具，适合调试单片机、传感器、上位机协议和网络数据流。它可以把接收到的数据实时绘制成波形，支持时域、频域、通道配色、统计信息、发送面板和配置导入导出。</p<blockquote style="tet-align: start;"仓库地址：<a href="https://github.com/yssickjgd/serial_plotter" target="_blank"https://github.com/yssickjgd/serial_plotte
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 中国科学技术大学 RoboWalker战队. Ứng dụng trong phân mảng Thị giác máy.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>中国科学技术大学 RoboWalker战队</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1883870" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> Trojan</p>
+    <p><strong>Chuyên mục:</strong> Thị giác máy</p>
+  </div>
+  
+  
+  <hr>
+  <div class="article-body">
+<h2>1 项目简介</h2><p style="text-align: start;">SerialPlotter 是一个无需后端框架的浏览器端工具，适合调试单片机、传感器、上位机协议和网络数据流。它可以把接收到的数据实时绘制成波形，支持时域、频域、通道配色、统计信息、发送面板和配置导入导出。</p><blockquote style="text-align: start;">仓库地址：<a href="https://github.com/yssickjgd/serial_plotter" target="_blank">https://github.com/yssickjgd/serial_plotter</a><br><br>快速体验：<a href="https://yssickjgd.github.io/serial_plotter/ " target="_blank">https://yssickjgd.github.io/serial_plotter/ </a><br><br>其实当初的动机是感觉 <a href="https://github.com/hyOzd/serialplot" target="_blank">Serialplot</a> 软件的UI做得不太理想，而 <a href="https://gitee.com/gutega/Vodka" target="_blank">Vofa+</a> 有一些交互性不太友好的地方且作者大大好久没回 issue 了，因此我用VibeCoding做了这个网页端出来。。。<br><br>该工具完全兼容 Serialplot 的自定义帧头以及可选的8-bit校验协议，还有 Vofa+ 的 JustFloat 帧尾协议格式</blockquote><h2>2 主要功能</h2><ul><li style="text-align: start;">串口通信：基于 Web Serial API，适合现代 Chromium 系浏览器。</li><li style="text-align: start;">网络通信：通过本地 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>bridge.js</code></span> 提供 TCP Client、TCP Server 和 UDP 能力。</li><li style="text-align: start;">波形显示：支持时域图和频域图切换，频域模式内置 FFT。</li><li style="text-align: start;">频域去直流：可选在 FFT 前移除 DC 分量。</li><li style="text-align: start;">多通道显示：支持自定义通道名、颜色、显示/隐藏。</li><li style="text-align: start;">统计信息：单通道时显示最大值、最小值、峰峰值、均值、标准差、主频和周期。</li><li style="text-align: start;">交互查看：支持十字光标、滚动查看、鼠标缩放、手动 Y 轴范围。</li><li style="text-align: start;">帧解析：支持头部、尾部、8-bit 校验、字节序和多种数据类型。</li><li style="text-align: start;">发送面板：支持 Hex/Text、文件发送、定时发送。</li><li style="text-align: start;">配置管理：支持本地保存、导入、导出。</li></ul><h2>3 环境要求</h2><h3>3.1 浏览器</h3><p style="text-align: start;">建议使用 Chrome 或 Edge 等 Chromium 内核浏览器。</p><ul><li style="text-align: start;">需要支持 Web Serial API 才能使用串口模式。</li><li style="text-align: start;">建议通过本地 HTTP 服务或 HTTPS 方式打开页面，不要只依赖 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>file://</code></span>。</li><li style="text-align: start;">Firefox、Safari 目前不适合本项目的串口模式。</li></ul><h3>3.2 Node.js</h3><p style="text-align: start;">如果需要使用 TCP/UDP 模式，请安装：</p><ul><li style="text-align: start;">Node.js 14 或更高版本</li><li style="text-align: start;">npm 6 或更高版本</li></ul><h2>4 运行方式</h2><h3>4.1 网络访问（体验与试用）</h3><p style="text-align: start;">适合初次尝试使用，直接访问 <a href="https://yssickjgd.github.io/serial_plotter/" target="">https://yssickjgd.github.io/serial_plotter/</a> 即可。</p><h3>4.2 本地访问（强烈推荐）</h3><p style="text-align: start;">如若希望长期离线使用，则可以将仓库下载到本地：</p><pre><code >git clone https://github.com/yssickjgd/serial_plotter</code></pre><p style="text-align: start;">然后，在浏览器中打开仓库内的 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>index.html</code></span> 即可。</p><h3>4.2 启用 TCP/UDP 网络功能</h3><p style="text-align: start;">本项目还支持网络数据流的监听、解析、通信、绘图.如若使用该功能，则须克隆该仓库到本地：</p><pre><code >git clone https://github.com/yssickjgd/serial_plotter</code></pre><p style="text-align: start;">而后，需要在该仓库内执行下述两条命令，开启服务。注意！使用期间不能关闭该界面：</p><pre><code >npm install
+npm start</code></pre><p style="text-align: start;">默认会启动本地 WebSocket Bridge，监听 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>ws://127.0.0.1:8081</code></span>。此时，可配置网络监听环境</p><h2>5 使用方法</h2><h3>5.1 串口模式</h3><ol><li style="text-align: start;">打开左侧“通讯”选项卡。</li><li style="text-align: start;">选择“原生串口 (Web Serial)”模式。</li><li style="text-align: start;">设置波特率、数据位、停止位和校验位。</li><li style="text-align: start;">点击“连接”，在浏览器弹窗中选择串口设备。</li><li style="text-align: start;">接收数据后可在下方“字节流监视台”和上方“波形监视台”看到内容。</li></ol><h3>5.2 TCP Client 模式</h3><ol><li style="text-align: start;">启动 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>node bridge.js</code></span>。</li><li style="text-align: start;">在“通讯”里选择 “TCP Client (Bridge)”。</li><li style="text-align: start;">填写远端 TCP Server 的 Host 和 Port。</li><li style="text-align: start;">点击“连接”。</li></ol><h3>5.3 TCP Server 模式</h3><ol><li style="text-align: start;">启动 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>node bridge.js</code></span>。</li><li style="text-align: start;">选择 “TCP Server (Bridge)”。</li><li style="text-align: start;">填写要监听的本地端口。</li><li style="text-align: start;">Host 字段可以忽略，桥会在 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>0.0.0.0</code></span> 上监听该端口。</li><li style="text-align: start;">让外部 TCP 客户端连接这个端口即可。</li></ol><h3>5.4 UDP 模式</h3><ol><li style="text-align: start;">启动 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>node bridge.js</code></span>。</li><li style="text-align: start;">选择 “UDP (Bridge)”。</li><li style="text-align: start;">填写远端 Host 和 Port，这表示发送目标。</li><li style="text-align: start;">填写本地监听端口，用于接收 UDP 数据。</li><li style="text-align: start;">如果本地端口留空，程序会优先使用 Port 作为默认监听端口。</li></ol><h2>6 界面说明</h2><h3>6.1 波形监视台</h3><ul><li style="text-align: start;">时域图：显示原始采样值。</li><li style="text-align: start;">频域图：显示 FFT 频谱。</li><li style="text-align: start;">单通道时会显示统计信息。</li><li style="text-align: start;">统计栏会使用通道自定义名称，而不是默认 CH1、CH2。</li></ul><h3>6.2 字节流监视台</h3><p style="text-align: start;">日志颜色统一如下：</p><ul><li style="text-align: start;">蓝色：接收成功 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>RX</code></span></li><li style="text-align: start;">黄色：接收错误 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>RX[原因]</code></span></li><li style="text-align: start;">绿色：发送成功 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>TX</code></span></li><li style="text-align: start;">红色：发送错误 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>TX[原因]</code></span></li></ul><p style="text-align: start;">说明：</p><ul><li style="text-align: start;">未通过验证的数据会显示时间戳。</li><li style="text-align: start;">错误原因会直接附在 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>RX</code></span> 或 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>TX</code></span> 后面。</li><li style="text-align: start;">接收速率按真实接收到的数据块统计，不会因为错误帧重复放大。</li></ul><h2>7 配置文件</h2><p style="text-align: start;">配置支持导入导出，格式为 JSON。示例：</p><pre><code >{
+  "connType": "serial",
+  "serialBaud": "115200",
+  "serialData": "8",
+  "serialStop": "1",
+  "serialParity": "none",
+  "netHost": "127.0.0.1",
+  "netPort": "8081",
+  "netLocalPort": "9000",
+  "enableHeader": false,
+  "headerHex": "AB",
+  "enableFooter": true,
+  "footerHex": "0D 0A",
+  "enableChecksum": false,
+  "dataType": "float32",
+  "endianness": "little",
+  "channelsCount": "4",
+  "maxPoints": "1000",
+  "sendIntervalUnit": "ms",
+  "plotViewMode": "time",
+  "plotYScaleMode": "auto",
+  "plotFftRemoveDc": false,
+  "plotYMin": "-1",
+  "plotYMax": "1",
+  "channels": [
+    { "name": "acc_x", "color": "#ff0000", "visible": true },
+    { "name": "acc_y", "color": "#00ff00", "visible": true }
+  ]
+}</code></pre><p style="text-align: start;">支持的数据类型：</p><table data-new-ship='yes' data-font-node='' data-topic='' style="width: 100%;table-layout: fixed;height:0"><colgroup contentEditable="false"><col width=90></col><col width=90></col></colgroup><tbody><tr><th colSpan="1" rowSpan="1" width="auto" style="">类型</th><th colSpan="1" rowSpan="1" width="auto" style="">字节数</th></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(209, 217, 224);">int8 / uint8</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(209, 217, 224);">1</td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(209, 217, 224);">int16 / uint16</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(209, 217, 224);">2</td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(209, 217, 224);">int32 / uint32 / float32</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(209, 217, 224);">4</td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(209, 217, 224);">int64 / uint64 / float64</td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(209, 217, 224);">8<br></td></tr></tbody></table><h2>8 帧格式说明</h2><p style="text-align: start;">基本结构如下：</p><pre><code >[可选头部] + [数据负载] + [可选尾部] + [可选校验]</code></pre><p style="text-align: start;">示例：</p><pre><code >[AB] + [payload] + [0D 0A]</code></pre><p style="text-align: start;">如果启用了校验位，校验值位于帧尾之后。</p><h2>9 常见问题</h2><h3>9.1 串口无法连接</h3><ul><li style="text-align: start;">确认浏览器是否支持 Web Serial API。</li><li style="text-align: start;">确认页面是否通过本地 HTTP 服务或 HTTPS 打开。</li><li style="text-align: start;">检查串口是否已被其它程序占用。</li></ul><h3>9.2 TCP/UDP 无法监听</h3><ul><li style="text-align: start;">确认已经运行 <span style="background-color: rgba(129, 139, 152, 0.12);"><code>npm start</code></span>。</li><li style="text-align: start;">TCP Server 模式下，请填写要监听的本地端口。</li><li style="text-align: start;">UDP 模式下，请填写本地监听端口；远端 Host/Port 只是发送目标。</li><li style="text-align: start;">如果是 TCP Server，请确认该端口未被其它程序占用。</li><li style="text-align: start;">注意！目前暂不支持打开两个网页分别作为 Client 和 Server 这种特殊的工作模式。</li></ul><h3>9.3 波形不显示</h3><ul><li style="text-align: start;">在“通道”页勾选需要显示的通道。</li><li style="text-align: start;">检查 Y 轴范围是否合适。</li><li style="text-align: start;">切换到自动 Y 轴缩放试试。</li></ul><h3>9.4 发送定时任务异常</h3><ul><li style="text-align: start;">如果连接断开，程序会自动停止定时发送。</li><li style="text-align: start;">出错信息会出现在字节流监视台，不会再弹出浏览器提示框。</li></ul><h2>10 项目结构</h2><pre><code >serialplot_new_test/
+├── app.js
+├── bridge.js
+├── dataParser.js
+├── index.html
+├── netEngine.js
+├── package.json
+├── plotter.js
+├── readme.md
+├── serialEngine.js
+├── serial_config.json
+├── styles.css
+└── web_socket_test.html</code></pre><h2>11 开源说明</h2><p style="text-align: start;">本仓库遵循 CC-BY-NC-SA 4.0 开源协议。</p><h2>12 贡献</h2><p style="text-align: start;">欢迎提交 Issue 和 Pull Request。</p><p style="text-align: start;">建议在提交问题时附带：</p><ul><li style="text-align: start;">浏览器版本</li><li style="text-align: start;">操作系统</li><li style="text-align: start;">连接模式（Serial / TCP Client / TCP Server / UDP）</li><li style="text-align: start;">相关配置文件</li><li style="text-align: start;">复现步骤或截图</li></ul><h2 style="text-align: start;">13 相关资源</h2><ul><li style="text-align: start;">Web Serial API: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API" target="">https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API</a></li><li style="text-align: start;">Canvas API: <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API" target="">https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API</a></li><li style="text-align: start;">FFT: <a href="https://en.wikipedia.org/wiki/Fast_Fourier_transform" target="">https://en.wikipedia.org/wiki/Fast_Fourier_transform</a></li></ul><p style="text-align: start;">最后更新：2026-05-01</p>
+  </div>
+</article>
