@@ -1,10 +1,10 @@
-/** ROAB Ideas. Set ADMIN_EMAIL in Script Properties, then run setup_(). */
+/** Robot Ideas. Set ADMIN_EMAIL in Script Properties, then run setup_(). */
 const CATEGORIES_ = ['Robot di động','Thị giác máy','Điều khiển','Cơ khí','AI & ROS','Khác'];
 function properties_(){return PropertiesService.getScriptProperties();}
 function adminEmail_(){const value=String(properties_().getProperty('ADMIN_EMAIL')||'').trim().toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))throw Error('Chưa cấu hình ADMIN_EMAIL.');return value;}
 function setup_(){
  adminEmail_();const props=properties_();let id=props.getProperty('SHEET_ID');
- if(!id){const ss=SpreadsheetApp.create('ROAB Ideas · Private database');id=ss.getId();props.setProperty('SHEET_ID',id);}
+ if(!id){const ss=SpreadsheetApp.create('Robot Ideas · Private database');id=ss.getId();props.setProperty('SHEET_ID',id);}
  const ss=SpreadsheetApp.openById(id);
  [['Articles',['id','json']],['Sources',['id','name','feedUrl','enabled']],['Audit',['time','action','articleId']]].forEach(([name,headers])=>{let sh=ss.getSheetByName(name);if(!sh){sh=ss.insertSheet(name);sh.appendRow(headers);sh.setFrozenRows(1);}});
  // Do not enable sharing on this spreadsheet or its Drive folder.
@@ -14,7 +14,7 @@ function sheet_(name){const id=properties_().getProperty('SHEET_ID');if(!id)thro
 function text_(value){const s=String(value==null?'':value);return /^[\s\u0000-\u001f]*[=+@-]/.test(s)||s.startsWith("'")?"'"+s:s;}
 function rows_(){const sh=sheet_('Articles');return sh.getLastRow()<2?[]:sh.getRange(2,1,sh.getLastRow()-1,2).getValues().map((r,i)=>({row:i+2,article:JSON.parse(r[1])}));}
 function json_(data){return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);}
-function doGet(e){if(e&&e.parameter&&e.parameter.view==='admin')return HtmlService.createHtmlOutputFromFile('Admin').setTitle('ROAB Ideas · Biên tập');try{return json_({ok:true,articles:rows_().map(r=>r.article).filter(a=>a.status==='published').map(a=>({id:a.id,title:a.title,summary:a.summary,content:a.content,category:a.category,tags:a.tags,robotIdea:a.robotIdea,sourceName:a.sourceName,sourceUrl:a.sourceUrl,publishedAt:a.publishedAt})).sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt))});}catch(e){console.error(e);return json_({ok:false,error:'Thư viện chưa sẵn sàng.'});}}
+function doGet(e){if(e&&e.parameter&&e.parameter.view==='admin')return HtmlService.createHtmlOutputFromFile('Admin').setTitle('Robot Ideas · Biên tập');try{return json_({ok:true,articles:rows_().map(r=>r.article).filter(a=>a.status==='published').map(a=>({id:a.id,title:a.title,summary:a.summary,content:a.content,category:a.category,tags:a.tags,robotIdea:a.robotIdea,sourceName:a.sourceName,sourceUrl:a.sourceUrl,publishedAt:a.publishedAt})).sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt))});}catch(e){console.error(e);return json_({ok:false,error:'Thư viện chưa sẵn sàng.'});}}
 function digest_(value){return Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,value));}
 function random_(){return Utilities.getUuid()+Utilities.getUuid();}
 function locked_(fn){const lock=LockService.getScriptLock();lock.waitLock(10000);try{return fn();}finally{lock.releaseLock();}}
@@ -26,7 +26,7 @@ function adminApi(action,payload){payload=payload||{};try{
   const raw=random_();const bytes=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,raw);const code=String(((bytes[0]&255)*65536+(bytes[1]&255)*256+(bytes[2]&255))%1000000).padStart(6,'0');
   const day=new Date().toISOString().slice(0,10);const dailyKey='otpSent:'+day;const sent=Number(properties_().getProperty(dailyKey)||0);if(sent>=20)throw Error('Đã đạt giới hạn 20 email đăng nhập hôm nay.');
   const salt=random_();cache.put('otp',JSON.stringify({hash:digest_(salt+code),salt,attempts:0,expiresAt:Date.now()+600000}),600);cache.put('otpCooldown','1',60);properties_().setProperty(dailyKey,String(sent+1));
-  MailApp.sendEmail(email,'ROAB Ideas · Mã đăng nhập','Mã đăng nhập: '+code+'\nCó hiệu lực 10 phút. Không chia sẻ mã này.');return {ok:true};
+  MailApp.sendEmail(email,'Robot Ideas · Mã đăng nhập','Mã đăng nhập: '+code+'\nCó hiệu lực 10 phút. Không chia sẻ mã này.');return {ok:true};
  });
  if(action==='login')return locked_(()=>{const cache=CacheService.getScriptCache();const raw=cache.get('otp');if(!raw)throw Error('Mã hết hạn. Yêu cầu mã mới.');const otp=JSON.parse(raw);if(Date.now()>otp.expiresAt){cache.remove('otp');throw Error('Mã hết hạn. Yêu cầu mã mới.');}otp.attempts++;if(otp.attempts>5){cache.remove('otp');throw Error('Vượt số lần thử. Yêu cầu mã mới.');}cache.put('otp',JSON.stringify(otp),Math.max(1,Math.ceil((otp.expiresAt-Date.now())/1000)));if(digest_(otp.salt+String(payload.code||''))!==otp.hash)throw Error('Mã không đúng.');cache.remove('otp');const token=random_();cache.put('session:'+digest_(token),'admin',3600);return {ok:true,token};});
  requireSession_(payload.token);

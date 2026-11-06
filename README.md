@@ -1,4 +1,4 @@
-# ROAB Ideas
+# Robot Ideas
 
 Thư viện ý tưởng phát triển robot. Giao diện tĩnh trên GitHub Pages, dữ liệu riêng tư trên Google Sheets, API và trang biên tập trên Google Apps Script. Không có khóa bí mật trong repo.
 
