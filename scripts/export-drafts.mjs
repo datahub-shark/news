@@ -258,10 +258,16 @@ async function exportAll() {
     }
 
     // 4. Nội dung index.html
+    const coverHtml = art.coverImage ? `
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="${art.coverImage}" alt="${art.title}" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>` : '';
+
     const content = `<!-- METADATA
 Tiêu đề: ${art.title}
 Chuyên mục: ${art.category}
 Tác giả: ${art.author}
+Ảnh bìa: ${art.coverImage || ''}
 Nguồn: ${art.sourceUrl}
 Tên nguồn: ${art.sourceName}
 Tóm tắt: ${art.summary}
@@ -280,6 +286,7 @@ HƯỚNG DẪN:
     <p><strong>Nguồn:</strong> <a href="${art.sourceUrl}" target="_blank">${art.sourceName}</a> · <strong>Tác giả:</strong> ${art.author}</p>
     <p><strong>Chuyên mục:</strong> ${art.category}</p>
   </div>
+  ${coverHtml}
   ${attachmentsHtml}
   <hr>
   <div class="article-body">

@@ -110,6 +110,7 @@ function parseDraft(content) {
   const sourceUrl = getValue('Nguồn');
   const sourceName = getValue('Tên nguồn') || 'Robot Ideas';
   const summary = getValue('Tóm tắt');
+  const coverImage = getValue('Ảnh bìa');
   const robotIdea = getValue('Gợi ý ứng dụng');
 
   // Lấy toàn bộ nội dung HTML sau thẻ đóng comment -->
@@ -123,6 +124,7 @@ function parseDraft(content) {
     sourceUrl,
     sourceName,
     summary,
+    coverImage,
     robotIdea,
     html: htmlBody
   };
@@ -221,6 +223,7 @@ export async function pushApprovedArticles(options = {}) {
           sourceName: parsed.sourceName.slice(0, 200),
           sourceUrl: parsed.sourceUrl,
           robotIdea: parsed.robotIdea.slice(0, 5000),
+          coverImage: parsed.coverImage || '',
           html: parsed.html,
           status: targetStatus
         }

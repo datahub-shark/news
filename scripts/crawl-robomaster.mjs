@@ -126,6 +126,44 @@ function cleanText(str) {
 }
 
 /**
+ * Tự động trích xuất ảnh bìa chính thức từ bài viết:
+ * 1. Ưu tiên lấy từ headImg trong Nuxt state (ảnh đại diện tác giả chọn khi đăng bài trên RoboMaster BBS)
+ * 2. Fallback sang ảnh kỹ thuật đầu tiên trong nội dung bài viết
+ */
+function extractCoverImage(artHtml, bodyHtml) {
+  // 1. Thử bóc tách headImg từ Nuxt state của trang
+  try {
+    const nuxtScript = (artHtml || '').match(/<script>\s*window\.__NUXT__\s*=([\s\S]*?)<\/script>/);
+    if (nuxtScript) {
+      const code = nuxtScript[1].trim().replace(/;$/, '');
+      const data = eval(code);
+      const jsonStr = JSON.stringify(data);
+      const headMatch = jsonStr.match(/"headImg":\s*("\[.*?\]")/);
+      if (headMatch) {
+        const parsed = JSON.parse(JSON.parse(headMatch[1]));
+        const valid = parsed.find(img => img.url && !img.url.endsWith('.gif')) || parsed[0];
+        if (valid && valid.url && valid.url.startsWith('http')) {
+          return valid.url;
+        }
+      }
+    }
+  } catch {}
+
+  // 2. Fallback: Trích xuất ảnh đầu tiên trong bodyHtml nếu không có headImg
+  if (bodyHtml) {
+    const matches = [...bodyHtml.matchAll(/<img[^>]+src=["']([^"']+)["']/gi)].map(m => m[1]);
+    const valid = matches.filter(url => {
+      if (!url.startsWith('http')) return false;
+      if (/emoji|avatar|icon|badge/i.test(url)) return false;
+      return true;
+    });
+    if (valid.length > 0) return valid[0];
+  }
+
+  return '';
+}
+
+/**
  * Thu thập và tổng hợp bài viết
  */
 export async function crawlRoboMasterArticles(options = {}) {
@@ -229,11 +267,14 @@ export async function crawlRoboMasterArticles(options = {}) {
       const createdAt = createAtMatch ? createAtMatch[1] : new Date().toISOString();
       const publishedAt = updateAtMatch ? updateAtMatch[1] : createdAt;
 
+      const coverImage = extractCoverImage(artHtml, bodyHtml);
+
       const articleData = {
         title,
         summary: summary || title,
         category,
         author,
+        coverImage,
         sourceName: 'RoboMaster BBS',
         sourceUrl: url,
         robotIdea: `Giải pháp kỹ thuật tham khảo từ bài viết: ${title}. Ứng dụng trong phân mảng ${category}.`,

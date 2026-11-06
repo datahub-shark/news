@@ -2,6 +2,7 @@
 Tiêu đề: Hiện tượng rung IMU do bánh đà ma sát: Bản chất toán học và 4 giải pháp triệt tiêu dao động giả
 Chuyên mục: Điều khiển
 Tác giả: RoboMaster Community / Hồng Trúc (红竹)
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/83b5d72f22f642398ecdc3ea331f254e1793286394482/%E5%9B%BE1.png
 Nguồn: https://bbs.robomaster.com/article/1972619
 Tên nguồn: RoboMaster BBS
 Tóm tắt: Tôi tổng hợp phân tích chuyên sâu về hiện tượng bệ ngắm gimbal bị gật gù (Pitch oscillation) khi quay bánh đà ma sát tốc độ cao: Bản chất không phải do cộng hưởng kết cấu tần số thấp, mà do phép chuẩn hóa vector gia tốc trong thuật toán Mahony vô tình nhân chéo hai tần số rung cao thành tần số phách (beat frequency) siêu thấp. Bài viết chia sẻ 4 giải pháp kỹ thuật thực chiến gồm: cân bằng động, bộ lọc thông thấp 20Hz trước Mahony, chuẩn hóa gia tốc cố định a/g, và triển khai thuật toán VQF triệt tiêu 98% rung lắc mà không gây trễ pha.

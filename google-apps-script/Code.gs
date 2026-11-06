@@ -73,7 +73,7 @@ function save_(payload){
  let html;if(typeof input.html==='string')html=input.html.trim();else if(typeof input.content==='string')html='<p>'+escapeHtml_(input.content).replace(/\n/g,'<br>')+'</p>';else html=existing?readHtml_(existing.article):'';
  if(html.length>500000)throw Error('HTML vượt giới hạn 500.000 ký tự.');if(status==='published'&&(!strip_(html)||!summary))throw Error('Bài công khai cần nội dung và tóm tắt.');
  const now=new Date().toISOString();const createdAtInput=input.createdAt&&!isNaN(Date.parse(input.createdAt))?new Date(input.createdAt).toISOString():now;const publishedAtInput=input.publishedAt&&!isNaN(Date.parse(input.publishedAt))?new Date(input.publishedAt).toISOString():null;
- let coverImage=clean_(input.coverImage,500000);
+ let coverImage=clean_(input.coverImage,1500000);
  if(coverImage.startsWith('data:image/')){
   try{
    const comma=coverImage.indexOf(','),mime=coverImage.slice(5,coverImage.indexOf(';'));
@@ -83,7 +83,7 @@ function save_(payload){
    const coverFile=ensureCoverFolder_().createFile(blob);
    try{const access=(DriveApp.Access&&DriveApp.Access.ANYONE_WITH_LINK)?DriveApp.Access.ANYONE_WITH_LINK:DriveApp.Access.PRIVATE;const perm=(DriveApp.Permission&&DriveApp.Permission.VIEW)?DriveApp.Permission.VIEW:DriveApp.Permission.NONE;coverFile.setSharing(access,perm);}catch(e){}
    coverImage='https://drive.google.com/thumbnail?id='+coverFile.getId()+'&sz=w1000';
-  }catch(e){console.warn('Cover upload: '+e.message);}
+  }catch(e){console.warn('Cover upload: '+e.message);if(existing&&existing.article.coverImage){coverImage=existing.article.coverImage;}else{coverImage='';}}
  }
  const article={id:existing?input.id:Utilities.getUuid(),title,summary,format:'html',category:CATEGORIES_.includes(input.category)?input.category:'Khác',tags:clean_(input.tags,500),coverImage:clean_(coverImage,2000),robotIdea:clean_(input.robotIdea,5000),sourceName:clean_(input.sourceName,200),sourceUrl:https_(input.sourceUrl),status,version:existing?existing.article.version+1:1,createdAt:existing?existing.article.createdAt:createdAtInput,updatedAt:now,publishedAt:status==='published'?(existing&&existing.article.publishedAt||publishedAtInput||now):publishedAtInput};
  if(article.sourceUrl&&rows_().some(r=>r.article.id!==article.id&&r.article.sourceUrl===article.sourceUrl))throw Error('URL nguồn đã có trong thư viện.');
