@@ -52,7 +52,7 @@ Chọn bài trong kho để đọc/sửa. Tải lại lấy bản mới nhất v
 4. Deploy → New deployment → Web app → Execute as **Me**, access **Anyone**. Điền URL `/exec` vào `config.js` → apiUrl.
 5. GitHub repo Settings → Pages → Deploy from a branch → **main / root**. Frontend không cần build.
 
-OTP chỉ gửi đến ADMIN_EMAIL: tối đa 20 email/ngày UTC, cách 60 giây; mã có hạn 10 phút, 5 lần thử; phiên 7 ngày, server lưu bản băm token trong Script properties. Trình duyệt lưu token để khôi phục sau khi tải lại hoặc đóng/mở trình duyệt. Đăng xuất thu hồi token ở server và xóa bản lưu trên thiết bị. Mỗi email quản trị tối đa 10 phiên; đăng nhập mới sẽ thay phiên cũ nhất khi vượt giới hạn. Chưa hỗ trợ nhiều vai trò/tài khoản.
+OTP chỉ gửi đến ADMIN_EMAIL: tối đa 20 email/ngày UTC, cách 60 giây; mã có hạn 10 phút, 5 lần thử; phiên 30 ngày, server lưu bản băm token trong Script properties. Trình duyệt lưu token để khôi phục sau khi tải lại hoặc đóng/mở trình duyệt. Đăng xuất thu hồi token ở server và xóa bản lưu trên thiết bị. Mỗi email quản trị tối đa 10 phiên; đăng nhập mới sẽ thay phiên cũ nhất khi vượt giới hạn. Chưa hỗ trợ nhiều vai trò/tài khoản.
 
 ## RSS và AI
 

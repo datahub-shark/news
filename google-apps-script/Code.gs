@@ -37,7 +37,7 @@ function digest_(value){return Utilities.base64EncodeWebSafe(Utilities.computeDi
 function random_(){return Utilities.getUuid()+Utilities.getUuid();}
 function locked_(fn){const lock=LockService.getScriptLock();lock.waitLock(10000);try{return fn();}finally{lock.releaseLock();}}
 function sessions_(){return JSON.parse(properties_().getProperty('ADMIN_SESSIONS')||'{}');}
-function issueSession_(){const token=random_(),now=Date.now(),expiresAt=now+7*24*60*60*1000;const entries=Object.entries(sessions_()).filter(([,s])=>s.expiresAt>now&&s.email===adminEmail_()).sort((a,b)=>b[1].expiresAt-a[1].expiresAt).slice(0,9);const sessions=Object.fromEntries(entries);sessions[digest_(token)]={expiresAt,email:adminEmail_()};properties_().setProperty('ADMIN_SESSIONS',JSON.stringify(sessions));return {ok:true,token,expiresAt};}
+function issueSession_(){const token=random_(),now=Date.now(),expiresAt=now+30*24*60*60*1000;const entries=Object.entries(sessions_()).filter(([,s])=>s.expiresAt>now&&s.email===adminEmail_()).sort((a,b)=>b[1].expiresAt-a[1].expiresAt).slice(0,9);const sessions=Object.fromEntries(entries);sessions[digest_(token)]={expiresAt,email:adminEmail_()};properties_().setProperty('ADMIN_SESSIONS',JSON.stringify(sessions));return {ok:true,token,expiresAt};}
 function requireSession_(token){const session=typeof token==='string'&&token.length>=32&&token.length<=200?sessions_()[digest_(token)]:null;if(!session||session.expiresAt<=Date.now()||session.email!==adminEmail_()){const error=Error('Phiên đăng nhập hết hạn. Đăng nhập lại.');error.code='AUTH_REQUIRED';throw error;}return session;}
 /** Only public admin entry point; every data operation requires a server session. */
 function adminApi(action,payload){payload=payload||{};try{

@@ -1,7 +1,8 @@
 const $=id=>document.getElementById(id);let token='',articles=[],current={},busy=false,dirty=false;const fields=['title','category','tags','summary','html','robotIdea','sourceName','sourceUrl'];const labels={draft:'Riêng tư',pending:'Chờ duyệt',published:'Công khai',rejected:'Từ chối'};
 const SESSION_KEY='robot_ideas_admin_session';let sessionTimer;
 function forgetSession(){try{localStorage.removeItem(SESSION_KEY)}catch{}clearTimeout(sessionTimer);}
-function rememberSession(value){clearTimeout(sessionTimer);if(!value.expiresAt)return;try{localStorage.setItem(SESSION_KEY,JSON.stringify({token:value.token||token,expiresAt:value.expiresAt}))}catch{message('Trình duyệt không cho lưu phiên; phiên hiện tại chỉ dùng trong tab này.');}sessionTimer=setTimeout(()=>{clearPrivate();message('Phiên đăng nhập đã hết hạn. Anh đăng nhập lại để tiếp tục.');},Math.max(0,value.expiresAt-Date.now()));}
+function armSessionExpiry(expiresAt){const remaining=expiresAt-Date.now();if(remaining<=0){clearPrivate();message('Phiên đăng nhập đã hết hạn. Anh đăng nhập lại để tiếp tục.');return;}sessionTimer=setTimeout(()=>armSessionExpiry(expiresAt),Math.min(remaining,2147483647));}
+function rememberSession(value){clearTimeout(sessionTimer);if(!value.expiresAt)return;try{localStorage.setItem(SESSION_KEY,JSON.stringify({token:value.token||token,expiresAt:value.expiresAt}))}catch{message('Trình duyệt không cho lưu phiên; phiên hiện tại chỉ dùng trong tab này.');}armSessionExpiry(value.expiresAt);}
 function message(s){$('notice').textContent=s}
 async function call(action,payload={}){
  const request={...payload,token};let result;
@@ -28,7 +29,7 @@ function confirmDiscard(){if((dirty||sourceDirty)&&!confirm('Bỏ thay đổi ch
 $('editor').oninput=()=>dirty=true;window.onbeforeunload=e=>{if(dirty||sourceDirty){e.preventDefault();e.returnValue=''}};
 async function reload(){const r=await call('list');if(r.apiVersion!==2)throw Error('Backend chưa được nâng cấp HTML. Hãy cập nhật Code.gs và Admin.html, chạy setup rồi Deploy phiên bản mới.');articles=r.articles;render()}
 $('request').onclick=()=>task(async()=>{await call('requestCode');message('Đã gửi mã đến email quản trị. Mã có hiệu lực 10 phút.');});
-$('loginForm').onsubmit=e=>{e.preventDefault();task(async()=>{const r=await call('login',{code:$('code').value});token=r.token;rememberSession(r);await reload();enterDashboard();message('Đã đăng nhập. Trình duyệt sẽ ghi nhớ phiên trong 7 ngày.');})};
+$('loginForm').onsubmit=e=>{e.preventDefault();task(async()=>{const r=await call('login',{code:$('code').value});token=r.token;rememberSession(r);await reload();enterDashboard();message('Đã đăng nhập. Trình duyệt sẽ ghi nhớ phiên trong 30 ngày.');})};
 function enterDashboard(){$('login').hidden=true;$('workspace').hidden=false;$('logout').hidden=false;$('code').value='';edit();showView('overview',true);}
 function clearPrivate(){forgetSession();token='';articles=[];edit();editSource();$('sourceList').replaceChildren();$('workspace').hidden=true;$('login').hidden=false;$('logout').hidden=true;$('previewDialog').close();$('previewContent').replaceChildren();$('list').replaceChildren();dirty=false;}
 $('logout').onclick=()=>{if(!confirmDiscard())return;task(async()=>{try{await call('logout');clearPrivate();message('Đã đăng xuất và thu hồi phiên đăng nhập.');}catch(e){clearPrivate();message('Đã xóa phiên trên thiết bị. Chưa xác nhận thu hồi ở server: '+e.message);}})};
