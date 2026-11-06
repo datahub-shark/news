@@ -1,0 +1,123 @@
+<!-- METADATA
+Tiêu đề: Hệ thống điều khiển cánh tay robot song thủ hình người 7 bậc tự do: Kiến trúc phân tầng, Động học ngược SEW-DLS lai ghép và Bù trọng lực toàn phương
+Chuyên mục: Điều khiển
+Độ hữu dụng: ⭐⭐⭐⭐⭐ (Đỉnh cao công nghệ điều khiển cánh tay robot hình người 7-DOF)
+Tác giả: Nomad Joe - Đội DreamChaser (Đại học Công nghệ Bắc Kinh - BIT)
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/553c47ba74e644ab826b6456065553e01787402156460/DA.jpg
+Nguồn: https://bbs.robomaster.com/article/1941628
+Tên nguồn: RoboMaster BBS
+Tóm tắt: Báo cáo công nghệ và mã nguồn hoàn chỉnh của hệ thống cánh tay robot song thủ hình người 14 bậc tự do (mỗi tay 7-DOF cấu hình 3R-R-3R mô phỏng vai cầu, khuỷu và cổ tay cầu): Kiến trúc điều khiển phân tầng 5 lớp (Router - FSM - RoboArmT - ArmMiddleware - ArmDriver) điều khiển 14 động cơ Damiu qua 2 bus CAN độc lập; Thuật toán giải động học ngược lai ghép AdaptiveHybrid kết hợp giải tích góc tay SEW (Shoulder-Elbow-Wrist) với thuật toán bình phương tối thiểu giảm chấn (Weighted DLS) viết bằng C++20 không cấp phát động; Thuật toán bù trọng lực toàn phương thích ứng theo góc nghiêng của thân robot; Đi kèm báo cáo kỹ thuật 36 trang chi tiết.
+Gợi ý ứng dụng: Nền tảng mẫu mực cho bất kỳ dự án robot hình người (Humanoid Robot), robot phẫu thuật, robot gắp thả vật phẩm tự động trong kho vận hoặc cánh tay robot phục vụ cứu hộ cứu nạn. Cung cấp trọn vẹn từ kiến trúc code nhúng C++20 đến toán học động học và động lực học.
+Tệp đính kèm: canh-tay-robot-7dof-bao-cao-ky-thuat.pdf (4.11 MB)
+Trạng thái: PUBLISHED (6/11/2026)
+-->
+
+<article class="robot-ideas-article">
+  <header class="article-header">
+    <h1>Hệ thống điều khiển cánh tay robot song thủ hình người 7 bậc tự do: Kiến trúc phân tầng, Động học ngược SEW-DLS lai ghép và Bù trọng lực toàn phương</h1>
+    <div class="article-meta">
+      <p><strong>Chuyên mục:</strong> <span class="badge">Điều khiển</span> · <strong>Lĩnh vực:</strong> Robot hình người (Humanoid) / Cánh tay 7-DOF / Động học ngược SEW / Bù trọng lực toàn phương</p>
+      <p><strong>Nguồn gốc:</strong> <a href="https://bbs.robomaster.com/article/1941628" target="_blank" rel="noopener">RoboMaster BBS</a> · <strong>Tác giả:</strong> Nomad Joe (Đội DreamChaser - ĐH Công nghệ Bắc Kinh BIT)</p>
+      <p><strong>Đánh giá độ hữu dụng:</strong> <span style="color:#eab308;font-weight:bold;">⭐⭐⭐⭐⭐ (Hệ thống điều khiển Robot đỉnh cao)</span></p>
+    </div>
+  </header>
+
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/553c47ba74e644ab826b6456065553e01787402156460/DA.jpg" alt="Cánh tay robot song thủ hình người 7-DOF" style="width:100%;max-height:500px;object-fit:cover;display:block;">
+  </div>
+
+  <div class="local-attachments" style="background:#f0fdf4;border:1px solid #22c55e;padding:16px;border-radius:8px;margin:20px 0;">
+    <h3 style="margin-top:0;color:#15803d;display:flex;align-items:center;gap:8px;">
+      📦 Báo cáo kỹ thuật chi tiết & Mã nguồn dự án:
+    </h3>
+    <ul style="margin-bottom:0;line-height:1.8;">
+      <li>
+        <a href="./attachments/canh-tay-robot-7dof-bao-cao-ky-thuat.pdf" target="_blank" style="color:#15803d;font-weight:bold;text-decoration:underline;">
+          canh-tay-robot-7dof-bao-cao-ky-thuat.pdf
+        </a> 
+        <span style="color:#555;">(Tài liệu kỹ thuật 36 trang đầy đủ ma trận biến đổi tọa độ, đạo hàm Jacobian và mã giả thuật toán - 4.11 MB)</span>
+      </li>
+      <li>
+        <a href="https://github.com/NomadJoeviolet/Double7RArmSim" target="_blank" rel="noopener" style="color:#1d4ed8;font-weight:bold;">
+          🔗 Kho GitHub Mã nguồn C++20 trên robot thực (NomadJoeviolet/Double7RArmSim)
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/NomadJoeviolet/Double7RArm" target="_blank" rel="noopener" style="color:#1d4ed8;font-weight:bold;">
+          🔗 Kho GitHub Mô phỏng MATLAB & Robotics Toolbox (NomadJoeviolet/Double7RArm)
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="article-body" style="line-height:1.85;font-size:15px;">
+    <h2>1. Tổng quan hệ thống cánh tay robot song thủ (Dual-Arm 14-DOF)</h2>
+    <p>Hệ thống được phát triển trực tiếp trên robot thực tế của đội <strong>DreamChaser (Đại học Công nghệ Bắc Kinh - BIT)</strong>. Cấu hình robot gồm 2 cánh tay đối xứng lắp trên thân trên, mỗi cánh tay sở hữu <strong>7 bậc tự do (7-DOF)</strong> theo chuỗi động học <strong>3R-R-3R</strong>:</p>
+    <ul>
+      <li><strong>Khớp vai cầu (Spherical Shoulder - 3R):</strong> 3 trục quay đồng quy tại một điểm, mô phỏng khớp bả vai người ($J_0, J_1, J_2$).</li>
+      <li><strong>Khớp khuỷu tay (Revolute Elbow - 1R):</strong> 1 trục quay uốn duỗi cẳng tay ($J_3$).</li>
+      <li><strong>Khớp cổ tay cầu (Spherical Wrist - 3R):</strong> 3 trục quay đồng quy tại tâm cổ tay ($J_4, J_5, J_6$).</li>
+    </ul>
+    <p>Mỗi cánh tay sử dụng 7 động cơ không chổi than tích hợp bộ điều khiển Damiu (DM Motors) giao tiếp qua bus CAN (Tay trái dùng CAN1, tay phải dùng CAN2). Với 7 bậc tự do, cánh tay có <strong>1 bậc tự do dự phòng (Kinematic Redundancy)</strong>, cho phép xoay khuỷu tay trong không gian mà đầu công cụ (End-Effector) vẫn giữ nguyên vị trí và góc hướng trong không gian 6D.</p>
+
+    <h2>2. Kiến trúc phần mềm phân tầng độc lập phần cứng (5 Layers)</h2>
+    <p>Để code không bị phụ thuộc chặt vào loại tay cầm điều khiển hay loại motor cụ thể, hệ thống được phân thành 5 tầng rõ ràng:</p>
+
+    <table style="width:100%;border-collapse:collapse;margin:18px 0;font-size:14px;">
+      <thead>
+        <tr style="background:#f1f5f9;">
+          <th style="padding:10px;border:1px solid #cbd5e1;text-align:left;width:25%;">Tầng kiến trúc</th>
+          <th style="padding:10px;border:1px solid #cbd5e1;text-align:left;">Vai trò & Trách nhiệm chính</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:10px;border:1px solid #cbd5e1;"><strong>1. Router Layer</strong></td>
+          <td style="padding:10px;border:1px solid #cbd5e1;">Thu nhận tín hiệu từ bàn phím, chuột, cần gạt điều khiển từ xa (DR16) và chuyển hóa thành các "Ý định vận hành" (Business Intent) tuần hoàn. Hoàn toàn không chứa lệnh can thiệp motor.</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;border:1px solid #cbd5e1;"><strong>2. FSM / Actions</strong></td>
+          <td style="padding:10px;border:1px solid #cbd5e1;">Máy trạng thái hữu hạn tiêu thụ ý định từ Router, kiểm tra trạng thái robot và sinh ra quỹ đạo mục tiêu (Cartesian goal hoặc Joint goal).</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;border:1px solid #cbd5e1;"><strong>3. RoboArmT</strong></td>
+          <td style="padding:10px;border:1px solid #cbd5e1;">Cung cấp API hướng đối tượng cấp cao (di chuyển Descartes, điều khiển góc khớp gia số, đặt lại vị trí Home, ngắt an toàn) và quản lý vòng đời chu kỳ gọi 1ms.</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;border:1px solid #cbd5e1;"><strong>4. ArmMiddleware</strong></td>
+          <td style="padding:10px;border:1px solid #cbd5e1;">Trái tim thuật toán: Kiểm tra không gian làm việc an toàn và vùng cấm tự va chạm, tính toán Động học ngược (IK), lập quỹ đạo nội suy và tính toán lực bù trọng lực trước (Feedforward Gravity).</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;border:1px solid #cbd5e1;"><strong>5. ArmDriver</strong></td>
+          <td style="padding:10px;border:1px solid #cbd5e1;">Tầng điều khiển thiết bị: Quản lý trạng thái trực tuyến (heartbeat) 14 động cơ, kiểm tra độ mới của gói tin CAN, thực thi thuật toán điều khiển MIT (Torque + Position + Velocity + Kp + Kd) và gửi lệnh CAN.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>3. Thuật toán Động học ngược lai ghép thích nghi (AdaptiveHybrid IK)</h2>
+    <p>Giải động học ngược cho cánh tay robot 7 bậc tự do là một thử thách rất lớn do có vô số nghiệm và nguy cơ rơi vào điểm kỳ dị toán học. Nhóm tác giả đã kết hợp hai phương pháp bổ trợ nhau:</p>
+
+    <div style="background:#f8fafc;border-left:4px solid #3b82f6;padding:16px;border-radius:4px;margin:16px 0;">
+      <h3 style="margin-top:0;color:#1e40af;">📐 Hai mũi nhọn giải thuật:</h3>
+      <ol>
+        <li><strong>Thuật toán giải tích góc tay SEW (Shoulder-Elbow-Wrist Analytical Solver):</strong> Sử dụng góc quay của mặt phẳng chứa 3 điểm Vai - Khuỷu - Cổ tay để tham số hóa bậc tự do dự phòng. Thuật toán tìm ra nhánh nghiệm hình học giải tích trong micro-giây, cực kỳ thích hợp cho các đích đến ở khoảng cách xa (Global targets).</li>
+        <li><strong>Bình phương tối thiểu có trọng số và giảm chấn (Weighted DLS):</strong> Đối với các chuyển động nhỏ liên tục (bám quỹ đạo mượt mà), thuật toán dùng ma trận Jacobian có thêm hệ số cản damping để triệt tiêu vận tốc khớp tăng vọt gần điểm kỳ dị.</li>
+      </ol>
+      <p><strong>Bộ điều phối AdaptiveHybrid:</strong> Tự động phân luồng: Khi đích đến nằm xa vị trí hiện tại $\rightarrow$ gọi SEW Solver; Khi đích đến là các gia số dịch chuyển nhỏ liên tục $\rightarrow$ gọi Weighted DLS. Toàn bộ mã nguồn viết bằng C++20 không cấp phát bộ nhớ động (Zero Dynamic Allocation), chạy với tốc độ cực nhanh trên vi điều khiển nhúng.</p>
+    </div>
+
+    <h2>4. Thuật toán bù trọng lực toàn phương (All-Direction Gravity Compensation)</h2>
+    <p>Trong các dòng robot thông thường, cánh tay robot chỉ được tính bù trọng lực khi đế đứng thẳng cố định. Tuy nhiên trên robot chiến thuật, thân robot liên tục gập ngửa theo trục Pitch hoặc leo dốc gồ ghề:</p>
+    <ul>
+      <li>Hệ thống liên tục đọc góc nghiêng từ cảm biến quán tính IMU gắn trên thân robot.</li>
+      <li>Vectơ trọng trường $\mathbf{g}$ trong hệ quy chiếu thế giới được biến đổi ngược vào hệ quy chiếu của từng cánh tay theo góc Pitch thực tế.</li>
+      <li>Mô-men bù trọng lực của từng khớp được tính toán theo đạo hàm gradient thế năng, giúp cánh tay giữ nguyên trạng thái "không trọng lượng" ngay cả khi robot đang nghiêng 30 độ hoặc đang tăng tốc vượt dốc.</li>
+    </ul>
+
+    <h2>5. Thử nghiệm thực tế & Sai số mô phỏng</h2>
+    <ul>
+      <li><strong>Sai số động học:</strong> Thử nghiệm kiểm tra trong MATLAB R2023b cho thấy sai số vị trí khi thế ngược nghiệm (FK verification) chỉ đạt $2.01 \times 10^{-13}\text{ mm}$, sai số góc hướng bằng $0\text{ rad}$.</li>
+      <li><strong>Mô phỏng MuJoCo:</strong> So sánh mô-men tính bằng công thức toán học với biến `qfrc_bias` của MuJoCo trên mô hình 14 bậc tự do nặng 12 kg cho thấy sai số nhỏ hơn $1.75 \times 10^{-11}\text{ N}\cdot\text{m}$ (đạt tới giới hạn chính xác số thực dấu phẩy động 64-bit).</li>
+    </ul>
+  </div>
+</article>
