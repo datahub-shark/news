@@ -64,6 +64,49 @@ function generateShortSlug(art, id) {
   return `${id}-bai-viet`;
 }
 
+// Chuyển đổi tên tệp tiếng Trung / có dấu sang tiếng Việt không dấu, chuẩn kebab-case
+function cleanAttachmentName(rawName, folderSlug = '') {
+  const ext = path.extname(rawName).toLowerCase() || '.bin';
+  let base = path.basename(rawName, ext);
+
+  // Tra cứu từ điển nhanh cho các thuật ngữ thường gặp
+  const DICT = [
+    { match: /全向轮/i, replace: 'banh-xe-omni' },
+    { match: /内嵌/i, replace: 'nhung' },
+    { match: /减速箱/i, replace: 'hop-so' },
+    { match: /电机/i, replace: 'motor' },
+    { match: /战队文化建设指南/i, replace: 'cam-nang-van-hanh-doi-robot' },
+    { match: /我们的进度已经完蛋了/i, replace: 'nhac-che-test-xe-rm' },
+    { match: /指南|手册|文档/i, replace: 'huong-dan' },
+    { match: /图纸|开源/i, replace: 'ban-ve' },
+    { match: /固件/i, replace: 'firmware' },
+    { match: /上位机/i, replace: 'host-app' }
+  ];
+
+  for (const item of DICT) {
+    base = base.replace(item.match, item.replace);
+  }
+
+  // Chuyển ký tự tiếng Việt có dấu sang không dấu
+  base = base.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  base = base.replace(/[đĐ]/g, 'd');
+
+  // Nếu vẫn còn chữ Hán (chưa được dịch), thay bằng tên chủ đề của thư mục bài viết
+  if (/[\u4e00-\u9fa5]/.test(base)) {
+    const slugTopic = folderSlug.replace(/^\d+-?/, '') || 'tai-lieu-ky-thuat';
+    base = `${slugTopic}-tai-nguyen`;
+  }
+
+  // Chuẩn hóa ký tự: chỉ giữ a-z, 0-9, dấu gạch nối và dấu chấm phiên bản
+  base = base
+    .replace(/[^\w\.\-]+/g, '-')
+    .replace(/\-+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .toLowerCase();
+
+  return (base || 'tai-lieu-ky-thuat') + ext;
+}
+
 function findAttachments(html) {
   const attachments = [];
   const seenUrls = new Set();
@@ -176,23 +219,24 @@ async function exportAll() {
         fs.mkdirSync(attachmentsDir, { recursive: true });
       }
       for (const att of attachments) {
-        const destFile = path.join(attachmentsDir, att.filename);
+        const cleanName = cleanAttachmentName(att.filename, folderName);
+        const destFile = path.join(attachmentsDir, cleanName);
         if (!fs.existsSync(destFile)) {
-          console.log(`  ⬇️  Đang tải file đính kèm: ${att.filename}...`);
+          console.log(`  ⬇️  Đang tải file đính kèm: ${cleanName}...`);
           const dlResult = await downloadAttachment(att.url, destFile);
           if (dlResult) {
             downloadedFiles.push({
-              name: att.filename,
+              name: cleanName,
               size: dlResult.size,
-              url: dlResult.isExternal ? att.url : `./attachments/${att.filename}`,
+              url: dlResult.isExternal ? att.url : `./attachments/${cleanName}`,
               isLocal: !dlResult.isExternal
             });
           }
         } else {
           downloadedFiles.push({
-            name: att.filename,
+            name: cleanName,
             size: 'đã có sẵn trên máy',
-            url: `./attachments/${att.filename}`,
+            url: `./attachments/${cleanName}`,
             isLocal: true
           });
         }

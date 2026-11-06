@@ -169,7 +169,7 @@ const omniWheelData = {
   <div class="resource-box" style="background:#f4fbf7;border:1px solid #2e7d32;padding:16px;border-radius:8px;margin:20px 0;">
     <h3 style="margin-top:0;color:#2e7d32;">📁 Tệp thiết kế cơ khí 3D CAD đính kèm (Google Drive)</h3>
     <ul style="margin-bottom:0;line-height:1.8;">
-      <li><strong>Tải file trên Google Drive:</strong> <a href="https://drive.google.com/file/d/1fdKRQ1vaLBzD92yWuXzwqWRk-uDmVQwV/view?usp=sharing" target="_blank" rel="noopener" style="font-weight:bold;color:#2e7d32;">内嵌全向轮1.2.zip (9.94 MB) ↗</a></li>
+      <li><strong>Tải file trên Google Drive:</strong> <a href="https://drive.google.com/file/d/1fdKRQ1vaLBzD92yWuXzwqWRk-uDmVQwV/view?usp=sharing" target="_blank" rel="noopener" style="font-weight:bold;color:#2e7d32;">banh-xe-omni-nhung-motor-3508-v1.2.zip (9.94 MB) ↗</a></li>
       <li><strong>Thư mục bài viết trên Google Drive:</strong> <a href="https://drive.google.com/drive/folders/1GNwpVNkRwtg0gxurzKalYf_v47iXDCE5?usp=sharing" target="_blank" rel="noopener">Mở thư mục 1972643-banh-omni-motor-3508 trên Drive ↗</a></li>
       <li><strong>Bao gồm:</strong> Toàn bộ chi tiết gia công tấm kim loại, file in 3D nắp bánh con lăn và file lắp ráp hoàn chỉnh (.STEP, SolidWorks).</li>
     </ul>
