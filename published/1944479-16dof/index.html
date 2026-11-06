@@ -1,0 +1,90 @@
+<!-- METADATA
+Tiêu đề: Kết cấu cơ khí Robot Bánh-Chân 16 DOF: Bản vẽ CAD SolidWorks, cơ cấu truyền động đai 5M và cẩm nang chế tạo toàn diện
+Chuyên mục: Robot di động
+Độ hữu dụng: ⭐⭐⭐⭐⭐ (Đỉnh cao cơ cấu cơ khí di động kết hợp bánh xe và khớp chân)
+Tác giả: Đội HYNova - ĐH Công thương Sơn Đông (Giải Nhất Quốc Gia RC)
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c89c52e5e2de4076a5fe882cc357eda31787817014276/mmexport1784188421107.jpg
+Nguồn: https://bbs.robomaster.com/article/1944479
+Tên nguồn: RoboMaster BBS
+Tóm tắt: Toàn bộ thiết kế cơ khí của Robot bánh-chân (Wheeled-Bipedal / Quadruped) 16 bậc tự do: Thân xe khung nhôm hộp kết hợp tấm sợi carbon 5mm siêu nhẹ; Chuỗi truyền động khớp chân nối trực tiếp motor hông kết hợp cặp bánh răng và dây đai đồng bộ 5M không trượt; Cụm bánh xe lốp hơi 8 inch hấp thụ xung lực dằn xóc với moay-ơ in 3D PETG chịu lực; Đầy đủ bản vẽ SolidWorks (WEEKDOG.SLDASM/STEP), tài liệu tính toán động lực học và danh mục vật tư BOM.
+Gợi ý ứng dụng: Tài liệu tham khảo vô giá cho bất kỳ dự án robot tự hành di chuyển trên địa hình gồ ghề (sỏi đá, bậc thang, vượt chướng ngại vật). Cấu hình bánh-chân cho phép robot vừa chạy tốc độ cao trên đường bằng phẳng vừa bước qua chướng ngại vật phức tạp với hiệu suất năng lượng vượt trội.
+Tệp đính kèm: 16dof-tai-nguyen.pdf (1.16 MB)
+Trạng thái: PUBLISHED (6/11/2026)
+-->
+
+<article class="robot-ideas-article">
+  <header class="article-header">
+    <h1>Kết cấu cơ khí Robot Bánh-Chân 16 DOF: Bản vẽ CAD SolidWorks, cơ cấu truyền động đai 5M và cẩm nang chế tạo toàn diện</h1>
+    <div class="article-meta">
+      <p><strong>Chuyên mục:</strong> <span class="badge">Robot di động</span> · <strong>Lĩnh vực:</strong> Robot bánh chân / Cơ cấu khớp liên hoàn / Truyền động đai 5M / Carbon Composite</p>
+      <p><strong>Nguồn gốc:</strong> <a href="https://bbs.robomaster.com/article/1944479" target="_blank" rel="noopener">RoboMaster BBS</a> · <strong>Tác giả:</strong> Đội HYNova (Giải Nhất Quốc gia RC)</p>
+      <p><strong>Đánh giá độ hữu dụng:</strong> <span style="color:#eab308;font-weight:bold;">⭐⭐⭐⭐⭐ (Cơ cấu cơ khí đỉnh cao - Top 5% toàn quốc)</span></p>
+    </div>
+  </header>
+
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c89c52e5e2de4076a5fe882cc357eda31787817014276/mmexport1784188421107.jpg" alt="Robot bánh chân 16 DOF HYNova" style="width:100%;max-height:480px;object-fit:cover;display:block;">
+  </div>
+
+  <div class="local-attachments" style="background:#f0fdf4;border:1px solid #22c55e;padding:16px;border-radius:8px;margin:20px 0;">
+    <h3 style="margin-top:0;color:#15803d;display:flex;align-items:center;gap:8px;">
+      📦 Tài liệu kỹ thuật & Bản vẽ CAD đi kèm:
+    </h3>
+    <ul style="margin-bottom:0;line-height:1.8;">
+      <li>
+        <a href="./attachments/16dof-tai-nguyen.pdf" target="_blank" style="color:#15803d;font-weight:bold;text-decoration:underline;">
+          16dof-tai-nguyen.pdf
+        </a> 
+        <span style="color:#555;">(Thuyết minh tính toán thiết kế cơ khí chi tiết, công thức kiểm nghiệm bền và dung sai lắp ghép - 1.16 MB)</span>
+      </li>
+      <li>
+        <a href="https://github.com/Beni-537/HYNova-16DOF-WheelLeg" target="_blank" rel="noopener" style="color:#1d4ed8;font-weight:bold;">
+          🔗 Kho GitHub Bản vẽ CAD SolidWorks + STEP (Beni-537/HYNova-16DOF-WheelLeg)
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/zeitvex/RC_WheelLeg" target="_blank" rel="noopener" style="color:#1d4ed8;font-weight:bold;">
+          🔗 Kho GitHub Phần mềm điều khiển & Huấn luyện học tăng cường Sim2Real (zeitvex/RC_WheelLeg)
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="article-body" style="line-height:1.85;font-size:15px;">
+    <h2>1. Tổng quan cấu hình: Triết lý "Đơn giản - Ổn định - Triển khai nhanh"</h2>
+    <p>Robot bánh-chân (Wheel-Legged Robot) kết hợp ưu điểm của cả hai thế giới: <strong>Tốc độ di chuyển nhanh, tiết kiệm pin của bánh xe</strong> trên mặt phẳng và <strong>khả năng vượt dốc, leo bậc thang linh hoạt của các khớp chân</strong>. Được phát triển từ nền tảng 8DOF chuỗi nối tiếp của ĐH Công nghệ Phúc Kiến, nhóm tác giả đã tái thiết kế thành cấu hình <strong>16 bậc tự do (16 DOF)</strong> hoàn chỉnh, xuất sắc giành giải Nhất toàn quốc (Top 7 / Top 5%).</p>
+
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/58b306915e474993b33407510484fa991787818594099/cd3f3033e21dd2a395ba98bee7f5dceb.jpg" alt="Mô hình CAD 3D SolidWorks robot bánh chân" style="max-width:100%;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 1: Bản vẽ tổng thành cơ khí 3D trong SolidWorks (WEEKDOG.SLDASM)</em></p>
+    </div>
+
+    <h2>2. Ba điểm đột phá trong thiết kế cơ khí</h2>
+
+    <h3>a. Khung thân xe chịu lực hỗn hợp (Hybrid Chassis Frame)</h3>
+    <ul>
+      <li><strong>Hệ xương sống nhôm hộp:</strong> Khung thân chính dùng nhôm hộp chữ nhật rỗng ruột. Thiết kế rỗng vừa đảm bảo mô-men chống uốn chống xoắn cao, vừa đóng vai trò như đường hào chạy dây diện an toàn, chống va quẹt dây tín hiệu khi robot nhào lộn.</li>
+      <li><strong>Vách chịu lực sợi carbon 5mm:</strong> Hai tấm thân trước và sau dùng vật liệu sợi carbon dày 5mm, vừa đóng vai trò gông khóa khung xe vừa là giá bắt trực tiếp cụm motor khớp háng (Hip joint motor), giúp giảm hơn 40% trọng lượng so với tấm nhôm thông thường.</li>
+    </ul>
+
+    <h3>b. Chuỗi truyền động khớp chân: Bánh răng kết hợp dây đai đồng bộ 5M</h3>
+    <p>Để tối ưu hóa không gian và dồn trọng tâm về sát thân:</p>
+    <ul>
+      <li>Động cơ đùi trên được kết nối trực tiếp với động cơ khớp háng, rút ngắn tối đa chiều dài cánh tay đòn quán tính.</li>
+      <li>Truyền động từ đùi trên xuống cẳng chân sử dụng hệ thống <strong>cặp bánh răng phối hợp dây đai răng đồng bộ chuẩn 5M</strong>. Dây đai 5M có ưu điểm không trượt, không rơ giật, độ chính xác cao và tích hợp sẵn cơ cấu vít tăng đai chỉnh lực căng.</li>
+      <li><strong>Kết cấu tiết diện chữ I (I-Beam):</strong> Đùi và cẳng chân được chế tạo theo kết cấu sandwich gồm 2 tấm nhôm CNC dày 3mm kẹp chặt lõi in 3D ở giữa, vừa đạt độ cứng vững tuyệt đối vừa tối ưu chi phí gia công.</li>
+    </ul>
+
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/8519026ab97e419c8ce3cc02211134a81787817546237/e7fb2e75276bd08474005b60d078f39e.jpg" alt="Kết cấu cụm khớp chân và bánh xe" style="max-width:100%;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 2: Cụm cẳng chân truyền động đai và moay-ơ bánh xe lốp hơi</em></p>
+    </div>
+
+    <h3>c. Cụm bánh xe lốp hơi 8 inch hấp thụ xung lực dằn xóc</h3>
+    <p>Đường truyền lực khi va chạm tiếp đất: <code>Mặt đất ➔ Lốp cao su ➔ Moay-ơ bánh xe ➔ Trục đầu ra motor</code>.</p>
+    <p>Nhóm sử dụng <strong>lốp cao su có săm bơm hơi đường kính 8 inch</strong> để chính áp suất khí trong lốp đóng vai trò như bộ giảm chấn khí nén sơ cấp, hấp thụ đến 80% xung lực va đập khi robot tiếp đất sau các pha bay nhảy vượt địa hình. Moay-ơ bánh xe được in 3D bằng nhựa PETG chịu lực cao, tối ưu vừa khít với trục động cơ dẫn động RS02.</p>
+
+    <h2>3. Ứng dụng thực chiến & Khả năng tái sử dụng mô-đun</h2>
+    <p>Hệ thống cơ khí này đã chứng minh độ bền bỉ xuất sắc khi vượt qua bãi sỏi đá, leo gờ hạn chế chiều cao và vượt tường cao trong giải đấu thực tế. Bộ bản vẽ đi kèm đầy đủ danh mục vật tư BOM (từ quy cách nhôm hộp, mã động cơ cho tới từng con ốc vít) giúp bất kỳ phòng lab hoặc đội robot nào cũng có thể chế tạo lại thành công.</p>
+  </div>
+</article>

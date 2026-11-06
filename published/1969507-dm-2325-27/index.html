@@ -1,0 +1,80 @@
+<!-- METADATA
+Tiêu đề: Cơ cấu cấp đạn tiếp tuyến 27Hz dùng động cơ DM-2325: Đĩa gạt xoắn chống kẹt đạn và bộ bản vẽ CAD tối ưu
+Chuyên mục: Cơ khí
+Độ hữu dụng: ⭐⭐⭐⭐⭐ (Cơ cấu cơ khí cấp đạn siêu tốc 27Hz - 30Hz, tỷ lệ kẹt < 0.3%)
+Tác giả: Đội Cangqiong (蒼穹戰隊) - Đại học Công nghiệp Hợp Phì
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/724d09a914d5489984aa8b104527fe091789464592502/a306cfc4f759913843e2de19acaeb0d0_720.jpg
+Nguồn: https://bbs.robomaster.com/article/1969507
+Tên nguồn: RoboMaster BBS
+Tóm tắt: Thiết kế cơ cấu cấp đạn tiếp tuyến (Tangent Feeder) nhỏ gọn sử dụng động cơ thế hệ mới DM-2325. Đĩa gạt được vặn góc xoắn 3D độc đáo giúp đè viên đạn sát mặt đáy khi đẩy, triệt tiêu hiện tượng đạn bị xóc nảy gây kẹt cửa ra. Cơ cấu đạt tần số cấp đạn thực chiến 27 Hz (tỷ lệ kẹt dưới 0.3%) và thử nghiệm bền bỉ trên 80.000 phát bắn liên tục. Đi kèm toàn bộ file bản vẽ CAD gia công và in 3D.
+Gợi ý ứng dụng: Ứng dụng ngay cho cụm nạp đạn của robot Sentry, Bộ binh (Infantry) hoặc máy bay không người lái (UAV). Thiết kế đặt ngược motor giúp giảm tối đa chiều cao trục Z của bệ ngắm Gimbal, giải quyết triệt để bài toán thiếu ngàm mô-men xoắn của motor 2006 và quá cồng kềnh của motor 3508.
+Tệp đính kèm: dm-2325-27-tai-nguyen.zip (11.34 MB)
+Trạng thái: PUBLISHED (6/11/2026)
+-->
+
+<article class="robot-ideas-article">
+  <header class="article-header">
+    <h1>Cơ cấu cấp đạn tiếp tuyến 27Hz dùng động cơ DM-2325: Đĩa gạt xoắn chống kẹt đạn và bộ bản vẽ CAD tối ưu</h1>
+    <div class="article-meta">
+      <p><strong>Chuyên mục:</strong> <span class="badge">Cơ khí</span> · <strong>Lĩnh vực:</strong> Cơ cấu cấp đạn tiếp tuyến / Motor DM-2325 / Chống kẹt đạn</p>
+      <p><strong>Nguồn gốc:</strong> <a href="https://bbs.robomaster.com/article/1969507" target="_blank" rel="noopener">RoboMaster BBS</a> · <strong>Tác giả:</strong> Đội Cangqiong - ĐH Công nghiệp Hợp Phì</p>
+      <p><strong>Đánh giá độ hữu dụng:</strong> <span style="color:#eab308;font-weight:bold;">⭐⭐⭐⭐⭐ (Cơ cấu cơ khí tối ưu hóa cao)</span></p>
+    </div>
+  </header>
+
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/724d09a914d5489984aa8b104527fe091789464592502/a306cfc4f759913843e2de19acaeb0d0_720.jpg" alt="Cơ cấu đĩa cấp đạn tiếp tuyến DM-2325" style="width:100%;max-height:480px;object-fit:cover;display:block;">
+  </div>
+
+  <div class="local-attachments" style="background:#f0fdf4;border:1px solid #22c55e;padding:16px;border-radius:8px;margin:20px 0;">
+    <h3 style="margin-top:0;color:#15803d;display:flex;align-items:center;gap:8px;">
+      📦 Tệp đính kèm mô hình 3D & Bản vẽ gia công:
+    </h3>
+    <ul style="margin-bottom:0;line-height:1.8;">
+      <li>
+        <a href="./attachments/dm-2325-27-tai-nguyen.zip" target="_blank" style="color:#15803d;font-weight:bold;text-decoration:underline;">
+          dm-2325-27-tai-nguyen.zip
+        </a> 
+        <span style="color:#555;">(Dung lượng: 11.34 MB - Bản vẽ STEP, chi tiết cắt CNC tấm sợi thủy tinh FR4 và file in 3D STL)</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="article-body" style="line-height:1.85;font-size:15px;">
+    <h2>1. Bối cảnh kỹ thuật & Lý do lựa chọn motor DM-2325</h2>
+    <p>Trong các thiết kế robot chiến thuật hiện nay, yêu cầu về <strong>trọng lượng siêu nhẹ và kích thước nhỏ gọn</strong> được đặt lên hàng đầu. Khi thiết kế cơ cấu đĩa quay cấp đạn (Feeder):</p>
+    <ul>
+      <li><strong>Motor DJI 2006:</strong> Thân hình nhỏ gọn nhưng mô-men xoắn danh định hơi yếu, rất dễ bị đứng motor hoặc nghẽn tải khi đạn xếp xô lệch ở tần số cao.</li>
+      <li><strong>Motor DJI 3508:</strong> Mô-men xoắn dư thừa khỏe, nhưng kích thước và khối lượng lại quá cồng kềnh, chiếm nhiều diện tích hữu ích trên bệ ngắm Gimbal.</li>
+    </ul>
+    <p>Nhóm tác giả đã lựa chọn dòng <strong>động cơ DM-2325</strong> (Damiu Technology) để làm nguồn động lực. Đây là giải pháp cân bằng hoàn hảo giữa mật độ mô-men xoắn cao và kích thước siêu mỏng.</p>
+
+    <h2>2. Bố trí cơ khí: Lộn ngược motor để giảm chiều cao trục Z</h2>
+    <p>Để đĩa cấp đạn có chiều cao tổng thể thấp nhất có thể:</p>
+    <ul>
+      <li>Động cơ DM-2325 được <strong>đặt lộn ngược ở một bên thành đĩa</strong> thay vì nằm thẳng dưới đáy.</li>
+      <li>Mô-men xoắn được truyền qua một bộ cặp bánh răng giảm tốc (gia công cắt CNC trực tiếp từ tấm sợi thủy tinh / phíp ngọc FR4 để đảm bảo vừa nhẹ vừa tự bôi trơn tốt).</li>
+      <li>Bộ vuốt gạt đạn trung tâm được chế tạo bằng phương pháp in 3D FDM.</li>
+    </ul>
+
+    <h2>3. Đột phá chống kẹt đạn: Cơ cấu vuốt gạt vặn góc xoắn 3D</h2>
+    <div style="background:#eff6ff;border-left:4px solid #3b82f6;padding:16px;border-radius:4px;margin:16px 0;">
+      <h3 style="margin-top:0;color:#1e40af;">💡 Nguyên nhân gốc rễ gây kẹt đạn & Giải pháp triệt tiêu:</h3>
+      <p>Khi robot di chuyển với gia tốc cao, đĩa cấp đạn bên hông liên tục bị rung lắc. Các viên đạn ở tầng dưới cùng bị xóc nảy nhấc lên khỏi mặt đáy của đĩa cấp. Khi xoay đến cửa thoát tiếp tuyến, viên đạn bị lệch mặt phẳng và chèn kẹt vào khe cửa ra.</p>
+      <p><strong>Giải pháp:</strong> Nhóm đã thiết kế lại hình học cánh vuốt gạt với <strong>góc xoắn 3D (Twisted Claw)</strong>. Khi cánh vuốt xoay đẩy viên đạn về phía trước, bề mặt nghiêng của cánh đồng thời tạo ra một <strong>vectơ lực nén hướng thẳng xuống mặt đáy</strong>, giữ cho viên đạn luôn dính sát sàn đĩa cho đến khi lọt trọn vào rãnh tiếp tuyến.</p>
+    </div>
+
+    <h2>4. Dữ liệu thực nghiệm & Độ bền hoạt động</h2>
+    <ul>
+      <li><strong>Tần số bắn liên tục 27 Hz:</strong> Tỷ lệ kẹt đạn tổng hợp đo được <strong>dưới 0.3%</strong> (&lt; 3 phát kẹt trên 1.000 phát bắn).</li>
+      <li><strong>Tần số cực hạn 30 Hz:</strong> Tỷ lệ kẹt chỉ khoảng <strong>0.7%</strong>, hoàn toàn đáp ứng các pha giao tranh bắn xả tốc độ cao.</li>
+      <li><strong>Kiểm tra độ bền (Durability Test):</strong> Cơ cấu chạy thử nghiệm liên tục ở tần số 25 Hz. Đến mốc <strong>80.000 phát bắn liên tục</strong>, động cơ mới cần bảo dưỡng; các chi tiết cơ khí vẫn hoạt động hoàn hảo.</li>
+    </ul>
+
+    <h2>5. Hai lưu ý quan trọng khi gia công và lắp ráp</h2>
+    <ol>
+      <li><strong>Dán băng keo Teflon chống ma sát:</strong> Dán thêm một lớp decal/băng dính Teflon mỏng tại các vị trí tiếp xúc trực tiếp với viên đạn (mặt vuốt gạt, mặt sàn đĩa, thành cong cửa thoát tiếp tuyến). Ma sát trượt sẽ giảm mạnh và triệt tiêu hầu hết nguy cơ xước đạn.</li>
+      <li><strong>Khớp nối trục D-Shaft của DM-2325:</strong> Khớp nối trục bán nguyệt chữ D của motor DM-2325 có kích thước vát hơi khác so với motor 2006 thông dụng. Khi gia công khớp nối kẹp (clamping coupler), cần dũa hoặc phay chuẩn theo kích thước trục DM-2325 để tránh bị trượt khớp dưới tải lớn.</li>
+    </ol>
+  </div>
+</article>

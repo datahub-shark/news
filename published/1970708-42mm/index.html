@@ -1,0 +1,93 @@
+<!-- METADATA
+Tiêu đề: Thiết kế cơ cấu phóng đạn 42mm Bolt-Action in 3D: Khóa nòng cơ học, nạp đạn đẩy tay và bộ bản vẽ CAD chi tiết
+Chuyên mục: Cơ khí
+Độ hữu dụng: ⭐⭐⭐⭐⭐ (Cơ cấu cơ khí chế thử nhanh & kiểm tra đạn 42mm)
+Tác giả: Zayn (RoboMaster Community)
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/6e3ca3276ee546f9aca3d5a27047a7ae1791634165102/%E5%8F%91%E5%B0%84%E5%99%A8.jpeg
+Nguồn: https://bbs.robomaster.com/article/1970708
+Tên nguồn: RoboMaster BBS
+Tóm tắt: Hướng dẫn chi tiết thiết kế và lắp ráp cơ cấu phóng đạn 42mm kiểu khóa nòng trượt (Bolt-Action) được chế tạo 100% bằng in 3D PLA kết hợp phụ kiện tiêu chuẩn (vòng thun đàn hồi và lò xo bút bi). Giải pháp giúp các đội kỹ thuật chế tạo nhanh bộ thử nghiệm đường đạn, kiểm tra kích thước đạn 42mm của robot Hero mà không cần gia công CNC tốn kém. Đi kèm trọn bộ tệp CAD 3D (.zip) sẵn sàng in.
+Gợi ý ứng dụng: Ứng dụng xuất sắc trong việc chế thử nhanh (Rapid Prototyping) hệ thống cấp và đẩy đạn 42mm trên robot Hero. Ngoài ra có thể làm thiết bị kiểm tra an toàn quỹ đạo đạn tại xưởng cơ khí, hoặc tích hợp thành cơ cấu phóng phụ trợ gọn nhẹ trên robot cứu hộ / robot tự hành.
+Tệp đính kèm: 42mm-tai-nguyen.zip (8.03 MB)
+Trạng thái: PUBLISHED (6/11/2026)
+-->
+
+<article class="robot-ideas-article">
+  <header class="article-header">
+    <h1>Thiết kế cơ cấu phóng đạn 42mm Bolt-Action in 3D: Khóa nòng cơ học, nạp đạn đẩy tay và bộ bản vẽ CAD chi tiết</h1>
+    <div class="article-meta">
+      <p><strong>Chuyên mục:</strong> <span class="badge">Cơ khí</span> · <strong>Lĩnh vực:</strong> Cơ cấu phóng / In 3D FDM / Cơ khí chính xác</p>
+      <p><strong>Nguồn gốc:</strong> <a href="https://bbs.robomaster.com/article/1970708" target="_blank" rel="noopener">RoboMaster BBS</a> · <strong>Tác giả:</strong> Zayn</p>
+      <p><strong>Đánh giá độ hữu dụng:</strong> <span style="color:#eab308;font-weight:bold;">⭐⭐⭐⭐⭐ (Cơ cấu cơ khí thực chiến)</span></p>
+    </div>
+  </header>
+
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/6e3ca3276ee546f9aca3d5a27047a7ae1791634165102/%E5%8F%91%E5%B0%84%E5%99%A8.jpeg" alt="Cơ cấu phóng đạn 42mm Bolt-Action" style="width:100%;max-height:480px;object-fit:cover;display:block;">
+  </div>
+
+  <div class="local-attachments" style="background:#f0fdf4;border:1px solid #22c55e;padding:16px;border-radius:8px;margin:20px 0;">
+    <h3 style="margin-top:0;color:#15803d;display:flex;align-items:center;gap:8px;">
+      📦 Tệp đính kèm mô hình 3D & Bản vẽ CAD:
+    </h3>
+    <ul style="margin-bottom:0;line-height:1.8;">
+      <li>
+        <a href="./attachments/42mm-tai-nguyen.zip" target="_blank" style="color:#15803d;font-weight:bold;text-decoration:underline;">
+          42mm-tai-nguyen.zip
+        </a> 
+        <span style="color:#555;">(Dung lượng: 8.03 MB - Chứa đầy đủ file CAD 3D STL/STEP để in và gia công)</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="article-body" style="line-height:1.85;font-size:15px;">
+    <h2>1. Tổng quan cơ cấu & Mục tiêu thiết kế</h2>
+    <p>Đối với các robot sử dụng đạn cỡ lớn 42mm (như robot Hero trong thi đấu RoboMaster), việc thử nghiệm cơ cấu nạp và bắn thường đòi hỏi cụm đầu phóng CNC bằng nhôm nguyên khối rất đắt đỏ và nặng nề. Bản thiết kế này giới thiệu một <strong>cơ cấu phóng cơ học kiểu khóa nòng trượt (Bolt-Action)</strong> được thiết kế chế tạo thủ công nhằm tối ưu hóa chi phí và tốc độ hoàn thiện.</p>
+    
+    <div style="background:#f8fafc;border-left:4px solid #3b82f6;padding:16px;border-radius:4px;margin:16px 0;">
+      <h3 style="margin-top:0;color:#1e40af;">🎯 Đặc điểm kỹ thuật cốt lõi:</h3>
+      <ul style="margin-bottom:0;">
+        <li><strong>Vật liệu chế tạo:</strong> Toàn bộ chi tiết thân vỏ và cơ cấu trượt đều in 3D bằng nhựa <strong>PLA</strong> thông thường (tiết kiệm chi phí, dễ dàng in lại nếu hỏng).</li>
+        <li><strong>Phụ kiện kim loại tối thiểu:</strong> Chỉ sử dụng một lượng nhỏ ốc vít M3/M4 tiêu chuẩn, chốt định vị và đai ốc.</li>
+        <li><strong>Nguồn tạo lực đẩy:</strong> Tận dụng dây thun tròn đường kính 20mm, 55mm kết hợp 2 lò xo bút bi làm lò xo hồi vị cho cò và khóa lẫy.</li>
+        <li><strong>Phần đầu bắn:</strong> Tương thích trực tiếp với cụm nòng bắn đạn 42mm của robot Hero mùa giải trước (chỉ gồm 3 chi tiết kim loại gia công cơ bản), có thể tùy biến vị trí bắt ốc để gắn vào bất kỳ hệ cơ khí nào của đội bạn.</li>
+      </ul>
+    </div>
+
+    <h2>2. Hướng dẫn lắp ráp & Những lưu ý gia công in 3D</h2>
+
+    <h3>a. Lắp ráp vòng nối tay kéo khóa nòng (Bolt Ring)</h3>
+    <div style="text-align:center;margin:20px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/f0e768f163374d0ebff3e051d41bd6161791634945444/5b47b09a502231249ce8ec9edd6606ab.jpg" alt="Lắp ráp vòng nối tay kéo khóa nòng" style="max-width:320px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 1: Vị trí lắp vòng nối tay kéo khóa nòng và phương pháp ép nhiệt</em></p>
+    </div>
+    <p>Ban đầu thiết kế dự tính dựa vào tính đàn hồi của chi tiết in 3D để cài vào khớp. Tuy nhiên thực nghiệm cho thấy khi lắp nguội, ứng suất tập trung ở đoạn giữa vòng nối rất lớn khiến chi tiết bị nứt gãy (kể cả khi đổi sang nhựa PETG bền dẻo hơn vẫn bị).</p>
+    <div style="background:#fffbeb;border-left:4px solid #f59e0b;padding:14px;border-radius:4px;margin:12px 0;">
+      <strong>⚠️ Giải pháp thực chiến - Phương pháp nhiệt luyện cục bộ:</strong>
+      <p style="margin:6px 0 0;">Dùng máy khò nhiệt hoặc máy sấy nhiệt nhẹ nhàng làm nóng chân vòng nối nhựa cho mềm ra, sau đó nhân lúc chi tiết còn ấm thì ấn khớp vào vị trí rồi giữ chặt để định hình khi nguội.<br>
+      <em>Lưu ý:</em> Cần ép đai ốc ren đồng (heat-set insert) vào chân đế trước khi lắp ráp.</p>
+    </div>
+
+    <h3>b. Kết nối dây thun tạo lực kim hỏa (Striker Elastic Bands)</h3>
+    <div style="text-align:center;margin:20px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a2394d7d720140f5bb61db9c14c8913d1791635177376/5bd5a8fdcc5a408df6e87e07e80f4c9b.jpg" alt="Móc dây thun kim hỏa" style="max-width:320px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 2: Sơ đồ căng dây thun truyền lực cho kim hỏa</em></p>
+    </div>
+    <p>Kim hỏa sử dụng các vòng thun kéo căng về phía trước. Khi kéo khóa nòng về sau, kim hỏa được ngậm vào chốt lẫy cò (giữ bằng lò xo bút bi). Khi bóp cò, kim hỏa phóng thẳng về phía trước tác động lên viên đạn 42mm đẩy nó vào tiếp xúc với cặp bánh đà ma sát tốc độ cao.</p>
+
+    <h3>c. Kết nối hộp tiếp đạn (Magazine Feed)</h3>
+    <div style="text-align:center;margin:20px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/950d67374f874199b32b801fd83d8ee61791635888667/8639bbe563867bf0593d9f1cb0576b4e.jpg" alt="Dây thun hộp tiếp đạn" style="max-width:480px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 3: Cơ cấu lò xo/dây thun đẩy viên đạn kế tiếp từ hộp tiếp đạn lên buồng nạp</em></p>
+    </div>
+
+    <h2>3. Lưu ý then chốt khi in 3D & Chống tuôn ren</h2>
+    <ul>
+      <li><strong>Hiện tượng tuôn ren nhựa:</strong> Phần lớn các lỗ ốc bắt trực tiếp vào phôi nhựa PLA được taro ren trực tiếp chứ không dùng đai ốc (để giảm trọng lượng). Do đó khi siết ốc, lực tay cần vừa phải, tránh siết quá lực gây trờn ren.</li>
+      <li><strong>Dung sai chuyển động (Clearance):</strong> File CAD đã được bù sẵn dung sai khe hở trượt ~0.3mm. Tùy thuộc vào sai số của từng máy in 3D (độ co ngót nhựa), nếu các rãnh trượt còn cọ xát rít, hãy dùng giấy nhám mịn mài nhẹ và bôi một lớp <strong>mỡ bôi trơn silicon</strong> để cơ cấu trượt êm ái nhất.</li>
+    </ul>
+
+    <h2>4. Đánh giá kỹ thuật & Ứng dụng</h2>
+    <p>Đây là một dự án mở mang tính thực hành cơ khí cực cao. Nhờ thiết kế mô-đun hóa và chi phí linh kiện gần như bằng 0 (chỉ tốn ~1 cuộn nhựa PLA và vài con ốc), bất kỳ kỹ sư cơ khí nào cũng có thể in và lắp ráp trong 1 buổi chiều để kiểm tra quỹ đạo bay của đạn 42mm hoặc làm bài tập huấn luyện tay nghề cho thành viên mới của đội cơ khí.</p>
+  </div>
+</article>

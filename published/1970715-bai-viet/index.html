@@ -1,0 +1,53 @@
+<!-- METADATA
+Tiêu đề: Thuật toán bù trọng lực chi tiết cho cánh tay robot 7 bậc tự do (7-DOF): Mô hình MDH, ma trận thế năng và triệt tiêu tải trọng khớp
+Chuyên mục: Điều khiển
+Độ hữu dụng: ⭐⭐⭐⭐⭐ (Động lực học cánh tay robot 7 trục & bù mô-men xoắn thực chiến)
+Tác giả: Đội DreamChaser (追梦战队) - Đại học Công nghệ Bắc Kinh (BIT)
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/81b4229d5fa041dc965ad2486135723d1789689778838/image.png
+Nguồn: https://bbs.robomaster.com/article/1970715
+Tên nguồn: RoboMaster BBS
+Tóm tắt: Hướng dẫn toán học và động lực học hoàn chỉnh về thuật toán bù trọng lực (Gravity Compensation) cho cánh tay robot hình người 7 bậc tự do (7-DOF Redundant Arm). Bài viết thiết lập hệ tọa độ MDH (Modified Denavit-Hartenberg), mô hình hóa vị trí khối tâm 3D từng khâu, thiết lập hàm thế năng tổng quát và đạo hàm riêng theo các góc khớp để tính toán chính xác vectơ mô-men bù trừ trọng lực cho 7 khớp J0 - J6.
+Gợi ý ứng dụng: Áp dụng trực tiếp vào khâu điều khiển mô-men xoắn (Torque / Impedance Control) cho cánh tay robot công nghiệp, cánh tay robot cứu hộ, hoặc robot gắp quà / lấy khoáng sản. Giúp cánh tay robot "không trọng lượng" - người vận hành có thể cầm tay kéo dắt (Lead-through Teaching) nhẹ như không khí.
+Tệp đính kèm: Không có
+Trạng thái: PUBLISHED (6/11/2026)
+-->
+
+<article class="robot-ideas-article">
+  <header class="article-header">
+    <h1>Thuật toán bù trọng lực chi tiết cho cánh tay robot 7 bậc tự do (7-DOF): Mô hình MDH, ma trận thế năng và triệt tiêu tải trọng khớp</h1>
+    <div class="article-meta">
+      <p><strong>Chuyên mục:</strong> <span class="badge">Điều khiển</span> · <strong>Lĩnh vực:</strong> Cánh tay robot 7 trục / Tọa độ MDH / Bù trọng lực / Điều khiển trở kháng</p>
+      <p><strong>Nguồn gốc:</strong> <a href="https://bbs.robomaster.com/article/1970715" target="_blank" rel="noopener">RoboMaster BBS</a> · <strong>Tác giả:</strong> Đội DreamChaser - ĐH Công nghệ Bắc Kinh (BIT)</p>
+      <p><strong>Đánh giá độ hữu dụng:</strong> <span style="color:#eab308;font-weight:bold;">⭐⭐⭐⭐⭐ (Động lực học thực chiến cho cánh tay 7-DOF)</span></p>
+    </div>
+  </header>
+
+  <div class="article-body" style="line-height:1.85;font-size:15px;">
+    <h2>1. Tổng quan bài toán bù trọng lực cánh tay 7 bậc tự do</h2>
+    <p>Đối với cánh tay robot nhiều bậc tự do (đặc biệt là dạng 7 trục dự phòng như cánh tay người), nếu không có thuật toán <strong>bù trừ trọng lực chủ động (Active Gravity Compensation)</strong>, các động cơ tại các khớp vai và khuỷu tay phải liên tục phát lực gồng gánh trọng lượng bản thân các đốt tay và công cụ gắp. Điều này dẫn đến:</p>
+    <ul>
+      <li>Động cơ nhanh bị nóng và quá nhiệt, tiêu hao pin vô ích.</li>
+      <li>Vòng lặp kín điều khiển vị trí bị trôi (steady-state error) do tải tĩnh.</li>
+      <li>Không thể triển khai tính năng dẫn dắt bằng tay (Lead-through teaching / Zero-gravity mode) vốn rất cần thiết khi lập trình quỹ đạo.</li>
+    </ul>
+
+    <h2>2. Quy trình thiết lập hệ tọa độ MDH & Khối tâm từng khâu</h2>
+    <p>Thuật toán thiết lập theo chuẩn <strong>MDH (Modified Denavit-Hartenberg)</strong> để tránh các kỳ dị toán học khi các trục quay cắt nhau:</p>
+    <ol>
+      <li><strong>Xác định hệ quy chiếu từng khớp (Frames):</strong> Thiết lập 7 hệ trục tọa độ gắn cố định trên từng khâu từ $J_0$ (khớp xoay vai) đến $J_6$ (khớp xoay cổ tay).</li>
+      <li><strong>Định vị khối tâm 3D ($\mathbf{r}_{ci}$):</strong> Khối tâm thực tế của mỗi khâu (bao gồm vỏ nhôm, động cơ, hộp số hành tinh và dây cáp) được trích xuất chính xác từ phần mềm CAD SolidWorks/Inventor và chuyển đổi sang hệ tọa độ MDH tương ứng.</li>
+      <li><strong>Hàm thế năng tổng cộng ($E_p$):</strong>
+        <p style="text-align:center;">$$E_p = \sum_{i=1}^{7} m_i \cdot \mathbf{g}^T \cdot \mathbf{p}_{ci}(q_0, \dots, q_{i-1})$$</p>
+        Trong đó $m_i$ là khối lượng khâu thứ $i$, $\mathbf{g} = [0, 0, -9.81]^T$ là vectơ gia tốc trọng trường, và $\mathbf{p}_{ci}$ là tọa độ khối tâm khâu thứ $i$ trong hệ tọa độ gốc.
+      </li>
+    </ol>
+
+    <h2>3. Đạo hàm mô-men bù trừ trọng lực (Torque Calculation)</h2>
+    <p>Mô-men xoắn cần bù tại khớp thứ $k$ ($\tau_{g,k}$) chính là đạo hàm riêng của tổng thế năng theo góc quay $q_k$:</p>
+    <p style="text-align:center;">$$\tau_{g,k} = \frac{\partial E_p}{\partial q_k} = \sum_{i=k}^{7} m_i \cdot \mathbf{g}^T \cdot \left( \frac{\partial \mathbf{p}_{ci}}{\partial q_k} \right)$$</p>
+    <p>Nhóm tác giả đã triển khai thuật toán tính toán đệ quy ngược từ cổ tay về gốc (Recursive Newton-Euler / Backward accumulation), giúp giảm độ phức tạp tính toán xuống mức tối thiểu, cho phép chạy vòng lặp bù lực ở tần số <strong>1000 Hz (1 ms)</strong> trên vi điều khiển STM32 mà không chiếm dụng quá 5% CPU.</p>
+
+    <h2>4. Ứng dụng thực tế</h2>
+    <p>Khi tích hợp thuật toán này, toàn bộ cánh tay robot 7 bậc tự do đạt được trạng thái <strong>lơ lửng không trọng lực</strong>: Khi thả tay ra, cánh tay đứng yên ở bất kỳ vị trí nào trong không gian; người điều khiển chỉ cần dùng một ngón tay đẩy nhẹ là cánh tay di chuyển mượt mà theo đúng hướng tác động.</p>
+  </div>
+</article>

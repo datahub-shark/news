@@ -1,0 +1,70 @@
+<!-- METADATA
+Tiêu đề: Cơ cấu gập biến hình vượt hầm chui cho Robot Omni: Bản vẽ SolidWorks 3D và cơ chế hạ thấp trọng tâm linh hoạt
+Chuyên mục: Cơ khí
+Độ hữu dụng: ⭐⭐⭐⭐⭐ (Cơ cấu cơ khí biến hình thích ứng không gian hẹp)
+Tác giả: Kesdo - Đội TCR (Học viện Gia Canh - Đại học Hạ Môn)
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c0be01b356854cafb6ec4f3ad2c7ccef1787734703164/28eef507fcce3b3f38690b713e1e452.jpg
+Nguồn: https://bbs.robomaster.com/article/1943679
+Tên nguồn: RoboMaster BBS
+Tóm tắt: Toàn bộ giải pháp thiết kế cơ khí cho robot bộ binh bánh Omni có khả năng gập biến hình thu gọn chiều cao để chui lọt qua các cửa hầm hẹp và gờ chắn giới hạn chiều cao: Cơ chế đòn bẩy đa liên kết nâng hạ bệ ngắm Gimbal đồng bộ với giáp bảo vệ; Khung gầm Omni bố trí động cơ nằm phẳng; Đầy đủ thuyết minh kỹ thuật tính toán ứng suất, bản vẽ 3D SolidWorks (phiên bản v2.1) và video thử nghiệm thực tế.
+Gợi ý ứng dụng: Rất giá trị cho các kỹ sư phát triển robot thăm dò địa hình hiểm trở, robot tìm kiếm cứu nạn luồn lách qua các khe nứt sụp đổ, hoặc robot công nghiệp cần chui dưới gầm kệ hàng pallet trong kho thông minh.
+Tệp đính kèm: bai-viet-tai-nguyen.pdf (1.67 MB)
+Trạng thái: PUBLISHED (6/11/2026)
+-->
+
+<article class="robot-ideas-article">
+  <header class="article-header">
+    <h1>Cơ cấu gập biến hình vượt hầm chui cho Robot Omni: Bản vẽ SolidWorks 3D và cơ chế hạ thấp trọng tâm linh hoạt</h1>
+    <div class="article-meta">
+      <p><strong>Chuyên mục:</strong> <span class="badge">Cơ khí</span> · <strong>Lĩnh vực:</strong> Cơ cấu biến hình / Khung gầm Omni / Đòn bẩy nâng hạ đa thanh / Robot thu gọn</p>
+      <p><strong>Nguồn gốc:</strong> <a href="https://bbs.robomaster.com/article/1943679" target="_blank" rel="noopener">RoboMaster BBS</a> · <strong>Tác giả:</strong> Kesdo (Đội TCR - ĐH Hạ Môn)</p>
+      <p><strong>Đánh giá độ hữu dụng:</strong> <span style="color:#eab308;font-weight:bold;">⭐⭐⭐⭐⭐ (Cơ cấu cơ khí biến hình thực chiến)</span></p>
+    </div>
+  </header>
+
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c0be01b356854cafb6ec4f3ad2c7ccef1787734703164/28eef507fcce3b3f38690b713e1e452.jpg" alt="Robot gập biến hình vượt hầm TCR" style="width:100%;max-height:480px;object-fit:cover;display:block;">
+  </div>
+
+  <div class="local-attachments" style="background:#f0fdf4;border:1px solid #22c55e;padding:16px;border-radius:8px;margin:20px 0;">
+    <h3 style="margin-top:0;color:#15803d;display:flex;align-items:center;gap:8px;">
+      📦 Tài liệu kỹ thuật & Bản vẽ CAD đi kèm:
+    </h3>
+    <ul style="margin-bottom:0;line-height:1.8;">
+      <li>
+        <a href="./attachments/bai-viet-tai-nguyen.pdf" target="_blank" style="color:#15803d;font-weight:bold;text-decoration:underline;">
+          bai-viet-tai-nguyen.pdf
+        </a> 
+        <span style="color:#555;">(Thuyết minh chi tiết cơ cấu gập, nguyên lý liên kết và kiểm nghiệm bền - 1.67 MB)</span>
+      </li>
+      <li>
+        <a href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/5fff6f0c03d24839ac7cd72e5f5824881788002521168/扫地机器人v2.1 开源版本.rar" target="_blank" rel="noopener" style="color:#1d4ed8;font-weight:bold;">
+          🌐 Tải trọn bộ bản vẽ 3D SolidWorks v2.1 (Dung lượng: 482 MB từ máy chủ gốc Aliyun)
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="article-body" style="line-height:1.85;font-size:15px;">
+    <h2>1. Bài toán kỹ thuật: Thách thức vượt hầm giới hạn chiều cao</h2>
+    <p>Trong các giải đấu robot hoặc nhiệm vụ cứu hộ, các chướng ngại vật dạng vòm hẹp hoặc thanh giới hạn chiều cao đòi hỏi robot phải có chiều cao thấp hơn bình thường từ 30% đến 45%. Nếu thiết kế robot thấp cố định thì góc bắn và tầm nhìn camera quan sát sẽ bị hạn chế nghiêm trọng. Do đó, <strong>cơ chế gập biến hình chủ động (Active Morphing Mechanism)</strong> là giải pháp tối ưu nhất.</p>
+
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e4bc49ba2da14353b7a3590105ec39841787734714939/22d4938899ac76f87da3001f1e74771.jpg" alt="So sánh tư thế đứng thẳng và gập sát sàn" style="max-width:100%;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 1: Trạng thái bình thường (cao ráo, bao quát) so với trạng thái gập sát đáy (chui hầm)</em></p>
+    </div>
+
+    <h2>2. Nguyên lý cơ cấu gập đòn bẩy đa thanh liên động</h2>
+    <ul>
+      <li><strong>Hạ trọng tâm bệ ngắm Gimbal:</strong> Bệ Gimbal được gắn trên một cơ cấu thanh truyền hình bình hành hoặc cơ cấu cam trượt. Khi một động cơ bước/servo hành trình kích hoạt, toàn bộ trục bệ ngắm được kéo trượt chéo ra sau và ép sát xuống sát mặt sàn khung gầm.</li>
+      <li><strong>Cụm giáp bảo vệ tự động xếp gọn:</strong> Các tấm giáp va chạm và cảm biến quanh thân được liên động bằng khớp bản lề trợ lực lò xo; khi bệ ngắm hạ xuống, các tấm giáp tự động cụp sát vào thân xe mà không cần thêm động cơ phụ, giúp tiết kiệm trọng lượng tối đa.</li>
+      <li><strong>Khung gầm Omni siêu mỏng:</strong> Bốn cụm bánh xe Omni được dẫn động bằng động cơ đặt nằm ngang kết hợp truyền động đai hoặc bánh răng nón, giải phóng toàn bộ không gian trung tâm để bệ ngắm có thể chìm sâu xuống đáy gầm.</li>
+    </ul>
+
+    <h2>3. Lưu ý then chốt khi chế tạo & vận hành</h2>
+    <ul>
+      <li><strong>Cân bằng khối lượng và trợ lực lò xo:</strong> Khi bệ ngắm nặng từ 1.5kg - 3kg, động cơ nâng gập sẽ phải chịu tải rất lớn ở góc nâng tới hạn. Cần bố trí thêm các cặp lò xo kéo trợ lực để bù trừ trọng lực tĩnh, giúp motor nâng hạ nhẹ nhàng và không bị quá nhiệt.</li>
+      <li><strong>Độ rơ lắc tại các chốt xoay:</strong> Vì cơ cấu có nhiều khớp nối trung gian, các lỗ chốt cần được đóng bạc thau tự bôi trơn hoặc vòng bi mini, tránh tình trạng rơ lắc làm sai lệch điểm ngắm của súng bắn.</li>
+    </ul>
+  </div>
+</article>

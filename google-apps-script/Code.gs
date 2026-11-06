@@ -66,7 +66,7 @@ function clean_(value,max){if(typeof value!=='string')return '';return value.tri
 function sources_(){const sh=sheet_('Sources');return sh.getLastRow()<2?[]:sh.getRange(2,1,sh.getLastRow()-1,4).getValues().map(r=>({id:String(r[0]),name:String(r[1]),feedUrl:String(r[2]),enabled:String(r[3]).toLowerCase()==='true'}));}
 function saveSource_(input){const name=clean_(input.name,200),feedUrl=https_(input.feedUrl);if(!name||!feedUrl)throw Error('Nhập tên nguồn và URL HTTPS RSS/Atom.');const sources=sources_();const index=input.id?sources.findIndex(s=>s.id===input.id):-1;if(input.id&&index<0)throw Error('Nguồn không tồn tại. Tải lại danh sách.');if(sources.some(s=>s.id!==input.id&&s.feedUrl===feedUrl))throw Error('URL nguồn này đã có.');const source={id:input.id||Utilities.getUuid(),name,feedUrl,enabled:input.enabled===true};const row=[source.id,source.name,source.feedUrl,source.enabled?'TRUE':'FALSE'].map(text_);if(index<0)sheet_('Sources').appendRow(row);else sheet_('Sources').getRange(index+2,1,1,4).setValues([row]);return {ok:true,source};}
 function https_(value){const s=clean_(value,2000);if(s&&!/^https:\/\/[^\s/@]+(?:[/?#][^\s]*)?$/i.test(s))throw Error('Nguồn phải là URL HTTPS hợp lệ.');return s;}
-function save_(payload){
+function save_(payload,importFileId){
  const input=payload.article||{};const entries=rows_();const existing=input.id?entries.find(r=>r.article.id===input.id):null;if(input.id&&!existing)throw Error('Bài không tồn tại.');
  if(existing&&input.version!==existing.article.version)throw Error('Bài đã thay đổi ở phiên khác. Tải lại trước khi sửa.');
  const status=input.status;if(!['draft','pending','published','rejected'].includes(status))throw Error('Trạng thái không hợp lệ.');
@@ -90,11 +90,13 @@ function save_(payload){
  if(article.sourceUrl&&entries.some(r=>r.article.id!==article.id&&r.article.sourceUrl===article.sourceUrl))throw Error('URL nguồn đã có trong thư viện.');
  // New private revision first; never overwrite a file readers may already be using.
  const file=ensureFolder_().createFile(Utilities.newBlob(html,'text/html',article.id+'-v'+article.version+'.html'));
+ if(importFileId)article.importFileId=importFileId;
+ else if(existing&&existing.article.importFileId)article.importFileId=existing.article.importFileId;
  try{file.setSharing(DriveApp.Access.PRIVATE,DriveApp.Permission.NONE);article.fileId=file.getId();const encoded=JSON.stringify(article);
  if(existing)sheet_('Articles').getRange(existing.row,1,1,2).setValues([[text_(article.id),encoded]]);else sheet_('Articles').appendRow([text_(article.id),encoded]);
  }catch(e){try{file.setTrashed(true);}catch(cleanupError){console.warn(cleanupError);}throw e;}
  try{sheet_('Audit').appendRow([now,status,text_(article.id)]);}catch(e){console.warn('Audit: '+e.message);}
- try{autoShareDriveLinks_(html+' '+(input.robotIdea||'')+' '+(input.summary||''));}catch(e){console.warn('Auto share: '+e.message);}
+ if(!importFileId)try{autoShareDriveLinks_(html+' '+(input.robotIdea||'')+' '+(input.summary||''));}catch(e){console.warn('Auto share: '+e.message);}
  return {ok:true,article:{...article,html}};
 }
 function strip_(html){return String(html||'').replace(/<[^>]*>/g,' ').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/\s+/g,' ').trim();}
@@ -109,6 +111,73 @@ function importFeeds_(){return locked_(()=>{
 });}
 function scheduledImport_(){return importFeeds_();}
 function installImportTrigger_(){ScriptApp.getProjectTriggers().filter(t=>t.getHandlerFunction()==='scheduledImport_').forEach(t=>ScriptApp.deleteTrigger(t));ScriptApp.newTrigger('scheduledImport_').timeBased().everyHours(6).create();}
+
+/** Run once in the Apps Script editor as the owner. Does not publish articles. */
+function installDriveImport(){
+ requireOwnerExecution_();driveImportRoot_();
+ ScriptApp.getProjectTriggers().filter(t=>t.getHandlerFunction()==='scheduledDriveImport_').forEach(t=>ScriptApp.deleteTrigger(t));
+ ScriptApp.newTrigger('scheduledDriveImport_').timeBased().everyMinutes(10).create();
+ console.log(JSON.stringify(scheduledDriveImport_()));
+}
+function importDriveNow(){requireOwnerExecution_();console.log(JSON.stringify(scheduledDriveImport_()));}
+function stopDriveImport(){requireOwnerExecution_();ScriptApp.getProjectTriggers().filter(t=>t.getHandlerFunction()==='scheduledDriveImport_').forEach(t=>ScriptApp.deleteTrigger(t));}
+function driveImportRoot_(){
+ const props=properties_(),id=props.getProperty('IMPORT_FOLDER_ID');if(id)return DriveApp.getFolderById(id);
+ const folders=DriveApp.getFoldersByName('Robot Ideas Articles');
+ if(!folders.hasNext())throw Error('Không tìm thấy thư mục Robot Ideas Articles. Đặt IMPORT_FOLDER_ID trong Script properties.');
+ const folder=folders.next();if(folders.hasNext())throw Error('Có nhiều thư mục cùng tên. Đặt IMPORT_FOLDER_ID để chọn đúng thư mục.');
+ props.setProperty('IMPORT_FOLDER_ID',folder.getId());return folder;
+}
+function driveArticle_(raw,name){
+ const match=raw.match(/<!--\s*METADATA\s*([\s\S]*?)-->/i),meta={};
+ if(match)for(const line of match[1].split(/\r?\n/)){const colon=line.indexOf(':');if(colon>0)meta[line.slice(0,colon).trim()]=line.slice(colon+1).trim();}
+ const html=match?raw.slice(0,match.index)+raw.slice(match.index+match[0].length):raw;
+ const heading=(html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i)||html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)||[])[1];
+ return {title:clean_(meta['Tiêu đề']||strip_(heading||'')||name.replace(/\.html?$/i,''),240),summary:clean_(strip_(meta['Tóm tắt']||html),1000),category:meta['Chuyên mục']||'Khác',tags:meta['Tags']||'',sourceName:meta['Tên nguồn']||'Google Drive',sourceUrl:meta['Nguồn']||'',robotIdea:meta['Gợi ý ứng dụng']||'',coverImage:/^https:\/\//i.test(meta['Ảnh bìa']||'')?meta['Ảnh bìa']:'',html,status:'pending'};
+}
+function scheduledDriveImport_(){return locked_(()=>{
+ const props=properties_(),root=driveImportRoot_(),rootId=root.getId(),started=Date.now();
+ let state;try{state=JSON.parse(props.getProperty('DRIVE_IMPORT_CURSOR')||'null');}catch(e){}
+ if(!state||state.root!==rootId)state={root:rootId,queue:[rootId],fileToken:'',folderToken:'',phase:'files'};
+ const known=rows_().map(r=>r.article),ids=new Set(known.flatMap(a=>[a.importFileId,a.fileId]).filter(Boolean)),urls=new Set(known.map(a=>a.sourceUrl).filter(Boolean));
+ const result={imported:0,skipped:0,errors:0,scanned:0};
+ const checkpoint=()=>props.setProperty('DRIVE_IMPORT_CURSOR',JSON.stringify(state));
+ // Small, resumable batches keep Drive work within Apps Script execution limits.
+ while(state.queue.length&&result.imported<10&&result.scanned<200&&Date.now()-started<120000){
+  const folder=DriveApp.getFolderById(state.queue[0]);
+  if(state.phase==='files'){
+   let files;try{files=state.fileToken?DriveApp.continueFileIterator(state.fileToken):folder.getFiles();}catch(e){state.fileToken='';files=folder.getFiles();}
+   while(files.hasNext()&&result.imported<10&&result.scanned<200&&Date.now()-started<120000){
+    const file=files.next();result.scanned++;
+    try{
+     const id=file.getId();
+     if(!/\.html?$/i.test(file.getName())||ids.has(id)){result.skipped++;}
+     else{
+      if(file.getSize()>1500000)throw Error('HTML vượt 1,5 MB.');
+      const article=driveArticle_(file.getBlob().getDataAsString('UTF-8'),file.getName());
+      if(article.sourceUrl&&urls.has(article.sourceUrl)){result.skipped++;}
+      else{save_({article},id);ids.add(id);if(article.sourceUrl)urls.add(article.sourceUrl);result.imported++;}
+     }
+    }catch(e){result.errors++;console.warn('Drive import '+file.getId()+': '+e.message);}
+    state.fileToken=files.getContinuationToken();checkpoint();
+   }
+   if(files.hasNext())break;
+   state.phase='folders';state.fileToken='';checkpoint();
+  }
+  let folders;try{folders=state.folderToken?DriveApp.continueFolderIterator(state.folderToken):folder.getFolders();}catch(e){state.folderToken='';folders=folder.getFolders();}
+  while(folders.hasNext()&&result.scanned<200&&Date.now()-started<120000){
+   const sub=folders.next();result.scanned++;
+   if(sub.getName()!=='attachments'&&!state.queue.includes(sub.getId()))state.queue.push(sub.getId());
+   state.folderToken=folders.getContinuationToken();checkpoint();
+  }
+  if(folders.hasNext())break;
+  state.queue.shift();state.phase='files';state.folderToken='';checkpoint();
+ }
+ result.cycleComplete=state.queue.length===0;
+ if(result.cycleComplete){state={root:rootId,queue:[rootId],fileToken:'',folderToken:'',phase:'files'};checkpoint();}
+ props.setProperty('DRIVE_IMPORT_LAST_RESULT',JSON.stringify({...result,time:new Date().toISOString()}));
+ return result;
+});}
 function shareArticlesFolder_(){let count=0;try{const folders=DriveApp.getFoldersByName('Robot Ideas Articles');while(folders.hasNext()){count+=makePublicRecursively_(folders.next());}}catch(e){console.warn('Share articles folder: '+e.message);}return count;}
 function makePublicRecursively_(folder){let count=0;try{folder.setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW);}catch(e){}try{const files=folder.getFiles();while(files.hasNext()){const f=files.next();try{f.setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW);count++;}catch(e){}}}catch(e){}try{const subs=folder.getFolders();while(subs.hasNext()){count+=makePublicRecursively_(subs.next());}}catch(e){}return count;}
 function autoShareDriveLinks_(text){if(!text||typeof text!=='string')return 0;let count=0;const fileMatches=[...text.matchAll(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_\-]+)/gi)].map(m=>m[1]);const folderMatches=[...text.matchAll(/drive\.google\.com\/drive\/(?:u\/\d+\/)?folders\/([a-zA-Z0-9_\-]+)/gi)].map(m=>m[1]);const allIds=[...new Set([...fileMatches,...folderMatches])];for(const id of allIds){try{DriveApp.getFileById(id).setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW);count++;}catch(e){try{DriveApp.getFolderById(id).setSharing(DriveApp.Access.ANYONE_WITH_LINK,DriveApp.Permission.VIEW);count++;}catch(e2){}}}return count;}

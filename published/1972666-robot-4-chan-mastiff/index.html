@@ -1,0 +1,62 @@
+<!-- METADATA
+Tiêu đề: Thiết kế kết cấu cơ khí Robot 4 chân cỡ lớn Mastiff: Tệp CAD STEP 3D và cấu trúc khung chịu tải cao
+Chuyên mục: Robot di động
+Độ hữu dụng: ⭐⭐⭐⭐⭐ (Cơ cấu cơ khí robot 4 chân công nghiệp hạng nặng)
+Tác giả: Yuqi (俣琦)
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/0b52a711cf1e4969a5ae9bf5e940f0eb1793341125384/image.png
+Nguồn: https://bbs.robomaster.com/article/1972666
+Tên nguồn: RoboMaster BBS
+Tóm tắt: Toàn bộ mô hình cơ khí 3D định dạng chuẩn STEP của robot bốn chân cỡ lớn (Heavy-duty Quadruped Robot) mang tên Mastiff. Thiết kế tập trung vào bộ khung chịu lực mô-đun hóa, bố trí động cơ khớp hông và khớp gối có mô-men xoắn lớn, đường truyền động đai đồng bộ giảm chấn và chân tiếp đất đệm giảm chấn cao su. Đi kèm tệp mô hình 3D nguyên bản (Mastiff_W.stp - 80.9 MB).
+Gợi ý ứng dụng: Nền tảng tuyệt vời cho các nhóm nghiên cứu phát triển robot bốn chân vận chuyển tải trọng lớn (BigDog / Spot style), robot tuần tra nhà máy hoặc khung gầm địa hình mang vác thiết bị đo đạc khảo sát.
+Tệp đính kèm: Mastiff_W.stp (80.9 MB)
+Trạng thái: PUBLISHED (6/11/2026)
+-->
+
+<article class="robot-ideas-article">
+  <header class="article-header">
+    <h1>Thiết kế kết cấu cơ khí Robot 4 chân cỡ lớn Mastiff: Tệp CAD STEP 3D và cấu trúc khung chịu tải cao</h1>
+    <div class="article-meta">
+      <p><strong>Chuyên mục:</strong> <span class="badge">Robot di động</span> · <strong>Lĩnh vực:</strong> Robot bốn chân (Quadruped) / Khớp động cơ mô-men xoắn lớn / CAD STEP</p>
+      <p><strong>Nguồn gốc:</strong> <a href="https://bbs.robomaster.com/article/1972666" target="_blank" rel="noopener">RoboMaster BBS</a> · <strong>Tác giả:</strong> Yuqi (俣琦)</p>
+      <p><strong>Đánh giá độ hữu dụng:</strong> <span style="color:#eab308;font-weight:bold;">⭐⭐⭐⭐⭐ (Bản vẽ CAD robot 4 chân cỡ lớn hiếm có)</span></p>
+    </div>
+  </header>
+
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/0b52a711cf1e4969a5ae9bf5e940f0eb1793341125384/image.png" alt="Robot 4 chân Mastiff" style="width:100%;max-height:480px;object-fit:cover;display:block;">
+  </div>
+
+  <div class="local-attachments" style="background:#f0fdf4;border:1px solid #22c55e;padding:16px;border-radius:8px;margin:20px 0;">
+    <h3 style="margin-top:0;color:#15803d;display:flex;align-items:center;gap:8px;">
+      📦 Tệp mô hình CAD 3D tiêu chuẩn:
+    </h3>
+    <ul style="margin-bottom:0;line-height:1.8;">
+      <li>
+        <a href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/f56ac3edfbec40cd9fea51ddf136cfdf1793341210613/Mastiff_W.stp" target="_blank" rel="noopener" style="color:#15803d;font-weight:bold;text-decoration:underline;">
+          Mastiff_W.stp
+        </a> 
+        <span style="color:#555;">(Dung lượng: 80.9 MB - Định dạng STEP phổ quát, mở được trên SolidWorks, Inventor, Fusion 360, FreeCAD)</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="article-body" style="line-height:1.85;font-size:15px;">
+    <h2>1. Giới thiệu tổng quan dự án Mastiff</h2>
+    <p>Khác với các dòng chó robot mini cỡ nhỏ thường thấy trong trường đại học, <strong>Mastiff</strong> là dự án robot 4 chân kích thước và tải trọng lớn, hướng tới khả năng mang vác và vượt địa hình thực thụ. Tác giả đã chia sẻ công khai toàn bộ mô hình thiết kế cơ khí 3D dưới định dạng <strong>STEP (.stp)</strong> để cộng đồng kỹ sư có thể bóc tách, tái sử dụng các cụm khớp chân và khung thân.</p>
+
+    <h2>2. Đặc điểm cơ khí nổi bật trong file CAD</h2>
+    <ul>
+      <li><strong>Bố trí động cơ khớp tập trung (Coaxial Joint Actuators):</strong> Cả động cơ khớp đùi và động cơ khớp gối đều được dồn về phía trục hông thân trên, giúp giảm tối đa khối lượng chuyển động ở cẳng chân (Unsprung Mass). Nhờ vậy, chân robot có thể vung bước với tần số cực cao mà không đòi hỏi công suất motor quá lớn.</li>
+      <li><strong>Truyền động thanh giằng kết hợp đai đồng bộ:</strong> Lực từ động cơ khớp gối được truyền xuống cẳng chân thông qua cụm thanh truyền liên kết 4 khâu, mang lại tỷ số truyền lực ổn định và độ cứng vững chống xoắn vượt trội khi chịu tải nặng.</li>
+      <li><strong>Khung sườn gia cường dạng hộp:</strong> Thân chính robot thiết kế theo dạng khoang kín bảo vệ pin, máy tính công nghiệp onboard và cụm điều khiển trung tâm khỏi va đập môi trường ngoài.</li>
+    </ul>
+
+    <h2>3. Hướng dẫn sử dụng file CAD</h2>
+    <p>Tệp <code>Mastiff_W.stp</code> có thể mở trực tiếp trên hầu hết các phần mềm CAD cơ khí. Bạn có thể:</p>
+    <ol>
+      <li>Trích xuất kích thước và biên dạng các tấm nhôm CNC để đặt gia công cắt laser / phay CNC.</li>
+      <li>Đo đạc khoảng cách lắp ráp vòng bi tiêu chuẩn và trục then của từng khớp.</li>
+      <li>Nhập vào phần mềm mô phỏng (MuJoCo / Isaac Gym) để huấn luyện dáng đi học tăng cường (Reinforcement Learning Walk Gait).</li>
+    </ol>
+  </div>
+</article>

@@ -1,0 +1,72 @@
+<!-- METADATA
+Tiêu đề: Plugin SolidWorks xuất URDF siêu tốc (0.43s): Đồng bộ trực tiếp MuJoCo và ROS 2 không lo treo máy
+Chuyên mục: Cơ khí
+Độ hữu dụng: ⭐⭐⭐⭐⭐ (Công cụ cầu nối Cơ khí - Điều khiển - Mô phỏng cực mạnh)
+Tác giả: SunWater (RoboMaster Community)
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/81b4229d5fa041dc965ad2486135723d1789689778838/image.png
+Nguồn: https://bbs.robomaster.com/article/1970138
+Tên nguồn: RoboMaster BBS
+Tóm tắt: Plugin mã nguồn mở dành riêng cho SolidWorks giải quyết triệt để nỗi ám ảnh xuất file URDF mô phỏng: Xuất toàn bộ mô hình robot bánh chân nguyên bản sang lưới STL chỉ mất 0.43 giây nhờ cơ chế đọc trực tiếp dữ liệu tam giác hóa đồ họa thay vì gọi SaveAs tuần tự. Tích hợp thuật toán rút gọn lưới QEM, cửa sổ xem trước URDF theo phím tắt SolidWorks, tự động sinh gói ament_cmake cho ROS 2 và cấu hình MuJoCo compiler nguyên bản.
+Gợi ý ứng dụng: Công cụ không thể thiếu trong quy trình làm việc giữa nhóm Cơ khí và nhóm Thuật toán / Điều khiển. Giúp kỹ sư cơ khí chuyển giao mô hình robot sang MuJoCo / Gazebo / ROS 2 ngay trong vài giây mà không cần mất cả ngày cắt gọt đơn giản hóa chi tiết hay chịu cảnh SolidWorks bị đơ (Not Responding).
+Tệp đính kèm: Không có (Mã nguồn Gitee mở)
+Trạng thái: PUBLISHED (6/11/2026)
+-->
+
+<article class="robot-ideas-article">
+  <header class="article-header">
+    <h1>Plugin SolidWorks xuất URDF siêu tốc (0.43s): Đồng bộ trực tiếp MuJoCo và ROS 2 không lo treo máy</h1>
+    <div class="article-meta">
+      <p><strong>Chuyên mục:</strong> <span class="badge">Cơ khí</span> · <strong>Lĩnh vực:</strong> SolidWorks API / URDF / MuJoCo Simulation / ROS 2</p>
+      <p><strong>Nguồn gốc:</strong> <a href="https://bbs.robomaster.com/article/1970138" target="_blank" rel="noopener">RoboMaster BBS</a> · <strong>Tác giả:</strong> SunWater</p>
+      <p><strong>Đánh giá độ hữu dụng:</strong> <span style="color:#eab308;font-weight:bold;">⭐⭐⭐⭐⭐ (Công cụ tối ưu hóa năng suất thiết kế)</span></p>
+    </div>
+  </header>
+
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/81b4229d5fa041dc965ad2486135723d1789689778838/image.png" alt="Plugin SolidWorks URDF Exporter" style="width:100%;max-height:480px;object-fit:cover;display:block;">
+  </div>
+
+  <div class="article-body" style="line-height:1.85;font-size:15px;">
+    <h2>1. Nỗi đau của kỹ sư cơ khí khi xuất mô hình sang mô phỏng</h2>
+    <p>Khi đưa mô hình thiết kế cơ khí từ SolidWorks sang các phần mềm mô phỏng (như MuJoCo, Gazebo, Isaac Sim) hay hệ điều hành ROS 2, công cụ xuất URDF mặc định (SW2URDF) bộc lộ rất nhiều hạn chế:</p>
+    <ul>
+      <li>Thời gian chờ đợi xuất file cực kỳ lâu với các cụm lắp ghép phức tạp.</li>
+      <li>Thường xuyên bị treo cứng phần mềm (Crash / Not Responding) nếu không đơn giản hóa hay xóa bớt các chi tiết ốc vít, bo góc.</li>
+      <li>Giao diện khó xem trước và dễ nhầm lẫn gốc tọa độ liên kết giữa các Link và Joint.</li>
+    </ul>
+    <p>Dự án plugin này ra đời nhằm mục đích <strong>tăng tốc độ xuất file lên gấp hàng chục lần</strong> và tự động hóa toàn bộ việc cấu hình cho môi trường MuJoCo và ROS 2.</p>
+    <p>🔗 <strong>Liên kết mã nguồn và cài đặt:</strong> <a href="https://gitee.com/hrg_vex_project/sw-urdf" target="_blank" rel="noopener">Gitee - sw-urdf Repository</a></p>
+
+    <h2>2. Bản chất kỹ thuật: Tại sao tốc độ xuất đạt kỷ lục 0.43 giây?</h2>
+    <div style="background:#f8fafc;border-left:4px solid #3b82f6;padding:16px;border-radius:4px;margin:16px 0;">
+      <h3 style="margin-top:0;color:#1e40af;">⚡ Khác biệt về mặt kiến trúc truy xuất dữ liệu:</h3>
+      <p>Trình xuất STL tiêu chuẩn của SolidWorks hoạt động thông qua lệnh COM <code>SaveAs</code>. Lệnh này bắt buộc tài liệu cần chuyển đổi phải là <code>Active Document</code> (tài liệu đang mở và được chọn trên màn hình). Do đó, hệ thống chỉ có thể mở từng chi tiết, lưu ra đĩa rồi đóng lại, gây nghẽn I/O rất lớn.</p>
+      <p><strong>Cơ chế của Plugin mới:</strong> Bỏ qua hoàn toàn lệnh <code>SaveAs</code>. Plugin đọc thẳng dữ liệu lưới tam giác hóa (Tessellation Data) mà SolidWorks đã tính sẵn trong bộ nhớ đệm đồ họa (GPU/RAM) để hiển thị trên màn hình. Nhờ vậy, một mô hình robot bánh chân nguyên bản với hàng trăm chi tiết phức tạp được xuất trọn vẹn chỉ trong <strong>0.43 giây</strong>!</p>
+    </div>
+
+    <h2>3. Các tính năng nổi bật</h2>
+
+    <h3>a. Tối ưu hóa số lượng bề mặt (QEM Mesh Decimation)</h3>
+    <p>Nhiều phần mềm mô phỏng vật lý gặp khó khăn nếu lưới 3D có quá nhiều tam giác. Plugin tích hợp sẵn công cụ giới hạn số lượng mặt đa giác và thuật toán tối ưu hóa lưới QEM (Quadric Error Metrics), cho phép giảm dung lượng tệp lưới mà vẫn giữ trọn hình dạng cơ học quan trọng.</p>
+
+    <h3>b. Cửa sổ xem trước trực quan (URDF Preview)</h3>
+    <p>Hỗ trợ xoay, phóng to, thu nhỏ cây cấu trúc liên kết Link/Joint ngay trong SolidWorks với các phím bấm đồng nhất. Cung cấp kèm script <code>view_sw_pose.py</code> giúp ghi lại góc tư thế lắp ghép hiện tại của robot để khi mở trong MuJoCo, robot sẽ giữ nguyên dáng đứng như thiết kế thay vì bị gập sụp về góc <code>q=0</code>.</p>
+
+    <h3>c. Xuất tự động cấu trúc thư mục chuẩn cho MuJoCo & ROS 2</h3>
+    <p>Không cần chỉnh sửa thủ công bằng tay, plugin xuất ra cấu trúc thư mục chuẩn:</p>
+
+    <div style="background:#1e293b;color:#f8fafc;padding:16px;border-radius:6px;font-family:monospace;font-size:13px;margin:16px 0;">
+      <div style="color:#94a3b8;margin-bottom:8px;">// Cấu trúc gói ROS 2 sẵn sàng chạy display.launch.py:</div>
+      robot_description/<br>
+      ├── package.xml<br>
+      ├── CMakeLists.txt<br>
+      ├── urdf/ (chứa file robot.urdf chuẩn)<br>
+      ├── meshes/ (chứa toàn bộ file .stl)<br>
+      ├── config/initial_joint_positions.yaml<br>
+      ├── launch/display.launch.py<br>
+      └── rviz/display.rviz
+    </div>
+
+    <p>Khi mở bằng lệnh <code>ros2 launch display.launch.py</code>, RViz sẽ hiển thị ngay lập tức toàn bộ mô hình với đầy đủ hệ trục tọa độ TF và giao diện thanh trượt điều khiển khớp.</p>
+  </div>
+</article>

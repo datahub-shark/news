@@ -1,0 +1,90 @@
+<!-- METADATA
+Tiêu đề: Cẩm nang cơ khí truyền động: Trục, Then bằng, Then hoa, Khớp nối trục và các lỗi rơ giật thường gặp
+Chuyên mục: Cơ khí
+Độ hữu dụng: ⭐⭐⭐⭐⭐ (Kiến thức cơ khí nền tảng cốt lõi cho mọi kỹ sư Robot)
+Tác giả: Yuqi (俣琦) - RM Community
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/515056f607494e1cbdcb8ffca27b3e191792741413976/01_ILL_FIXED.jpg
+Nguồn: https://bbs.robomaster.com/article/1971847
+Tên nguồn: RoboMaster BBS
+Tóm tắt: Cẩm nang phân tích chuyên sâu về hệ thống truyền động cơ khí từ động cơ sang cơ cấu chấp hành: Phân biệt bản chất chịu lực của Trục truyền (Shaft) - Tâm trục (Spindle) - Trục quay; Nguyên lý tiếp xúc truyền lực của Then bằng (Parallel Key), Then hoa (Spline), Ống nở côn (Clamping Sleeve) và Trục chữ D; Bản chất cơ học của các loại Khớp nối trục (Khớp nối mềm đệm mận Plum Coupling, Khớp nối cắt rãnh xoắn Helical, Khớp nối mặt bích cứng); Giải thích tận gốc nguyên nhân bánh xe bị rơ giật, trễ pha điều khiển góc và cháy bạc đạn khi lắp ráp.
+Gợi ý ứng dụng: Tài liệu huấn luyện đào tạo nội bộ bắt buộc cho cả kỹ sư Cơ khí và kỹ sư Điều khiển. Giúp thợ cơ khí thiết kế chuẩn dung sai và khử rơ giật truyền động, đồng thời giúp kỹ sư thuật toán hiểu rõ vì sao góc phản hồi Encoder motor khác góc thực của cơ cấu.
+Tệp đính kèm: Không có
+Trạng thái: PUBLISHED (6/11/2026)
+-->
+
+<article class="robot-ideas-article">
+  <header class="article-header">
+    <h1>Cẩm nang cơ khí truyền động: Trục, Then bằng, Then hoa, Khớp nối trục và các lỗi rơ giật thường gặp</h1>
+    <div class="article-meta">
+      <p><strong>Chuyên mục:</strong> <span class="badge">Cơ khí</span> · <strong>Lĩnh vực:</strong> Trục truyền động / Then & Rãnh then / Khớp nối trục / Khử khe hở Backlash</p>
+      <p><strong>Nguồn gốc:</strong> <a href="https://bbs.robomaster.com/article/1971847" target="_blank" rel="noopener">RoboMaster BBS</a> · <strong>Tác giả:</strong> Yuqi (俣琦)</p>
+      <p><strong>Đánh giá độ hữu dụng:</strong> <span style="color:#eab308;font-weight:bold;">⭐⭐⭐⭐⭐ (Giáo trình cơ khí thực chiến bắt buộc)</span></p>
+    </div>
+  </header>
+
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/515056f607494e1cbdcb8ffca27b3e191792741413976/01_ILL_FIXED.jpg" alt="Trục và cơ cấu truyền động cơ khí" style="width:100%;max-height:480px;object-fit:cover;display:block;">
+  </div>
+
+  <div class="article-body" style="line-height:1.85;font-size:15px;">
+    <h2>1. Mở đầu: Khi motor quay mà cơ cấu không chịu nghe lời</h2>
+    <p>Khi động cơ điện quay, mô-men xoắn phải được chuyển giao đến cơ cấu chấp hành (bánh xe, bánh đà bắn, cánh tay robot). Quá trình này nghe thì tưởng chừng đơn giản: <em>Bắt một khớp nối vào trục động cơ, nối với một trục truyền, rồi lắp bánh xe hoặc bánh răng lên đó</em>. Nhưng khi đưa vào vận hành thực tế, các kỹ sư thường gặp hàng loạt lỗi nhức nhối:</p>
+    <ul>
+      <li>Bánh xe quay theo trục nhưng lại bị trượt chạy dọc theo trục (mất định vị hướng trục).</li>
+      <li>Vít siết đã vặn chặt hết cỡ nhưng mỗi lần đảo chiều quay lại xuất hiện một khoảng chết (Dead-band / Rơ giật chuyển chiều).</li>
+      <li>Khớp nối rõ ràng ghi là "khớp nối bù lệch tâm", nhưng sau khi siết ốc vận hành một lát thì ổ bi nóng ran và kẹt cứng...</li>
+    </ul>
+    <p>Gốc rễ của những vấn đề này nằm ở việc <strong>nhầm lẫn nhiệm vụ của từng chi tiết cơ khí</strong>: Ổ bi chịu trách nhiệm đỡ tải và định vị tâm; Then, then hoa và ngàm kẹp chịu trách nhiệm truyền mô-men từ trục sang may-ơ; Khớp nối chịu trách nhiệm nối hai trục với nhau. Không thể vì chúng nằm cạnh nhau mà bắt một chi tiết gánh việc của chi tiết khác.</p>
+
+    <h2>2. Bản chất các loại Trục cơ khí (Shafts)</h2>
+    <table style="width:100%;border-collapse:collapse;margin:18px 0;font-size:14px;">
+      <thead>
+        <tr style="background:#f1f5f9;">
+          <th style="padding:10px;border:1px solid #cbd5e1;text-align:left;">Loại trục</th>
+          <th style="padding:10px;border:1px solid #cbd5e1;text-align:left;">Đặc trưng tải trọng chính</th>
+          <th style="padding:10px;border:1px solid #cbd5e1;text-align:left;">Ví dụ thực tế</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:10px;border:1px solid #cbd5e1;"><strong>Trục truyền (Transmission Shaft)</strong></td>
+          <td style="padding:10px;border:1px solid #cbd5e1;">Chủ yếu truyền mô-men xoắn (Torque), chịu uốn rất nhỏ</td>
+          <td style="padding:10px;border:1px solid #cbd5e1;">Trục các-đăng nối giữa hộp số và cầu xe</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;border:1px solid #cbd5e1;"><strong>Tâm trục / Trục gá (Spindle / Axle)</strong></td>
+          <td style="padding:10px;border:1px solid #cbd5e1;">Chủ yếu chịu lực uốn (Bending), không truyền mô-men quay</td>
+          <td style="padding:10px;border:1px solid #cbd5e1;">Trục bánh xe bị động, trục bánh tỳ căng đai (Idler)</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;border:1px solid #cbd5e1;"><strong>Trục quay tổng hợp (Drive Shaft)</strong></td>
+          <td style="padding:10px;border:1px solid #cbd5e1;">Đồng thời vừa chịu uốn vừa chịu xoắn rất lớn</td>
+          <td style="padding:10px;border:1px solid #cbd5e1;">Trục bánh răng dẫn động, trục gắn puli đai</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="background:#eff6ff;border-left:4px solid #3b82f6;padding:14px;border-radius:4px;margin:16px 0;">
+      <strong>💡 Quy tắc then chốt: Giới hạn xoay và Giới hạn dịch chuyển trục là hai việc độc lập!</strong>
+      <p style="margin:6px 0 0;">Then bằng (Parallel Key) chỉ có nhiệm vụ truyền mô-men xoay, hoàn toàn không giữ được chi tiết khỏi bị trôi dọc theo trục. Cần phải có gờ vai trục (Shaft Shoulder), phe cài chặn trục (Circlip), hoặc bạc cách (Spacer) để khóa chặt bậc tự do tịnh tiến dọc trục.</p>
+    </div>
+
+    <h2>3. Then bằng, Then hoa & Ống nở côn: Ai truyền lực như thế nào?</h2>
+
+    <h3>a. Then bằng (Parallel Key): Mặt làm việc là hai mặt bên!</h3>
+    <p>Nhiều bạn lầm tưởng lắp then chặt là phải chêm then thật khít ở mặt trên. <strong>Thực tế, bề mặt truyền mô-men xoắn của then bằng chính là hai mặt bên</strong> (mặt cạnh dọc theo trục). Mặt đỉnh của then luôn luôn phải có khe hở nhỏ so với đáy rãnh may-ơ để tránh làm lệch tâm trục khi siết ép.</p>
+
+    <h3>b. Then hoa (Splines): Phân bổ lực trên nhiều răng</h3>
+    <p>Khi mô-men xoắn đảo chiều liên tục ở gia tốc cực lớn (như động cơ robot đảo chiều đột ngột), rãnh then đơn sẽ nhanh chóng bị biến dạng dập và sinh ra rơ lắc. <strong>Then hoa (Spline)</strong> chia đều tải trọng lên 6 đến 24 răng xung quanh chu vi, mang lại độ bền mỏi và độ cứng vững chống xoắn vượt trội.</p>
+
+    <h3>c. Khóa trục bằng Ống nở côn (Clamping Sleeve / Power Lock)</h3>
+    <p>Ống nở côn biến lực siết ốc dọc trục thành áp lực ép hướng kính cực mạnh thông qua mặt nón nghiêng, kẹp chặt trục và may-ơ bánh xe bằng ma sát thuần túy. <strong>Ưu điểm lớn nhất: Hoàn toàn không có rãnh then làm suy yếu trục và không có bất kỳ khe hở rơ giật nào (Zero-Backlash)</strong>, rất lý tưởng cho hệ thống điều khiển bám vị trí chính xác cao.</p>
+
+    <h2>4. Chọn Khớp nối trục (Couplings) phù hợp cho Robot</h2>
+    <ul>
+      <li><strong>Khớp nối đệm mận (Plum / Jaw Coupling):</strong> Ở giữa có cục đệm cao su Polyurethane hình hoa mai. Hấp thụ rung động và giảm chấn cực tốt cho các cơ cấu chịu va đập (như bánh xe khung gầm).</li>
+      <li><strong>Khớp nối cắt rãnh xoắn đàn hồi (Helical Beam Coupling):</strong> Cắt rãnh xoắn từ một khối nhôm liền. <strong>Độ rơ bằng 0 tuyệt đối (Zero Backlash)</strong>, độ cứng vững xoắn cao, lý tưởng cho kết nối giữa trục động cơ với trục vitme bi hoặc encoder hồi tiếp góc.</li>
+      <li><strong>Khớp nối mặt bích cứng (Rigid Flange Coupling):</strong> Không có khả năng bù lệch tâm. Yêu cầu hai trục phải được gia công đồng tâm tuyệt đối; nếu bị lệch tâm mà cố siết cứng sẽ làm ổ bi bị bó chặt và sinh nhiệt phá hủy động cơ trong thời gian ngắn.</li>
+    </ul>
+  </div>
+</article>

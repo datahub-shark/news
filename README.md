@@ -26,6 +26,17 @@ Không đổi tên setup. Hàm kiểm tra danh tính Google; hàm nội bộ man
 
 ## Đăng bài HTML
 
+### Tự động nhập file có sẵn trên Google Drive vào hàng chờ
+
+1. Trong dự án Apps Script đang nối với website, thay `Code.gs` bằng `google-apps-script/Code.gs` trong repo và lưu; giữ nguyên các Script properties hiện có.
+2. Thư mục nguồn mặc định là **Robot Ideas Articles** trong Drive của tài khoản chạy script. Nếu thư mục có tên khác, hoặc có nhiều thư mục cùng tên, đặt Script property **IMPORT_FOLDER_ID** bằng ID thư mục muốn nhập.
+3. Chọn hàm **installDriveImport** và bấm **Run** bằng tài khoản sở hữu dự án, cấp quyền Google khi được yêu cầu. Hàm nhập ngay một lượt, rồi đặt lịch mỗi 10 phút. Không cần mở máy tính để lịch chạy trên Google. Trigger dùng mã đã lưu; nếu muốn cập nhật cả API web thì Deploy một phiên bản mới như phần nâng cấp.
+4. Mở quản trị → **Đang chờ** → tải lại danh sách để thấy bài vừa nhập. Mỗi lượt tối đa 10 bài mới, quét tối đa 200 mục hoặc khoảng 2 phút rồi tiếp tục ở lượt sau. Vì vậy kho lớn cần nhiều lượt.
+
+Hệ thống đọc file `.html`/`.htm` trong thư mục và thư mục con, bỏ thư mục `attachments`; lấy tiêu đề, chuyên mục, nguồn, tóm tắt và ảnh bìa từ khối `METADATA` hiện có. File không có metadata dùng tiêu đề HTML/tên file. Bài mới luôn là **pending**, kể cả file ghi READY. Đã có cùng file ID hoặc URL nguồn thì bỏ qua; không tự sửa hay đưa bài đã duyệt/từ chối trở lại hàng chờ. Nội dung được lưu thành bản HTML riêng tư cho web, không tự công khai các file đính kèm. Liên kết tương đối/tệp đính kèm riêng tư chưa được chuyển thành link tải công khai.
+
+Chạy **importDriveNow** để nhập thêm một lượt ngay; **stopDriveImport** để dừng lịch. Xem **Executions** và Script property **DRIVE_IMPORT_LAST_RESULT** để biết số bài nhập, bỏ qua và lỗi; file lỗi được bỏ qua trong vòng quét hiện tại và thử lại ở vòng sau. Các thay đổi file đã nhập không tự ghi đè bài trên web.
+
 1. Trên web bấm **Quản trị** → **Gửi mã đến email quản trị** → nhập mã → Đăng nhập.
 2. Bấm **+ Bài mới** → **Nhập file .html**, hoặc dán mã vào ô HTML. Nhập file mới chỉ đọc trên máy, chưa lưu lên Drive.
 3. Điền tiêu đề, chủ đề, tóm tắt, tên tác giả/nguồn và URL bài gốc. Bổ sung gợi ý ứng dụng vào robot nếu có.
