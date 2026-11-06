@@ -1,5 +1,13 @@
-/** Robot Ideas. Set ADMIN_EMAIL in Script Properties, then run setup_(). */
+/** Robot Ideas. Set ADMIN_EMAIL in Script Properties, then run setup(). */
 const CATEGORIES_ = ['Robot di động','Thị giác máy','Điều khiển','Cơ khí','AI & ROS','Khác'];
+// Public wrappers appear in the editor Run menu. Never trust execute-as-owner alone.
+function requireOwnerExecution_(){
+ const active=String(Session.getActiveUser().getEmail()||'').trim().toLowerCase();
+ const effective=String(Session.getEffectiveUser().getEmail()||'').trim().toLowerCase();
+ if(!active||!effective||active!==effective)throw Error('Chỉ chạy chức năng này trong Apps Script bằng tài khoản sở hữu dự án.');
+}
+function setup(){requireOwnerExecution_();return locked_(()=>setup_());}
+function installImportTrigger(){requireOwnerExecution_();return locked_(()=>installImportTrigger_());}
 function properties_(){return PropertiesService.getScriptProperties();}
 function adminEmail_(){const value=String(properties_().getProperty('ADMIN_EMAIL')||'').trim().toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))throw Error('Chưa cấu hình ADMIN_EMAIL.');return value;}
 function setup_(){
@@ -45,7 +53,8 @@ function save_(payload){
  const title=clean_(input.title,240),content=clean_(input.content,40000),summary=clean_(input.summary,1000);if(!title)throw Error('Nhập tiêu đề.');if(status==='published'&&(!content||!summary))throw Error('Bài công khai cần nội dung và tóm tắt.');
  const now=new Date().toISOString();const article={id:existing?input.id:Utilities.getUuid(),title,summary,content,category:CATEGORIES_.includes(input.category)?input.category:'Khác',tags:clean_(input.tags,500),robotIdea:clean_(input.robotIdea,5000),sourceName:clean_(input.sourceName,200),sourceUrl:https_(input.sourceUrl),status,version:existing?existing.article.version+1:1,createdAt:existing?existing.article.createdAt:now,updatedAt:now,publishedAt:status==='published'?(existing&&existing.article.publishedAt||now):null};
  if(article.sourceUrl&&rows_().some(r=>r.article.id!==article.id&&r.article.sourceUrl===article.sourceUrl))throw Error('URL nguồn đã có trong thư viện.');
- if(existing)sheet_('Articles').getRange(existing.row,1,1,2).setValues([[text_(article.id),JSON.stringify(article)]]);else sheet_('Articles').appendRow([text_(article.id),JSON.stringify(article)]);
+ const encoded=JSON.stringify(article);if(encoded.length>49000)throw Error('Bài quá dài để lưu trong một ô Google Sheets. Hãy rút ngắn nội dung.');
+ if(existing)sheet_('Articles').getRange(existing.row,1,1,2).setValues([[text_(article.id),encoded]]);else sheet_('Articles').appendRow([text_(article.id),encoded]);
  sheet_('Audit').appendRow([now,status,text_(article.id)]);return {ok:true,article};
 }
 function strip_(html){return String(html||'').replace(/<[^>]*>/g,' ').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/\s+/g,' ').trim();}
@@ -53,7 +62,7 @@ function strip_(html){return String(html||'').replace(/<[^>]*>/g,' ').replace(/&
 function importFeeds_(){return locked_(()=>{
  const sh=sheet_('Sources');if(sh.getLastRow()<2)return 0;const feeds=sh.getRange(2,1,sh.getLastRow()-1,4).getValues().filter(r=>String(r[3]).toLowerCase()==='true').slice(0,5);let count=0;
  for(const row of feeds){try{const url=https_(row[2]);if(!url)continue;const response=UrlFetchApp.fetch(url,{muteHttpExceptions:true,followRedirects:false});if(response.getResponseCode()!==200)continue;const xml=response.getContentText();if(xml.length>1000000)continue;const root=XmlService.parse(xml).getRootElement();const ns=root.getNamespace();const channel=root.getChild('channel');const entries=channel?channel.getChildren('item'):root.getChildren('entry',ns);
- for(const item of entries.slice(0,5)){const n=channel?undefined:ns;const get=name=>{const child=item.getChild(name,n);return child?child.getText():''};const links=item.getChildren('link',n);const link=channel?get('link'):(links.find(l=>!l.getAttribute('rel')||l.getAttribute('rel').getValue()==='alternate')?.getAttribute('href')?.getValue()||'');if(!link||rows_().some(r=>r.article.sourceUrl===link))continue;
+ for(const item of entries.slice(0,5)){const get=name=>{const child=channel?item.getChild(name):item.getChild(name,ns);return child?child.getText():''};const links=channel?item.getChildren('link'):item.getChildren('link',ns);const link=channel?get('link'):(links.find(l=>!l.getAttribute('rel')||l.getAttribute('rel').getValue()==='alternate')?.getAttribute('href')?.getValue()||'');if(!link||rows_().some(r=>r.article.sourceUrl===link))continue;
  save_({article:{title:strip_(get('title'))||'Chưa có tiêu đề',summary:strip_(get('description')||get('summary')).slice(0,1000),content:'',sourceName:String(row[1]),sourceUrl:link,category:'Khác',status:'draft'}});count++;
  }}catch(e){console.warn('Không nhập được nguồn '+String(row[0])+': '+e.message);}}
  return count;

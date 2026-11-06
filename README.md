@@ -17,7 +17,7 @@ Thư viện ý tưởng phát triển robot. Giao diện tĩnh trên GitHub Page
 
 1. Tạo dự án tại https://script.google.com bằng tài khoản Google quản trị. Tạo file `Code.gs`, `Admin.html`, bật hiển thị manifest trong Project Settings rồi chép ba file tương ứng từ `google-apps-script/`.
 2. Project Settings → Script properties: thêm `ADMIN_EMAIL` bằng email nhận mã duyệt bài. Không đặt email hay mã trong frontend.
-3. Trong trình biên tập, chạy `setup_` và cấp quyền Google yêu cầu. Hàm tạo Google Spreadsheet và lưu `SHEET_ID` trong Script Properties; URL bảng nằm trong execution log. Chạy lại không xóa dữ liệu.
+3. Trong trình biên tập, chạy `setup` và cấp quyền Google yêu cầu. Hàm tạo Google Spreadsheet và lưu `SHEET_ID` trong Script Properties; URL bảng nằm trong execution log. Chạy lại không xóa dữ liệu.
 4. **Giữ Spreadsheet riêng tư**, chỉ cấp cho quản trị viên tin cậy. Không Publish to web, không chia sẻ Anyone with link. Không dùng tài khoản chứa dữ liệu nhạy cảm khác nếu không cần.
 5. Deploy → New deployment → Web app → Execute as **Me**, Who has access **Anyone**. API công khai cần cấu hình này; dữ liệu nháp và mọi thao tác quản trị đều kiểm tra session ở server. Không dùng URL `/dev`.
 6. Copy URL kết thúc `/exec` vào `config.js` → `apiUrl`. URL triển khai là địa chỉ công khai, không phải bí mật.
@@ -44,7 +44,7 @@ Trong Sheet `Sources`, thêm hàng theo cột:
 
 Sau đó bấm **Nhập RSS** ở trang biên tập. Mỗi lượt tối đa 5 nguồn × 5 mục đầu. Feed chuyển hướng sẽ bị bỏ qua; cấu hình URL đích chính thức. Xem execution log khi nhập thất bại. Chỉ dùng nguồn được phép khai thác và giữ liên kết/tác giả. Không vượt paywall hoặc tự đăng bản dịch toàn văn chưa có quyền.
 
-Muốn tự động nhập: trong Apps Script chạy `installImportTrigger_` để tạo một trigger mỗi 6 giờ. Bài thu thập luôn ở trạng thái `draft`. Xóa trigger trong Apps Script để tắt. Chỉ bật khi đã kiểm tra nguồn và hạn mức; trigger chạy bằng quyền người cài.
+Muốn tự động nhập: trong Apps Script chạy `installImportTrigger` để tạo một trigger mỗi 6 giờ. Bài thu thập luôn ở trạng thái `draft`. Xóa trigger trong Apps Script để tắt. Chỉ bật khi đã kiểm tra nguồn và hạn mức; trigger chạy bằng quyền người cài.
 
 ## Bước tiếp theo: AI
 
