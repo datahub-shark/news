@@ -36,7 +36,9 @@ function ensureFolder_(){const props=properties_();const id=props.getProperty('H
 function digest_(value){return Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,value));}
 function random_(){return Utilities.getUuid()+Utilities.getUuid();}
 function locked_(fn){const lock=LockService.getScriptLock();lock.waitLock(10000);try{return fn();}finally{lock.releaseLock();}}
-function requireSession_(token){if(typeof token!=='string'||token.length>200||!CacheService.getScriptCache().get('session:'+digest_(token)))throw Error('Phiên đăng nhập hết hạn. Đăng nhập lại.');}
+function sessions_(){return JSON.parse(properties_().getProperty('ADMIN_SESSIONS')||'{}');}
+function issueSession_(){const token=random_(),now=Date.now(),expiresAt=now+7*24*60*60*1000;const entries=Object.entries(sessions_()).filter(([,s])=>s.expiresAt>now&&s.email===adminEmail_()).sort((a,b)=>b[1].expiresAt-a[1].expiresAt).slice(0,9);const sessions=Object.fromEntries(entries);sessions[digest_(token)]={expiresAt,email:adminEmail_()};properties_().setProperty('ADMIN_SESSIONS',JSON.stringify(sessions));return {ok:true,token,expiresAt};}
+function requireSession_(token){const session=typeof token==='string'&&token.length>=32&&token.length<=200?sessions_()[digest_(token)]:null;if(!session||session.expiresAt<=Date.now()||session.email!==adminEmail_()){const error=Error('Phiên đăng nhập hết hạn. Đăng nhập lại.');error.code='AUTH_REQUIRED';throw error;}return session;}
 /** Only public admin entry point; every data operation requires a server session. */
 function adminApi(action,payload){payload=payload||{};try{
  if(action==='requestCode')return locked_(()=>{
@@ -46,9 +48,10 @@ function adminApi(action,payload){payload=payload||{};try{
   const salt=random_();cache.put('otp',JSON.stringify({hash:digest_(salt+code),salt,attempts:0,expiresAt:Date.now()+600000}),600);cache.put('otpCooldown','1',60);properties_().setProperty(dailyKey,String(sent+1));
   MailApp.sendEmail(email,'Robot Ideas · Mã đăng nhập','Mã đăng nhập: '+code+'\nCó hiệu lực 10 phút. Không chia sẻ mã này.');return {ok:true};
  });
- if(action==='login')return locked_(()=>{const cache=CacheService.getScriptCache();const raw=cache.get('otp');if(!raw)throw Error('Mã hết hạn. Yêu cầu mã mới.');const otp=JSON.parse(raw);if(Date.now()>otp.expiresAt){cache.remove('otp');throw Error('Mã hết hạn. Yêu cầu mã mới.');}otp.attempts++;if(otp.attempts>5){cache.remove('otp');throw Error('Vượt số lần thử. Yêu cầu mã mới.');}cache.put('otp',JSON.stringify(otp),Math.max(1,Math.ceil((otp.expiresAt-Date.now())/1000)));if(digest_(otp.salt+String(payload.code||''))!==otp.hash)throw Error('Mã không đúng.');cache.remove('otp');const token=random_();cache.put('session:'+digest_(token),'admin',3600);return {ok:true,token};});
- requireSession_(payload.token);
- if(action==='logout'){CacheService.getScriptCache().remove('session:'+digest_(payload.token));return {ok:true};}
+ if(action==='login')return locked_(()=>{const cache=CacheService.getScriptCache();const raw=cache.get('otp');if(!raw)throw Error('Mã hết hạn. Yêu cầu mã mới.');const otp=JSON.parse(raw);if(Date.now()>otp.expiresAt){cache.remove('otp');throw Error('Mã hết hạn. Yêu cầu mã mới.');}otp.attempts++;if(otp.attempts>5){cache.remove('otp');throw Error('Vượt số lần thử. Yêu cầu mã mới.');}cache.put('otp',JSON.stringify(otp),Math.max(1,Math.ceil((otp.expiresAt-Date.now())/1000)));if(digest_(otp.salt+String(payload.code||''))!==otp.hash)throw Error('Mã không đúng.');cache.remove('otp');return issueSession_();});
+ const session=requireSession_(payload.token);
+ if(action==='session')return {ok:true,expiresAt:session.expiresAt};
+ if(action==='logout')return locked_(()=>{const sessions=sessions_();delete sessions[digest_(payload.token)];properties_().setProperty('ADMIN_SESSIONS',JSON.stringify(sessions));return {ok:true};});
  if(action==='list')return {ok:true,apiVersion:2,articles:rows_().map(r=>metadata_(r.article)).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))};
  if(action==='get'){const entry=rows_().find(r=>r.article.id===payload.id);if(!entry)throw Error('Bài không tồn tại.');return {ok:true,article:{...metadata_(entry.article),html:readHtml_(entry.article)}};}
  if(action==='sources')return {ok:true,sources:sources_()};
@@ -56,7 +59,7 @@ function adminApi(action,payload){payload=payload||{};try{
  if(action==='save')return locked_(()=>save_(payload));
  if(action==='importFeeds'){const count=importFeeds_();return {ok:true,count};}
  throw Error('Thao tác không hợp lệ.');
- }catch(e){return {ok:false,error:e.message};}}
+ }catch(e){return {ok:false,error:e.message,code:e.code||'REQUEST_FAILED'};}}
 function clean_(value,max){if(typeof value!=='string')return '';return value.trim().slice(0,max);}
 function sources_(){const sh=sheet_('Sources');return sh.getLastRow()<2?[]:sh.getRange(2,1,sh.getLastRow()-1,4).getValues().map(r=>({id:String(r[0]),name:String(r[1]),feedUrl:String(r[2]),enabled:String(r[3]).toLowerCase()==='true'}));}
 function saveSource_(input){const name=clean_(input.name,200),feedUrl=https_(input.feedUrl);if(!name||!feedUrl)throw Error('Nhập tên nguồn và URL HTTPS RSS/Atom.');const sources=sources_();const index=input.id?sources.findIndex(s=>s.id===input.id):-1;if(input.id&&index<0)throw Error('Nguồn không tồn tại. Tải lại danh sách.');if(sources.some(s=>s.id!==input.id&&s.feedUrl===feedUrl))throw Error('URL nguồn này đã có.');const source={id:input.id||Utilities.getUuid(),name,feedUrl,enabled:input.enabled===true};const row=[source.id,source.name,source.feedUrl,source.enabled?'TRUE':'FALSE'].map(text_);if(index<0)sheet_('Sources').appendRow(row);else sheet_('Sources').getRange(index+2,1,1,4).setValues([row]);return {ok:true,source};}

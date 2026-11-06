@@ -34,7 +34,7 @@ Không đổi tên setup. Hàm kiểm tra danh tính Google; hàm nội bộ man
 6. Khi duyệt xong chọn **Công khai** → Lưu → xác nhận. Độc giả đọc qua Apps Script, không cần chia sẻ công khai file Drive.
 7. Muốn gỡ bài: chọn **Riêng tư** → Lưu. API ngừng trả nội dung cho yêu cầu mới; không thể thu hồi nội dung người khác đã tải/xem.
 
-Chọn bài trong kho để đọc/sửa. Tải lại lấy bản mới nhất và cảnh báo thay đổi chưa lưu. Hệ thống chặn ghi đè phiên bản cũ. Đăng xuất xóa token và nội dung đang mở khỏi bộ nhớ tab.
+Chọn bài trong kho để đọc/sửa. Tải lại lấy bản mới nhất và cảnh báo thay đổi chưa lưu. Hệ thống chặn ghi đè phiên bản cũ. Đăng xuất thu hồi phiên ở server, xóa token lưu trên thiết bị và nội dung đang mở.
 
 ## Cách hiển thị HTML
 
@@ -52,7 +52,7 @@ Chọn bài trong kho để đọc/sửa. Tải lại lấy bản mới nhất v
 4. Deploy → New deployment → Web app → Execute as **Me**, access **Anyone**. Điền URL `/exec` vào `config.js` → apiUrl.
 5. GitHub repo Settings → Pages → Deploy from a branch → **main / root**. Frontend không cần build.
 
-OTP chỉ gửi đến ADMIN_EMAIL: tối đa 20 email/ngày UTC, cách 60 giây; mã có hạn 10 phút, 5 lần thử; phiên tối đa một giờ (Google Cache có thể hết sớm hơn). Token chỉ trong bộ nhớ tab. Chưa hỗ trợ nhiều vai trò/tài khoản.
+OTP chỉ gửi đến ADMIN_EMAIL: tối đa 20 email/ngày UTC, cách 60 giây; mã có hạn 10 phút, 5 lần thử; phiên 7 ngày, server lưu bản băm token trong Script properties. Trình duyệt lưu token để khôi phục sau khi tải lại hoặc đóng/mở trình duyệt. Đăng xuất thu hồi token ở server và xóa bản lưu trên thiết bị. Mỗi email quản trị tối đa 10 phiên; đăng nhập mới sẽ thay phiên cũ nhất khi vượt giới hạn. Chưa hỗ trợ nhiều vai trò/tài khoản.
 
 ## RSS và AI
 
