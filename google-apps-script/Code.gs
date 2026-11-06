@@ -14,6 +14,7 @@ function setup_(){
  adminEmail_();const props=properties_();let id=props.getProperty('SHEET_ID');
  if(!id){const ss=SpreadsheetApp.create('Robot Ideas · Private database');id=ss.getId();props.setProperty('SHEET_ID',id);}
  const ss=SpreadsheetApp.openById(id);
+ ensureFolder_();
  [['Articles',['id','json']],['Sources',['id','name','feedUrl','enabled']],['Audit',['time','action','articleId']]].forEach(([name,headers])=>{let sh=ss.getSheetByName(name);if(!sh){sh=ss.insertSheet(name);sh.appendRow(headers);sh.setFrozenRows(1);}});
  // Do not enable sharing on this spreadsheet or its Drive folder.
  console.log('Database: '+ss.getUrl());
@@ -22,7 +23,16 @@ function sheet_(name){const id=properties_().getProperty('SHEET_ID');if(!id)thro
 function text_(value){const s=String(value==null?'':value);return /^[\s\u0000-\u001f]*[=+@-]/.test(s)||s.startsWith("'")?"'"+s:s;}
 function rows_(){const sh=sheet_('Articles');return sh.getLastRow()<2?[]:sh.getRange(2,1,sh.getLastRow()-1,2).getValues().map((r,i)=>({row:i+2,article:JSON.parse(r[1])}));}
 function json_(data){return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);}
-function doGet(e){if(e&&e.parameter&&e.parameter.view==='admin')return HtmlService.createHtmlOutputFromFile('Admin').setTitle('Robot Ideas · Biên tập');try{return json_({ok:true,articles:rows_().map(r=>r.article).filter(a=>a.status==='published').map(a=>({id:a.id,title:a.title,summary:a.summary,content:a.content,category:a.category,tags:a.tags,robotIdea:a.robotIdea,sourceName:a.sourceName,sourceUrl:a.sourceUrl,publishedAt:a.publishedAt})).sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt))});}catch(e){console.error(e);return json_({ok:false,error:'Thư viện chưa sẵn sàng.'});}}
+function doGet(e){const p=e&&e.parameter||{};if(p.view==='admin')return HtmlService.createHtmlOutputFromFile('Admin').setTitle('Robot Ideas · Biên tập');try{
+ if(p.action==='article'){const entry=rows_().find(r=>r.article.id===p.id&&r.article.status==='published');if(!entry)return json_({ok:false,error:'Bài không tồn tại hoặc chưa công khai.'});return json_({ok:true,apiVersion:2,article:{...publicArticle_(entry.article),html:readHtml_(entry.article)}});}
+ return json_({ok:true,apiVersion:2,articles:rows_().map(r=>r.article).filter(a=>a.status==='published').map(publicArticle_).sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt))});
+ }catch(e){console.error(e);return json_({ok:false,error:'Không đọc được dữ liệu bài viết.'});}}
+function doPost(e){try{const raw=e&&e.postData&&e.postData.contents||'';if(raw.length>800000)throw Error('Yêu cầu quá lớn.');const req=JSON.parse(raw);return json_(adminApi(req.action,req.payload));}catch(e){return json_({ok:false,error:e.message});}}
+function publicArticle_(a){return {id:a.id,title:a.title,summary:a.summary,category:a.category,tags:a.tags,robotIdea:a.robotIdea,sourceName:a.sourceName,sourceUrl:a.sourceUrl,publishedAt:a.publishedAt};}
+function metadata_(a){const {content,html,...meta}=a;return meta;}
+function escapeHtml_(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function readHtml_(a){if(a.fileId)return DriveApp.getFileById(a.fileId).getBlob().getDataAsString('UTF-8');return '<p>'+escapeHtml_(a.content).replace(/\n/g,'<br>')+'</p>';}
+function ensureFolder_(){const props=properties_();const id=props.getProperty('HTML_FOLDER_ID');if(id)return DriveApp.getFolderById(id);const folder=DriveApp.createFolder('Robot Ideas · Private HTML');folder.setSharing(DriveApp.Access.PRIVATE,DriveApp.Permission.NONE);props.setProperty('HTML_FOLDER_ID',folder.getId());return folder;}
 function digest_(value){return Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,value));}
 function random_(){return Utilities.getUuid()+Utilities.getUuid();}
 function locked_(fn){const lock=LockService.getScriptLock();lock.waitLock(10000);try{return fn();}finally{lock.releaseLock();}}
@@ -39,7 +49,8 @@ function adminApi(action,payload){payload=payload||{};try{
  if(action==='login')return locked_(()=>{const cache=CacheService.getScriptCache();const raw=cache.get('otp');if(!raw)throw Error('Mã hết hạn. Yêu cầu mã mới.');const otp=JSON.parse(raw);if(Date.now()>otp.expiresAt){cache.remove('otp');throw Error('Mã hết hạn. Yêu cầu mã mới.');}otp.attempts++;if(otp.attempts>5){cache.remove('otp');throw Error('Vượt số lần thử. Yêu cầu mã mới.');}cache.put('otp',JSON.stringify(otp),Math.max(1,Math.ceil((otp.expiresAt-Date.now())/1000)));if(digest_(otp.salt+String(payload.code||''))!==otp.hash)throw Error('Mã không đúng.');cache.remove('otp');const token=random_();cache.put('session:'+digest_(token),'admin',3600);return {ok:true,token};});
  requireSession_(payload.token);
  if(action==='logout'){CacheService.getScriptCache().remove('session:'+digest_(payload.token));return {ok:true};}
- if(action==='list')return {ok:true,articles:rows_().map(r=>r.article).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))};
+ if(action==='list')return {ok:true,apiVersion:2,articles:rows_().map(r=>metadata_(r.article)).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))};
+ if(action==='get'){const entry=rows_().find(r=>r.article.id===payload.id);if(!entry)throw Error('Bài không tồn tại.');return {ok:true,article:{...metadata_(entry.article),html:readHtml_(entry.article)}};}
  if(action==='save')return locked_(()=>save_(payload));
  if(action==='importFeeds'){const count=importFeeds_();return {ok:true,count};}
  throw Error('Thao tác không hợp lệ.');
@@ -50,12 +61,18 @@ function save_(payload){
  const input=payload.article||{};const existing=input.id?rows_().find(r=>r.article.id===input.id):null;if(input.id&&!existing)throw Error('Bài không tồn tại.');
  if(existing&&input.version!==existing.article.version)throw Error('Bài đã thay đổi ở phiên khác. Tải lại trước khi sửa.');
  const status=input.status;if(!['draft','pending','published','rejected'].includes(status))throw Error('Trạng thái không hợp lệ.');
- const title=clean_(input.title,240),content=clean_(input.content,40000),summary=clean_(input.summary,1000);if(!title)throw Error('Nhập tiêu đề.');if(status==='published'&&(!content||!summary))throw Error('Bài công khai cần nội dung và tóm tắt.');
- const now=new Date().toISOString();const article={id:existing?input.id:Utilities.getUuid(),title,summary,content,category:CATEGORIES_.includes(input.category)?input.category:'Khác',tags:clean_(input.tags,500),robotIdea:clean_(input.robotIdea,5000),sourceName:clean_(input.sourceName,200),sourceUrl:https_(input.sourceUrl),status,version:existing?existing.article.version+1:1,createdAt:existing?existing.article.createdAt:now,updatedAt:now,publishedAt:status==='published'?(existing&&existing.article.publishedAt||now):null};
+ const title=clean_(input.title,240),summary=clean_(input.summary,1000);if(!title)throw Error('Nhập tiêu đề.');
+ let html;if(typeof input.html==='string')html=input.html.trim();else if(typeof input.content==='string')html='<p>'+escapeHtml_(input.content).replace(/\n/g,'<br>')+'</p>';else html=existing?readHtml_(existing.article):'';
+ if(html.length>500000)throw Error('HTML vượt giới hạn 500.000 ký tự.');if(status==='published'&&(!strip_(html)||!summary))throw Error('Bài công khai cần nội dung và tóm tắt.');
+ const now=new Date().toISOString();const article={id:existing?input.id:Utilities.getUuid(),title,summary,format:'html',category:CATEGORIES_.includes(input.category)?input.category:'Khác',tags:clean_(input.tags,500),robotIdea:clean_(input.robotIdea,5000),sourceName:clean_(input.sourceName,200),sourceUrl:https_(input.sourceUrl),status,version:existing?existing.article.version+1:1,createdAt:existing?existing.article.createdAt:now,updatedAt:now,publishedAt:status==='published'?(existing&&existing.article.publishedAt||now):null};
  if(article.sourceUrl&&rows_().some(r=>r.article.id!==article.id&&r.article.sourceUrl===article.sourceUrl))throw Error('URL nguồn đã có trong thư viện.');
- const encoded=JSON.stringify(article);if(encoded.length>49000)throw Error('Bài quá dài để lưu trong một ô Google Sheets. Hãy rút ngắn nội dung.');
+ // New private revision first; never overwrite a file readers may already be using.
+ const file=ensureFolder_().createFile(Utilities.newBlob(html,'text/html',article.id+'-v'+article.version+'.html'));
+ try{file.setSharing(DriveApp.Access.PRIVATE,DriveApp.Permission.NONE);article.fileId=file.getId();const encoded=JSON.stringify(article);
  if(existing)sheet_('Articles').getRange(existing.row,1,1,2).setValues([[text_(article.id),encoded]]);else sheet_('Articles').appendRow([text_(article.id),encoded]);
- sheet_('Audit').appendRow([now,status,text_(article.id)]);return {ok:true,article};
+ }catch(e){try{file.setTrashed(true);}catch(cleanupError){console.warn(cleanupError);}throw e;}
+ try{sheet_('Audit').appendRow([now,status,text_(article.id)]);}catch(e){console.warn('Audit: '+e.message);}
+ return {ok:true,article:{...article,html}};
 }
 function strip_(html){return String(html||'').replace(/<[^>]*>/g,' ').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/\s+/g,' ').trim();}
 /** Reads only configured feeds. Imports are always drafts, never auto-published. */
