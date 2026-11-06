@@ -1,0 +1,35 @@
+<!-- METADATA
+Tiêu đề: 2027RMUC地图unity资源开源
+Chuyên mục: Thị giác máy
+Tác giả: 掉分员
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/8f6ba83290274ce39cca822e183049781792415917840/f8c849f9beccad7693984dfa0af55c02.png
+Nguồn: https://bbs.robomaster.com/article/1971528
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <h3项目内容有地unity地图资源包，还有通过unity辅助制作的雷达定位使用的规范地图（28001500，包含掩码图）</h3<h4仓库地址：<a href="https://github.com/diaofenyuan/RMUC_2027map_unity" target=""diaofenyuan/RMUC_2027map_unity: 2027机甲大师超抗unity地图资源开源</a</h4<h2效果图：<img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/8f6ba83290274ce39cca822e1
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 2027RMUC地图unity资源开源. Ứng dụng trong phân mảng Thị giác máy.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>2027RMUC地图unity资源开源</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1971528" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 掉分员</p>
+    <p><strong>Chuyên mục:</strong> Thị giác máy</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/8f6ba83290274ce39cca822e183049781792415917840/f8c849f9beccad7693984dfa0af55c02.png" alt="2027RMUC地图unity资源开源" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <hr>
+  <div class="article-body">
+<h3>项目内容有地unity地图资源包，还有通过unity辅助制作的雷达定位使用的规范地图（2800x1500，包含掩码图）</h3><h4>仓库地址：<a href="https://github.com/diaofenyuan/RMUC_2027map_unity" target="">diaofenyuan/RMUC_2027map_unity: 2027机甲大师超抗unity地图资源开源</a></h4><h2>效果图：<img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/8f6ba83290274ce39cca822e183049781792415917840/f8c849f9beccad7693984dfa0af55c02.png" alt="f8c849f9beccad7693984dfa0af55c02.png" data-href="" data-file-md5="f8c849f9beccad7693984dfa0af55c02" data-file-len="556006" style=""/></h2><h2><span style="font-size: 22px;">录制：</span></h2><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c9d4592db4a643389dcadc6f1c8fa8501792415961588/2026-10-19 21-09-55.gif" alt="2026-10-19 21-09-55.gif" data-href="" data-file-md5="c9695ded9363ddd0c217cd35d99e07dd" data-file-len="31688149" style=""/></p><h2>掩码图：</h2><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/6a8f829ed73e4686aa7092004cab1da91792762769255/rm2027-map-mask.png" alt="rm2027-map-mask.png" data-href="" data-file-md5="8ab08d14badbf820bd9980155c86f581" data-file-len="26257" style=""/></p><h2>使用方法</h2><p>仓库提供两类资源，可按需取用：</p><ul><li><strong>Unity 三维场地工程</strong>（<code>Project/</code>）：完整仿真场景，需下载 Git LFS 大文件（约 382 MB）</li><li><strong>二维雷达地图包</strong>（<code>map/</code>）：28×15 m 底图与高度掩膜，不依赖 Unity，可单独使用</li></ul><h3>1）获取资源</h3><p><strong>完整克隆（Unity 工程 + 地图包）</strong>——两个大模型由 Git LFS 托管，请先安装 Git LFS：</p><pre><code class="language-bash language">git lfs install
+git clone https://github.com/diaofenyuan/RMUC_2027map_unity.git</code></pre><p><strong>只取二维地图、不下载 LFS 模型</strong>（约十几 MB）：</p><pre><code class="language-bash language">GIT_LFS_SKIP_SMUDGE=1 git clone --depth 1 https://github.com/diaofenyuan/RMUC_2027map_unity.git</code></pre><p>Windows PowerShell：</p><pre><code class="language-powershell language">$env:GIT_LFS_SKIP_SMUDGE = "1"
+git clone --depth 1 https://github.com/diaofenyuan/RMUC_2027map_unity.git</code></pre><p>地图在 <code>map/</code> 目录，坐标约定与掩膜语义见 <code>map/README.md</code>。</p><h3>2）打开 Unity 工程</h3><ul><li><strong>Windows</strong>：双击根目录 <code>一键打开场地.bat</code>。脚本会按「环境变量 RMVF_UNITY_EXE → 同目录 unity_path.txt → Unity Hub 标准安装路径」的顺序定位编辑器，并打开 <code>Project/</code></li><li><strong>其他平台</strong>：用 Unity Hub 添加 <code>Project/</code>，以 <strong>2022.3.62f1</strong> 打开，再在 Project 面板双击 <code>Assets/Rmvf/Scenes/U1Field.unity</code></li></ul><h3>3）首次打开的预期表现</h3><ul><li>场地网格约 <strong>707 万三角面</strong>，首次导入需数分钟，请耐心等待</li><li><code>Library/</code> 目录会增长到数 GB，属正常现象</li><li>导入结束后场景会自动载入；若未自动载入，手动打开上述 <code>U1Field.unity</code> 即可</li></ul><h3>常见问题</h3><ul><li><strong>编辑器装在非标准路径</strong>：在仓库根目录新建 <code>unity_path.txt</code>，第一行写 <code>Unity.exe</code> 的完整路径</li><li><strong>模型文件只有 130 字节左右</strong>：说明 LFS 对象没拉下来（只是指针文件），执行 <code>git lfs pull</code>；若仍未恢复，确认已安装 Git LFS 后重新执行</li><li><code><strong>不要在资源管理器里双击 .unity 文件</strong></code>：<code>.unity</code> 是 YAML 资产文件，不是可执行程序，必须由 Unity Editor 在某个工程内打开。多版本共存时尤其容易用错版本并触发工程升级</li><li><strong>打开后提示升级工程</strong>：建议使用 2022.3.62f1；其他 LTS 版本一般也能打开，但会触发工程升级，请自行备份</li></ul><h2>二维地图包速览</h2><table data-new-ship='yes' data-font-node='' data-topic='' style="width: 100%;table-layout: fixed;height:0"><colgroup contentEditable="false"><col width=90></col><col width=90></col></colgroup><tbody><tr><th colSpan="1" rowSpan="1" width="auto" style=""><p>文件</p></th><th colSpan="1" rowSpan="1" width="auto" style=""><p>说明</p></th></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);"><p><code>map/rm2027-map.png</code></p></td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);"><p>主底图，2800×1500（100 px/m），整幅对应 28×15 m</p></td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);"><p><code>map/rm2027-map-red.png</code></p><p> / </p><p><code>rm2027-map-blue.png</code></p></td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);"><p>红/蓝半场轻度着色，仅用于显示区分</p></td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);"><p><code>map/rm2027-map-mask.png</code></p></td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);"><p>三色高度掩膜：绿 = 高台，蓝 = 中等抬升，黑 = 地面与排除区</p></td></tr><tr><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);"><p><code>map/rm2027-map-mask-overlay.png</code></p></td><td colspan="1" rowspan="1" width="auto" style="border-width: 1px; border-style: solid; border-color: rgb(241, 241, 241);"><p>掩膜叠加预览，仅供人工检查</p></td></tr></tbody></table><p>雷达点云投影、降采样建议与掩膜语义详见 <code>map/README.md</code>。</p><h2>数据边界（使用前请阅读）</h2><ul><li>本资源是<strong>内部仿真基准 / 二维名义参考</strong>，不是规则书坐标，也不是实机裁判系统坐标</li><li>未经过实机定位精度验收（<code>map_ready = false</code>），不得作为建图 / 定位 / 融合精度的验收依据</li><li>不包含相机内参、雷达外参、时间同步等标定信息；跨系统对表前请自行核对锚点</li><li>再分发或商业使用前，请自行确认赛事主办方对模型传播的许可条款</li></ul><p><br></p><p><br></p><p><br></p>
+  </div>
+</article>
