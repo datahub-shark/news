@@ -1,0 +1,29 @@
+<!-- METADATA
+Tiêu đề: 【开源 / BETA】RoboDebugAssistant：面向 RoboMaster 的工程变量、波形、姿态与裁判系统调试工具
+Chuyên mục: Điều khiển
+Tác giả: 关于作者 Anthony 0 关注Ta 1 文章 0 被引用 0 获赞 关注
+Nguồn: https://bbs.robomaster.com/article/1972097
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p大家好，分享一下正在开发的机器人调试工具 <strongRoboDebugAssistant</strong。</p<p做机器人时，经常要在 IDE、变量监视、波形工具、串口工具和裁判系统解析程序之间来回切换。我希望把这些常用操作集中到一个桌面界面里：导入工程，从源码中找到变量，选择需要观察的通道，再查看波形、IMU 姿态和通信数据；需要修改控制参数时，也能找到对应的结构体和源码位置。</p<p<strong请先注意：本项目目前是 BETA 测试版，仍在持续开发，尚未完全完善，不是正式稳定版本。不同功能的验证程度不同，尤其不能把离线算法通过、曲线可以显示，等同于自动整定或实机控制已经可靠。
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 【开源 / BETA】RoboDebugAssistant：面向 RoboMaster 的工程变量、波形、姿态与裁判系统调试工具. Ứng dụng trong phân mảng Điều khiển.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>【开源 / BETA】RoboDebugAssistant：面向 RoboMaster 的工程变量、波形、姿态与裁判系统调试工具</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1972097" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 关于作者 Anthony 0 关注Ta 1 文章 0 被引用 0 获赞 关注</p>
+    <p><strong>Chuyên mục:</strong> Điều khiển</p>
+  </div>
+  
+  <hr>
+  <div class="article-body">
+<p>大家好，分享一下正在开发的机器人调试工具 <strong>RoboDebugAssistant</strong>。</p><p>做机器人时，经常要在 IDE、变量监视、波形工具、串口工具和裁判系统解析程序之间来回切换。我希望把这些常用操作集中到一个桌面界面里：导入工程，从源码中找到变量，选择需要观察的通道，再查看波形、IMU 姿态和通信数据；需要修改控制参数时，也能找到对应的结构体和源码位置。</p><p><strong>请先注意：本项目目前是 BETA 测试版，仍在持续开发，尚未完全完善，不是正式稳定版本。不同功能的验证程度不同，尤其不能把离线算法通过、曲线可以显示，等同于自动整定或实机控制已经可靠。欢迎阅读源码、试用和反馈问题。</strong></p><h2>目前已经实现、可以使用的功能</h2><h3>1. 工程导入与源码选变量</h3><ul><li>识别 Keil、CubeIDE、CMake 等工程入口，读取匹配的 ELF / AXF 符号与调试信息。</li><li>“工程与变量”有独立页面，可以搜索变量，展开结构体、数组，选择后加入监视列表和波形。</li><li>支持“从源码选择变量”：按文件、函数查看源码，选择对应的可读变量，与原有变量选择列表同步。</li><li>显示类型、地址、定义文件、行号及静态引用位置，方便回到下位机代码检查。</li><li>电机实例和 PID 参数结构体可以分别选择、添加备注并核查字段关联，适配两者分开定义的框架。</li></ul><p>这里的“自动识别”依赖工程文件和支持的调试信息。被优化掉的局部变量、复杂地址表达式或不支持的 DWARF 信息会给出限制提示；源码引用位置也不代表 CPU 当前运行位置。</p><h3>2. 探头扫描与运行中变量观察</h3><p>已经接入 <strong>J-Link、CMSIS-DAP / DAPLink、ST-Link</strong> 的读取后端，并提供探头扫描、选择、连接和断开按钮。断开后可释放探头，供 Keil 等下载工具使用。</p><p>J-Link 优先使用本机安装的官方 DLL 进行二进制批量读取，保留 Commander 兼容路径。采集与绘图分开处理，相邻变量合并读取；按页面需求建立采集计划，避免持续读取不需要的整块数据。</p><p>当前主要验证平台是 <strong>达妙 DM-MC-Board02 / STM32H723</strong>。</p><h3>3. 更接近示波器操作方式的波形页面</h3><ul><li>支持累计、滚动、最新帧等显示方式，区分主机趋势、目标采样帧、通信接收和数组快照。</li><li>可以单独选择显示某个变量或部分通道，避免所有曲线挤在一起。</li><li>提供时基、通道幅度、Y 中心、自动量程、冻结、缩放、游标和历史滚动。</li><li>提供当前值、最小值、最大值、平均值、标准差、计数及单位等测量统计。</li><li>支持独立波形窗口；较小屏幕可通过页面滚动访问配置项。</li></ul><p>没有目标时间戳或采样协议时，只显示实际可证明的趋势或索引快照，不推测固定采样率。</p><h3>4. IMU 数据与 3D 姿态显示</h3><p>可以绑定固件中已有的四元数、角速度、加速度、温度等变量，显示 3D 姿态，并核对坐标系、轴向和单位。</p><p>提供航向归零、完整姿态归零和恢复原始显示。归零只改变上位机的显示参考，不修改传感器或下位机数据。BMI088 六轴 IMU 的航向漂移仍受传感器和固件融合算法限制，显示归零不能代替标定。</p><h3>5. 独立的裁判系统页面和 H7 收发代码</h3><p>根据 <strong>RoboMaster 2026 高校系列赛通信协议 V2.0.0（20260626）</strong>实现编解码与消息目录，目前覆盖 35 类命令的长度检查和字段展示。</p><p>页面可以查看机器人 ID、机器人状态、消息明细、原始报文、CRC8 / CRC16 错误和接收统计。上行发送为独立操作，需要核查发送方、接收方、内容及适用频率；发送成功不等于远端已经接收。</p><p>配套 H7 示例内，主要的两个协议文件是：</p><pre><code class="language-text language-text">examples/MotorWorkbench-H7/firmware/application/referee/referee_protocol.c
+examples/MotorWorkbench-H7/firmware/application/referee/referee_protocol.h</code></pre><p>协议核心不依赖 HAL / RTOS，采用有界缓存处理分包、粘包、CRC 和错误重同步。H7 适配层使用 DMA 接收、中断有界搬运、任务批量解析，并处理 DMA 内存布局；函数接口和重要逻辑有中文注释，方便维护。实际接入还需要同目录的 <code>referee_h7.*</code>、<code>referee_usart_task.*</code> 和 UART 配置文件，不能只复制两个协议文件就认为完成串口适配。</p><p>当前示例使用 <strong>USART1 / PA9 TX、PA10 RX，115200、8N1</strong>。并不是所有命令都会从普通机器人 UART 链路发来，页面也不会替未收到的数据补值。</p><h3>6. 反馈记录、离线回放与手动参数维护</h3><p>电机试验完成后，可以选择<strong>保留记录</strong>或<strong>不保存、仅本次会话查看</strong>，避免每次试验都自动写入磁盘。</p><p>保留的记录支持 JSON / CSV 导出；离线回放可以播放、暂停、拖动时间位置、改变播放速度和选择显示通道，并保留固件身份、目标时间、故障和数据质量信息。开发者或 Codex 可以读取这些文件分析；当前没有对外提供 Robo 版本的 MCP 服务。</p><p>参数维护支持人工填写、源码差异检查、同步、编译和显式烧录，并提供 Keil 路径配置引导。观察、编译、烧录、运行和电机动作分别处理，保留功率下电确认及防误操作检查。</p><h2>自动调参现在是什么状态？</h2><p><strong>当前版本不支持可靠的全自动 PID / LQR 实机整定，相关自动调参和自动填入入口已置灰，并明确提示“当前版本不支持”。</strong></p><p>开发过程中做过两台 G6220 的有限空载对照，也尝试过反馈参数估计、量化处理和候选比较。部分低速工况有改善，但更高要求的速度跟踪和保护检查尚未全部通过。</p><p>目前推荐的方式是：</p><p><strong>选择电机与控制器结构体 → 核查关联 → 在明确边界内采集反馈 → 选择是否保存 → 回放分析 → 人工修改参数 → 检查差异 → 下电编译、烧录 → 重新测试。</strong></p><p>本地 PID 模型仿真、离散 LQR 求解和实验性分析代码仍可供研究，但它们不能替代真实系统辨识、稳定性检查及实机验证。高速、带载、位置—速度多环、力矩 / 电流内环的自动整定仍属于后续工作。</p><h2>已经做过哪些验证？</h2><ul><li>桌面核心、工程解析、源码选择、波形、协议、记录及界面有离线 / GUI 回归测试。</li><li>妙板上验证过 J-Link 只读观察、BMI088 姿态和裁判消息接收。</li><li>最新示例固件完成逻辑供电验收，实读到机器人 ID；约 10 秒收到 372 帧裁判消息，CRC 错误为 0，IMU 和显示归零通过。</li><li>G6220 的状态查询和有限空载动作有历史实测记录；<strong>最新固件的运动验证、高速 / 带载、多环控制和全自动整定尚未完成</strong>。</li></ul><p>上述结果只适用于报告中的目标、固件和条件，不保证更换工程或硬件后可以直接套用。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/f7caf7118b9f4e958d6c70b0f510e7991792999304360/12919d25f225ded9d9165da82923285a.jpg" alt="12919d25f225ded9d9165da82923285a.jpg" data-href="" data-file-md5="b7535ac554609c4031ebd1e1bf4a12a0" data-file-len="214020" style=""/></p><h2>当前限制和后续计划</h2><p>本次先开放源码，不发布新的安装包。桌面程序使用 C++20 / Qt 6，构建步骤、依赖和示例入口见仓库 README；Keil、J-Link 工具等需要用户自行合法安装。第三方组件遵循各自许可，具体见仓库说明。</p><p>欢迎反馈工程兼容性、探头连接、界面操作和数据解析问题。反馈时附上系统版本、板卡 / 探头型号、匹配的固件信息、复现步骤记录，会更方便定位。</p><p><strong>项目仍在开发，欢迎一起完善。开源仓库：</strong></p><p><a href="https://gitee.com/anthony3548/robo-debug-assistant" target="_blank">RoboDebugAssistant · Gitee</a></p><p><br></p>
+  </div>
+</article>

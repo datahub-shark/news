@@ -1,0 +1,27 @@
+[
+  {
+    "id": "robomaster",
+    "name": "RoboMaster BBS",
+    "enabled": true,
+    "listUrl": "https://bbs.robomaster.com/article",
+    "linkPattern": "/article/\\d+",
+    "baseUrl": "https://bbs.robomaster.com",
+    "contentSelector": ".library-detail-content-detail"
+  },
+  {
+    "id": "hackaday-robots",
+    "name": "Hackaday Robotics",
+    "enabled": true,
+    "listUrl": "https://hackaday.com/category/robots-hacks/",
+    "linkPattern": "https://hackaday\\.com/\\d{4}/\\d{2}/\\d{2}/[^/]+/",
+    "baseUrl": ""
+  },
+  {
+    "id": "ros-discourse",
+    "name": "ROS Discourse",
+    "enabled": false,
+    "listUrl": "https://discourse.ros.org/latest",
+    "linkPattern": "/t/[^/]+/\\d+",
+    "baseUrl": "https://discourse.ros.org"
+  }
+]

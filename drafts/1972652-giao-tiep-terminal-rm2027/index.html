@@ -1,0 +1,30 @@
+<!-- METADATA
+Tiêu đề: RM2027 自定义终端通信接口 开源
+Chuyên mục: Thị giác máy
+Tác giả: 糊糊233
+Nguồn: https://bbs.robomaster.com/article/1972652
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p使用C++实现自定义终端MQTT数据流及udp图传码流的服务端及客户端，封装为仅对外暴露发送函数/接收回调函数的纯C++接口及C语言/Python接口，并在Python接口的基础上实现简单的PyQt5可视化操作界面</p<p项目地址： <a href="https://github.com/BUAA-Transistor-alg/RM2027-CustomTerminal-CommunicationBackend" target="_blank"https://github.com/BUAA-Transistor-alg/RM2027-CustomTerminal-Communicatio
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: RM2027 自定义终端通信接口 开源. Ứng dụng trong phân mảng Thị giác máy.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>RM2027 自定义终端通信接口 开源</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1972652" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 糊糊233</p>
+    <p><strong>Chuyên mục:</strong> Thị giác máy</p>
+  </div>
+  
+  <hr>
+  <div class="article-body">
+<p>使用C++实现自定义终端MQTT数据流及udp图传码流的服务端及客户端，封装为仅对外暴露发送函数/接收回调函数的纯C++接口及C语言/Python接口，并在Python接口的基础上实现简单的PyQt5可视化操作界面</p><p>项目地址： <a href="https://github.com/BUAA-Transistor-alg/RM2027-CustomTerminal-CommunicationBackend" target="_blank">https://github.com/BUAA-Transistor-alg/RM2027-CustomTerminal-CommunicationBackend</a> </p><p>目前使用的协议版本：RoboMaster 2027 机甲大师高校系列赛通信协议 V1.0.0（20261029）</p><p>内置的可视化操作界面使用演示：</p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="5fdbed587a7efcd05bfdb9feedca193c" data-file-len="55726128" data-file-name="2026-10-29 22-33-45.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/2bf3f31508cd484491d507249612c2261793285872481/2026-10-29 22-33-45.mp4" type="video/mp4"/></video>
+</div><p>仅实现了通信接口部分，尚未也不会加入任何实际业务处理逻辑</p><p>目前已验证通信协议中与之前版本相同的部分，可以与其他开源项目互相通信，新协议新增/修改部分尚未验证</p><p><br></p><p>本项目主要<span style="color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); font-size: 16px;">由 AI 编写，可能会有较多疏漏</span></p><p>欢迎大家试用及反馈，欢迎给仓库提issue/PR</p><p><br></p><p>以下是用于验证未修改部分通信协议的开源项目：</p><p> <a href="https://github.com/JFCY2718/rmuc-custom-client-ui" target="_blank">https://github.com/JFCY2718/rmuc-custom-client-ui</a> <span id="referenceDom-2" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/2/undefined/undefined/null/2" data-order="2">[2]</span></p><p> <a href="https://bbs.robomaster.com/article/1943329" target="_blank">https://bbs.robomaster.com/article/1943329</a> <span id="referenceDom-1" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/1943329/1" data-order="1">[1]</span></p><p> <a href="https://bbs.robomaster.com/article/1969512" target="_blank">https://bbs.robomaster.com/article/1969512</a> <span id="referenceDom-3" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/1969512/3" data-order="3">[3]</span></p><p> <a href="https://bbs.robomaster.com/article/1296480" target="_blank">https://bbs.robomaster.com/article/1296480</a> <span id="referenceDom-4" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/1296480/4" data-order="4">[4]</span></p>
+  </div>
+</article>

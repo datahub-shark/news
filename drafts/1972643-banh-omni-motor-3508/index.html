@@ -1,0 +1,99 @@
+<!-- METADATA
+Tiêu đề: [RM2026] Thiết kế bánh xe đa hướng nhúng motor DJI 3508 chi phí thấp, không cần độ hộp giảm tốc
+Chuyên mục: Robot di động
+Tác giả: 铃谷Suzu
+Nguồn: https://bbs.robomaster.com/article/1972643
+Tên nguồn: RoboMaster BBS
+Tóm tắt: Bản vẽ thiết kế cơ khí bánh xe đa hướng (omni-wheel) dành cho xe lính canh (Sentry) mùa giải RM2026. Thiết kế nhúng trực tiếp motor DJI M3508 nguyên bản mà không cần gia công độ chế hộp số giảm tốc, tối ưu hóa các chi tiết cơ khí để có thể gia công qua các dịch vụ chi phí thấp (như JLCPCB), giúp các đội thi tiết kiệm đáng kể chi phí chế tạo khung gầm.
+Gợi ý ứng dụng: Ứng dụng trong việc chế tạo khung gầm robot di động đa hướng (Omni mobile robot) cho các robot thi đấu hoặc xe tự hành AGV trong phòng Lab. Giúp thu gọn kích thước cụm bánh xe, hạ thấp trọng tâm khung gầm và chế tạo dễ dàng bằng phương pháp gia công tấm CNC kết hợp in 3D.
+Tệp đính kèm: attachments/内嵌全向轮1.2.zip (9.94 MB - Đã tải sẵn trên máy)
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Bài viết đã được dịch chi tiết kèm bản đối chiếu song ngữ gốc tiếng Trung.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <header class="article-header">
+    <h1>[RM2026] Thiết kế bánh xe đa hướng nhúng motor DJI 3508 chi phí thấp, không cần độ hộp giảm tốc</h1>
+    <div class="article-meta">
+      <p><strong>Nguồn gốc:</strong> <a href="https://bbs.robomaster.com/article/1972643" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 铃谷Suzu</p>
+      <p><strong>Chuyên mục:</strong> <span class="badge">Robot di động</span> · <strong>Bản vẽ CAD:</strong> Đã có sẵn trong thư mục bài viết</p>
+    </div>
+  </header>
+  
+  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:16px;border-radius:8px;margin:20px 0;">
+    <h3 style="margin-top:0;color:#1b85ff;">📦 File thiết kế CAD đính kèm (Đã tải về máy):</h3>
+    <ul style="margin-bottom:0;line-height:1.8;">
+      <li><a href="./attachments/内嵌全向轮1.2.zip" target="_blank"><strong>📁 内嵌全向轮1.2.zip</strong></a> (9.94 MB - Bộ bản vẽ CAD bánh xe đa hướng nhúng motor v1.2)</li>
+    </ul>
+  </div>
+
+  <hr>
+
+  <div class="article-body">
+    <!-- Phần 1: Bối cảnh và Nguồn cảm hứng -->
+    <section class="bilingual-section">
+      <div class="vi-content">
+        <h2>1. Nguồn cảm hứng thiết kế</h2>
+        <p>Trước hết, tôi xin gửi lời cảm ơn chân thành đến chiến đội Bão Táp (风暴战队) - Đại học Khoa học và Công nghệ Hoa Bắc vì đã chia sẻ mã nguồn mở. Thiết kế của các bạn đã mang lại cho tôi nguồn cảm hứng rất lớn trong việc thiết kế xe lính canh (Sentry) bánh đa hướng (omni-wheel) cho mùa giải RM2026.</p>
+        <p>Dựa trên thiết kế bánh xe đa hướng nhúng trong bài viết <em>"Mã nguồn mở cơ khí xe bộ binh bánh omni nhỏ cấp đạn trung tâm RM2024"</em> của đội Bão Táp, tôi đã sửa đổi đôi chút để áp dụng trực tiếp lên xe Sentry bánh đa hướng của đội mình.</p>
+      </div>
+      <details class="zh-original" style="background:#fafafa;padding:10px 14px;border-left:3px solid #ccc;margin-top:10px;font-size:0.9em;color:#555;">
+        <summary style="cursor:pointer;font-weight:600;">Xem nguyên văn tiếng Trung (原文)</summary>
+        <p style="margin-top:8px;">首先由衷的感谢华北科技大学风暴战队分享的开源，为本人在RM26赛季全向轮哨兵的设计提供了巨大的设计思路。基于风暴战队【RM2024-中心供弹小全向轮步兵机械结构开源】中的内嵌全向轮设计，本人将其略微修改后在全向轮哨兵上使用。</p>
+      </details>
+    </section>
+
+    <!-- Ảnh thực tế tại giải đấu -->
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a4ad9e738e014f90a505dd951377004d1792745813891/微信图片_20261023165423_15_459.jpg" alt="Robot Sentry nhỏ tại giải đấu RMUL Giang Tô 2026" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 1: Chiếc xe Sentry nhỏ xuất hiện tại chặng đấu liên minh đại học Giang Tô 2026 (26UL)</em></p>
+    </div>
+
+    <!-- Phần 2: Vấn đề gặp phải và Động lực tối ưu chi phí -->
+    <section class="bilingual-section" style="margin-top:28px;">
+      <div class="vi-content">
+        <h2>2. Thách thức kỹ thuật & Tối ưu hóa chi phí gia công</h2>
+        <p>Hiện tại, tổng chiều dài cụm bánh xe vẫn bị giới hạn bởi hộp giảm tốc của động cơ. Nếu thay thế sang một loại hộp giảm tốc khác thì có thể rút ngắn chiều dài hơn nữa.</p>
+        <p>Tuy nhiên, trong quá trình chế tạo thực tế, tôi nhận thấy thiết kế cũ vẫn có <strong>một số linh kiện bắt buộc phải gia công riêng biệt</strong>, không thể sử dụng các dịch vụ gia công giá rẻ hoặc áp dụng mã giảm giá của JLCPCB (嘉立创) hay QuanZhou (铨洲智造). Điều này khiến chi phí sản xuất tăng vọt — đây là một gánh nặng rất lớn đối với những đội thi có nguồn kinh phí eo hẹp như chúng tôi.</p>
+        <p><strong>Giải pháp:</strong> Vì vậy, tôi đã tiến hành thiết kế lại cụm bánh xe một lần nữa, với mục tiêu cao nhất là <strong>hạ giá thành xuống mức tối đa</strong> nhưng vẫn đảm bảo độ bền cơ học khi thi đấu đối kháng.</p>
+      </div>
+      <details class="zh-original" style="background:#fafafa;padding:10px 14px;border-left:3px solid #ccc;margin-top:10px;font-size:0.9em;color:#555;">
+        <summary style="cursor:pointer;font-weight:600;">Xem nguyên văn tiếng Trung (原文)</summary>
+        <p style="margin-top:8px;">目前整体长度受限于电机减速箱，如果对减速箱进行更换可能会进一步缩短长度。但是在制作过程中，本人发现仍有几个零件需要定制加工，并且无法使用嘉立创或者铨洲智造优惠加工，导致成本激增，这对于我们这种资金匮乏的小队伍来说肉疼。因此对其进行了再次修改，以实现降低成本的目的。</p>
+      </details>
+    </section>
+
+    <!-- Ảnh cụm bánh sau cải tiến -->
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/8ed9054d5f6c4facaf249d6bddeddefc1792746121460/屏幕截图 2026-10-23 170145.png" alt="Cụm bánh xe đa hướng sau cải tiến" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 2: Cụm bánh xe đa hướng sau khi đã được tối ưu hóa lại kết cấu cơ khí</em></p>
+    </div>
+
+    <!-- Phần 3: Bản vẽ lắp ráp chi tiết -->
+    <section class="bilingual-section" style="margin-top:28px;">
+      <div class="vi-content">
+        <h2>3. Bản vẽ phân rã chi tiết (Exploded View)</h2>
+        <p>Dưới đây là hình ảnh phối cảnh bóc tách từng chi tiết lắp ráp của cụm bánh xe đa hướng nhúng motor DJI 3508. Các chi tiết gá liên kết được thiết kế để dễ dàng cắt laser nhôm tấm và tiện các trục tròn tiêu chuẩn.</p>
+      </div>
+      <details class="zh-original" style="background:#fafafa;padding:10px 14px;border-left:3px solid #ccc;margin-top:10px;font-size:0.9em;color:#555;">
+        <summary style="cursor:pointer;font-weight:600;">Xem nguyên văn tiếng Trung (原文)</summary>
+        <p style="margin-top:8px;">爆炸视图：改进后的轮组零部件拆解装配关系。</p>
+      </details>
+    </section>
+
+    <!-- Ảnh bản vẽ nổ -->
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/095c52ccf6ff4c15ad2eaec93a2dbf4f1792898030898/屏幕截图 2026-10-24 223321.png" alt="Bản vẽ nổ exploded view" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 3: Bản vẽ bóc tách từng chi tiết (Exploded view) thể hiện rõ vị trí lắp đặt motor DJI M3508</em></p>
+    </div>
+
+    <!-- Lời cảm ơn và đóng góp -->
+    <div style="background:#eef7ee;border:1px solid #c3e6cb;padding:14px;border-radius:6px;margin-top:24px;color:#155724;">
+      <p style="margin:0;">Đồng thời, tôi xin gửi lời cảm ơn đến các anh em đội LBT - Học viện Hắc Hà (黑河学院) đã hỗ trợ kiểm chứng thực tế và đưa ra nhiều ý kiến sửa đổi quý báu. Hiện tại thiết kế vẫn đang tiếp tục được tối ưu, trong tương lai sẽ có thêm các phiên bản nâng cấp mới.</p>
+      <p style="margin:8px 0 0 0;font-style:italic;">Nếu bạn có bất kỳ thắc mắc hay góp ý nào, vui lòng liên hệ với tôi qua diễn đàn RoboMaster!</p>
+    </div>
+  </div>
+</article>

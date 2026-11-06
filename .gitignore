@@ -2,3 +2,7 @@
 .env*
 node_modules/
 outputs/
+data/html/
+data/.admin_session.json
+drafts/*/attachments/
+published/*/attachments/

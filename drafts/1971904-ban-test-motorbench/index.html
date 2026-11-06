@@ -1,0 +1,162 @@
+<!-- METADATA
+Tiêu đề: [RM2026 - ĐH Nam Thông - Đội NSE] Mã nguồn mở RM-MotorBench: Bàn test động cơ đa năng cho phòng Lab
+Chuyên mục: Điều khiển
+Tác giả: NSE战队 (QQ: 1243840305)
+Nguồn: https://bbs.robomaster.com/article/1971904
+Tên nguồn: RoboMaster BBS
+Tóm tắt: RM-MotorBench là hệ thống bàn thử nghiệm động cơ dành cho phòng Lab: thêm động cơ trực tiếp trên giao diện web theo ID gạt mã ESC, đặt tốc độ vòng quay, lệnh gửi qua USB CDC (cổng ảo) xuống bo mạch để lái động cơ CAN, đồng thời phản hồi thời gian thực tốc độ, dòng điện, nhiệt độ. Đổi động cơ không cần sửa code, không cần nạp lại firmware, thao tác đơn giản, rất thích hợp test nhanh cơ cấu gạt đĩa nạp đạn (拨弹盘).
+Gợi ý ứng dụng: Ứng dụng trong phòng chế tạo robot để thử nghiệm nhanh và căn chỉnh PID cho các dòng động cơ DJI (M3508, M2006, GM6020) và Đạt Diệu (DM4310, DM8009P). Giúp nhóm điện điều khiển chỉnh thông số trên Web UI, xem biểu đồ đáp ứng thời gian thực và kiểm tra cơ cấu cấp đạn/bánh đà mà không mất công nạp code liên tục.
+Tệp đính kèm: GitHub Repository: https://github.com/wbz2006/RM-MotorBench | Windows EXE: MotorBench-1.2.0-Windows-x64.exe
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Bài viết đã được dịch chi tiết kèm bản đối chiếu song ngữ gốc tiếng Trung.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <header class="article-header">
+    <h1>[RM2026 - ĐH Nam Thông - Đội NSE] Mã nguồn mở RM-MotorBench: Bàn test động cơ đa năng cho phòng Lab</h1>
+    <div class="article-meta">
+      <p><strong>Nguồn gốc:</strong> <a href="https://bbs.robomaster.com/article/1971904" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> NSE战队 (ĐH Nam Thông)</p>
+      <p><strong>Chuyên mục:</strong> <span class="badge">Điều khiển</span> · <strong>Mã nguồn:</strong> <a href="https://github.com/wbz2006/RM-MotorBench" target="_blank">GitHub wbz2006/RM-MotorBench ↗</a></p>
+    </div>
+  </header>
+
+  <!-- Hộp tải tài nguyên và phần mềm -->
+  <div class="resource-box" style="background:#f0f7ff;border:1px solid #1b85ff;padding:16px;border-radius:8px;margin:20px 0;">
+    <h3 style="margin-top:0;color:#1b85ff;">📦 Tài nguyên & Tải phần mềm</h3>
+    <ul style="margin-bottom:0;line-height:1.8;">
+      <li><strong>Kho mã nguồn GitHub:</strong> <a href="https://github.com/wbz2006/RM-MotorBench" target="_blank">https://github.com/wbz2006/RM-MotorBench ↗</a></li>
+      <li><strong>Bản cài đặt Desktop Windows:</strong> <a href="https://github.com/wbz2006/RM-MotorBench/releases/download/host-v1.2.0/MotorBench-1.2.0-Windows-x64.exe" target="_blank">Tải MotorBench-x.x.x-Windows-x64.exe ↗</a> (Chạy trực tiếp không cần cài môi trường Node/Python)</li>
+    </ul>
+  </div>
+
+  <hr>
+
+  <div class="article-body">
+    <!-- Phần 1: Giới thiệu dự án -->
+    <section class="bilingual-section">
+      <div class="vi-content">
+        <h2>1. Giới thiệu dự án</h2>
+        <p><strong>RM-MotorBench</strong> là bàn thử nghiệm động cơ phục vụ phòng Lab nghiên cứu robot: Người dùng có thể trực tiếp thêm động cơ trên giao diện web theo ID gạt mã của ESC (bộ điều tốc), thiết lập tốc độ quay mong muốn. Lệnh điều khiển sẽ được truyền qua cổng nối tiếp ảo USB (USB Virtual COM Port) xuống bo mạch phát triển để lái động cơ qua bus CAN, đồng thời các thông số <strong>vận tốc, dòng điện, nhiệt độ</strong> được phản hồi theo thời gian thực.</p>
+        <p><strong>Điểm đặc biệt:</strong> <em>Thay động cơ không cần sửa code, không cần nạp lại firmware</em>, thao tác cực kỳ đơn giản (rất thích hợp cho việc test nhanh cơ cấu gạt đĩa nạp đạn của robot).</p>
+      </div>
+      <details class="zh-original" style="background:#fafafa;padding:10px 14px;border-left:3px solid #ccc;margin-top:10px;font-size:0.9em;color:#555;">
+        <summary style="cursor:pointer;font-weight:600;">Xem nguyên văn tiếng Trung (原文)</summary>
+        <p style="margin-top:8px;">RM-MotorBench 是一个面向实验室的电机测试台：网页上按电调拨码 ID 现场添加电机、设转速，指令经 USB 虚拟串口下发到开发板驱动 CAN 电机，转速/电流/温度实时回传。<strong>换电机不改代码、不烧固件</strong>，傻瓜操作，如拨弹盘的快速测试。</p>
+      </details>
+    </section>
+
+    <!-- Ảnh tổng quan thiết bị -->
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/ef7d49f3d6244a59b7395bff229315b31792844524622/overview-photo.png" alt="Ảnh thực tế bàn test động cơ RM-MotorBench" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 1: Mô hình thực tế bàn test động cơ RM-MotorBench tại phòng Lab</em></p>
+    </div>
+
+    <!-- Phần 2: Các tính năng đã hoàn thiện -->
+    <section class="bilingual-section" style="margin-top:28px;">
+      <div class="vi-content">
+        <h2>2. Các tính năng cốt lõi (Core Features)</h2>
+        <ul>
+          <li><strong>Thay động cơ không cần nạp lại firmware:</strong> Cho phép thêm/xóa động cơ linh hoạt ngay khi đang chạy: hỗ trợ động cơ DJI M3508, M2006, GM6020 và động cơ Damo (达妙) DM4310, DM8009P.</li>
+          <li><strong>Hỗ trợ 3 dòng bo mạch phát triển:</strong> Mã nguồn mở firmware (CubeMX + CMake) cho bo mạch DJI Type A, DJI Type C và Damo MC02; tất cả đều kết nối chung một phần mềm máy tính (Host UI).</li>
+          <li><strong>Chuyển đổi 3 vòng điều khiển linh hoạt:</strong> Hỗ trợ chuyển đổi trực tiếp giữa vòng Vận tốc (Speed), Vị trí (Position) và Dòng điện (Current). Căn chỉnh thông số PID trực tiếp trên Web và ghi tức thì vào bộ nhớ động cơ.</li>
+          <li><strong>Tích hợp sẵn các công cụ đo kiểm:</strong> 
+            <ul>
+              <li>Vẽ đồ thị đáp ứng thời gian thực (Real-time curve).</li>
+              <li>Chế độ tự động xuất tín hiệu sóng Sin hoặc hàm bước nhảy (Step response).</li>
+              <li>Công cụ tính toán quy đổi giữa tần số bắn (ROF) và tốc độ quay động cơ.</li>
+              <li>Thử nghiệm vị trí đĩa cấp đạn bắn đơn (Single shot) hoặc bắn đôi (Double shot).</li>
+            </ul>
+          </li>
+          <li><strong>Cơ chế bảo vệ an toàn:</strong> 
+            <ul>
+              <li>Cơ chế nhịp tim (Heartbeat): Mất kết nối quá 1.5 giây sẽ tự động ngắt toàn bộ động cơ.</li>
+              <li>Khi chưa ấn Enable (Kích hoạt), động cơ hoàn toàn không phát lực.</li>
+              <li>Phím cách (Spacebar) đóng vai trò phím dừng khẩn cấp (E-Stop).</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <details class="zh-original" style="background:#fafafa;padding:10px 14px;border-left:3px solid #ccc;margin-top:10px;font-size:0.9em;color:#555;">
+        <summary style="cursor:pointer;font-weight:600;">Xem nguyên văn tiếng Trung (原文)</summary>
+        <ul style="margin-top:8px;">
+          <li>免烧固件换电机：动态添加/删除大疆 M3508 / M2006 / GM6020、达妙 DM4310 / DM8009P</li>
+          <li>三板支持：大疆 A 型、C 型、达妙 MC02 固件均开源（CubeMX + CMake），上位机同一套</li>
+          <li>速度/位置/电流三环在线切换，PID 网页整定并写入电机</li>
+          <li>测试工具内建：实时曲线、正弦/阶梯自动输出、射频→转速计算器、单发/双发拨弹位置测试</li>
+          <li>安全设计：心跳断链约 1.5s 自动全停、未使能不出力、空格急停</li>
+        </ul>
+      </details>
+    </section>
+
+    <!-- Ảnh giao diện điều khiển -->
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/99893f5f7ebd4814a9c32aedf60406651792844454567/ui-annotated.png" alt="Giao diện phần mềm điều khiển MotorBench" style="max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 2: Chú thích chi tiết các khu vực chức năng trên giao diện Web UI</em></p>
+    </div>
+
+    <!-- Phần 3: Hướng dẫn khởi chạy nhanh -->
+    <section class="bilingual-section" style="margin-top:28px;">
+      <div class="vi-content">
+        <h2>3. Hướng dẫn bắt đầu nhanh (Quick Start)</h2>
+        <ol>
+          <li><strong>Nạp firmware xuống bo mạch:</strong> Cài extension <em>STM32CubeIDE for Visual Studio Code</em> trong VS Code, mở project tương ứng với bo mạch đang dùng và nhấn <code>F5</code> để biên dịch và nạp code.</li>
+          <li><strong>Khởi chạy phần mềm máy tính (Host App):</strong>
+            <ul>
+              <li>Cách 1: Chạy trực tiếp file <code>MotorBench-1.2.0-Windows-x64.exe</code> (không cần cài môi trường).</li>
+              <li>Cách 2: Chạy qua mã nguồn: mở terminal gõ <code>npm install &amp;&amp; npm start</code> rồi mở trình duyệt truy cập <code>http://127.0.0.1:3000</code>.</li>
+            </ul>
+          </li>
+          <li><strong>Thao tác điều khiển trên Web:</strong> Chọn cổng nối tiếp (COM Port) $\rightarrow$ Bấm <code>＋ Thêm động cơ</code> (chọn Model động cơ / Bus CAN / ID gạt mã ESC) $\rightarrow$ Bấm <code>Bind</code> (Liên kết) $\rightarrow$ Bấm <code>Enable</code> (Kích hoạt) $\rightarrow$ Kéo thanh trượt để quay động cơ.</li>
+        </ol>
+      </div>
+      <details class="zh-original" style="background:#fafafa;padding:10px 14px;border-left:3px solid #ccc;margin-top:10px;font-size:0.9em;color:#555;">
+        <summary style="cursor:pointer;font-weight:600;">Xem nguyên văn tiếng Trung (原文)</summary>
+        <ol style="margin-top:8px;">
+          <li>烧固件：VS Code 装 STM32CubeIDE for Visual Studio Code 扩展，打开对应板子工程按 F5</li>
+          <li>起上位机：双击 EXE（或 npm install &amp;&amp; npm start 后开 http://127.0.0.1:3000）</li>
+          <li>网页选串口 → ＋ 添加电机（型号/总线/电调拨码 ID）→ 绑定 → 使能 → 拖滑块</li>
+        </ol>
+      </details>
+    </section>
+
+    <!-- Phần 4: Lưu ý an toàn khi đấu dây -->
+    <section class="bilingual-section" style="margin-top:28px;">
+      <div class="vi-content">
+        <h2>4. Cảnh báo an toàn khi đấu dây</h2>
+        <div style="background:#fff3cd;border:1px solid #ffeeba;padding:14px;border-radius:6px;color:#856404;">
+          <strong>⚠️ Nhắc nhở thành viên nhóm điện điều khiển:</strong><br>
+          Trước khi cấp nguồn, hãy kiểm tra thật kỹ: <em>Cắm ngược jack XT30, đảo lộn dây CAN High / CAN Low, chập ngắn mạch nguồn 24V</em> — những lỗi này sẽ làm bốc khói linh kiện và tốn kém chi phí thay thế rất lớn.
+        </div>
+      </div>
+      <details class="zh-original" style="background:#fafafa;padding:10px 14px;border-left:3px solid #ccc;margin-top:10px;font-size:0.9em;color:#555;">
+        <summary style="cursor:pointer;font-weight:600;">Xem nguyên văn tiếng Trung (原文)</summary>
+        <p style="margin-top:8px;">🐶 接线前请电控过目：XT30 反接、CAN H/L 互换、24V 短路——烧掉的都是真金白银。</p>
+      </details>
+    </section>
+
+    <!-- Phần 5: Các hạn chế đã biết -->
+    <section class="bilingual-section" style="margin-top:28px;">
+      <div class="vi-content">
+        <h2>5. Các hạn chế đã biết (Known Limitations)</h2>
+        <ul>
+          <li>Danh sách động cơ đã cấu hình không lưu qua các lần mất nguồn, khi bật nguồn lại cần thêm lại trên giao diện.</li>
+          <li>Giá trị thông số PID mặc định chỉ là mức khởi đầu để tham khảo, người dùng cần căn chỉnh lại theo tải cơ khí thực tế.</li>
+          <li>Trên cùng một bus CAN, dải ID phản hồi của gimbal motor GM6020 và motor M3508 / M2006 có thể trùng lặp một phần (giao diện web sẽ liệt kê danh sách các ID khả dụng để bạn chọn tránh xung đột).</li>
+        </ul>
+        <p style="margin-top:14px;font-style:italic;color:#666;">Dự án được phát triển thứ cấp dựa trên framework <code>basic_framework</code> của chiến đội YueLu (跃鹿战队). Xin chân thành cảm ơn các tác giả tiền nhiệm!</p>
+      </div>
+      <details class="zh-original" style="background:#fafafa;padding:10px 14px;border-left:3px solid #ccc;margin-top:10px;font-size:0.9em;color:#555;">
+        <summary style="cursor:pointer;font-weight:600;">Xem nguyên văn tiếng Trung (原文)</summary>
+        <ul style="margin-top:8px;">
+          <li>电机清单不跨断电保留，上电后需重新添加</li>
+          <li>PID 默认值只是起点，请按实际负载整定</li>
+          <li>同总线 GM6020 与 M3508/M2006 的反馈 ID 区间部分冲突（页面会列出可用 ID）</li>
+        </ul>
+        <p style="margin-top:8px;">基于跃鹿 basic_framework 二次开发，感谢上游。欢迎试用提 issue。</p>
+      </details>
+    </section>
+  </div>
+</article>
