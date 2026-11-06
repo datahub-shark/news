@@ -6,3 +6,7 @@ data/html/
 data/.admin_session.json
 drafts/*/attachments/
 published/*/attachments/
+drafts/*/images/
+published/*/images/
+drafts/*/videos/
+published/*/videos/
