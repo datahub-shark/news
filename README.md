@@ -4,6 +4,16 @@ Web cá nhân tập hợp ý tưởng phát triển robot. GitHub Pages phục v
 
 Web: https://datahub-shark.github.io/news/ · Quản trị: https://datahub-shark.github.io/news/admin.html
 
+## Dashboard sau đăng nhập
+
+- **Tổng quan:** tổng số bài, chờ duyệt, đang công khai, bản nháp và bài cập nhật gần đây. Bấm thẻ số liệu để mở danh sách tương ứng.
+- **Tất cả bài viết:** tìm kiếm, lọc trạng thái, chỉnh sửa, duyệt đăng hoặc gỡ công khai. Các thao tác xuất bản đều yêu cầu xác nhận.
+- **Hàng chờ duyệt:** chỉ các bài pending để kiểm tra trước khi đăng.
+- **Nguồn thu thập:** thêm/sửa tên và URL RSS/Atom, bật/tắt nguồn và nhập RSS. Không cần sửa Sheet thủ công; cần cập nhật Code.gs mới để dùng các thao tác nguồn.
+- **Hệ thống:** xem cách lưu trữ, xác thực và tình trạng tích hợp AI. Không hiển thị khóa hay token.
+
+Nút **Tạo bài viết** mở trình biên tập riêng, hỗ trợ nhập HTML, sửa mã, xem trước và chọn quyền công khai. Nút **Xem website** mở trang độc giả.
+
 ## Nâng cấp sang HTML (giữ dữ liệu hiện tại)
 
 1. Mở dự án Apps Script đang sử dụng. Thay toàn bộ **Code.gs** bằng `google-apps-script/Code.gs` mới trong repo.

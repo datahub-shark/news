@@ -51,11 +51,15 @@ function adminApi(action,payload){payload=payload||{};try{
  if(action==='logout'){CacheService.getScriptCache().remove('session:'+digest_(payload.token));return {ok:true};}
  if(action==='list')return {ok:true,apiVersion:2,articles:rows_().map(r=>metadata_(r.article)).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))};
  if(action==='get'){const entry=rows_().find(r=>r.article.id===payload.id);if(!entry)throw Error('Bài không tồn tại.');return {ok:true,article:{...metadata_(entry.article),html:readHtml_(entry.article)}};}
+ if(action==='sources')return {ok:true,sources:sources_()};
+ if(action==='saveSource')return locked_(()=>saveSource_(payload.source||{}));
  if(action==='save')return locked_(()=>save_(payload));
  if(action==='importFeeds'){const count=importFeeds_();return {ok:true,count};}
  throw Error('Thao tác không hợp lệ.');
  }catch(e){return {ok:false,error:e.message};}}
 function clean_(value,max){if(typeof value!=='string')return '';return value.trim().slice(0,max);}
+function sources_(){const sh=sheet_('Sources');return sh.getLastRow()<2?[]:sh.getRange(2,1,sh.getLastRow()-1,4).getValues().map(r=>({id:String(r[0]),name:String(r[1]),feedUrl:String(r[2]),enabled:String(r[3]).toLowerCase()==='true'}));}
+function saveSource_(input){const name=clean_(input.name,200),feedUrl=https_(input.feedUrl);if(!name||!feedUrl)throw Error('Nhập tên nguồn và URL HTTPS RSS/Atom.');const sources=sources_();const index=input.id?sources.findIndex(s=>s.id===input.id):-1;if(input.id&&index<0)throw Error('Nguồn không tồn tại. Tải lại danh sách.');if(sources.some(s=>s.id!==input.id&&s.feedUrl===feedUrl))throw Error('URL nguồn này đã có.');const source={id:input.id||Utilities.getUuid(),name,feedUrl,enabled:input.enabled===true};const row=[source.id,source.name,source.feedUrl,source.enabled?'TRUE':'FALSE'].map(text_);if(index<0)sheet_('Sources').appendRow(row);else sheet_('Sources').getRange(index+2,1,1,4).setValues([row]);return {ok:true,source};}
 function https_(value){const s=clean_(value,2000);if(s&&!/^https:\/\/[^\s/@]+(?:[/?#][^\s]*)?$/i.test(s))throw Error('Nguồn phải là URL HTTPS hợp lệ.');return s;}
 function save_(payload){
  const input=payload.article||{};const existing=input.id?rows_().find(r=>r.article.id===input.id):null;if(input.id&&!existing)throw Error('Bài không tồn tại.');
