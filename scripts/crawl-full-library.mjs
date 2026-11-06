@@ -330,5 +330,6 @@ export async function crawlFullLibrary(options = {}) {
 }
 
 if (process.argv[1] && process.argv[1].endsWith('crawl-full-library.mjs')) {
-  crawlFullLibrary({ limit: 30 });
+  const customLimit = process.argv[2] ? parseInt(process.argv[2], 10) : 50;
+  crawlFullLibrary({ limit: customLimit });
 }

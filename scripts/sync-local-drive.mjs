@@ -7,32 +7,34 @@ if (!fs.existsSync(gDriveBase)) {
   process.exit(0);
 }
 
-// 1. Copy published
-const pubDir = path.resolve('published');
-for (const d of fs.readdirSync(pubDir)) {
-  const src = path.join(pubDir, d, 'index.html');
-  const targetDir = path.join(gDriveBase, d);
-  const target = path.join(targetDir, 'index.html');
-  if (fs.existsSync(src) && fs.existsSync(targetDir)) {
-    fs.copyFileSync(src, target);
-    console.log(`[SYNC PUBLISHED] ${d}/index.html`);
-  }
-}
-
-// 2. Copy drafts
-const draftsDir = path.resolve('drafts');
-for (const d of fs.readdirSync(draftsDir)) {
-  const src = path.join(draftsDir, d, 'index.html');
-  const targetDir = path.join(gDriveBase, d);
-  const target = path.join(targetDir, 'index.html');
-  if (fs.existsSync(src)) {
-    if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true });
-    // Don't overwrite if published already copied
-    if (!fs.existsSync(path.join(pubDir, d))) {
-      fs.copyFileSync(src, target);
-      console.log(`[SYNC DRAFT] ${d}/index.html`);
+function copyFolderRecursive(srcDir, destDir) {
+  if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
+  const entries = fs.readdirSync(srcDir, { withFileTypes: true });
+  for (const entry of entries) {
+    const srcPath = path.join(srcDir, entry.name);
+    const destPath = path.join(destDir, entry.name);
+    if (entry.isDirectory()) {
+      copyFolderRecursive(srcPath, destPath);
+    } else {
+      // Copy or update if file doesn't exist or size differs
+      if (!fs.existsSync(destPath) || fs.statSync(srcPath).size !== fs.statSync(destPath).size) {
+        fs.copyFileSync(srcPath, destPath);
+        console.log(`[SYNC FILE] ${path.relative(path.resolve('.'), srcPath)} -> ${entry.name}`);
+      }
     }
   }
 }
 
-console.log('Sync to Google Drive complete.');
+// 1. Sync published
+const pubDir = path.resolve('published');
+for (const d of fs.readdirSync(pubDir)) {
+  copyFolderRecursive(path.join(pubDir, d), path.join(gDriveBase, d));
+}
+
+// 2. Sync drafts
+const draftsDir = path.resolve('drafts');
+for (const d of fs.readdirSync(draftsDir)) {
+  copyFolderRecursive(path.join(draftsDir, d), path.join(gDriveBase, d));
+}
+
+console.log('Finished full sync to Google Drive.');
