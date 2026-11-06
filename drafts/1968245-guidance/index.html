@@ -1,0 +1,33 @@
+<!-- METADATA
+Tiêu đề: (过时的开源)大疆Guidance电源故障维修
+Chuyên mục: Khác
+Tác giả: 风之影
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/df1a302c78cc40b2a65ad8214e8e4f971788191243115/23293414-bd57-4b31-8754-ff54970c65b4.png
+Nguồn: https://bbs.robomaster.com/article/1968245
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p一个很早之前就想发但是总是忘记发的贴子。。。每次想起来的时候都没时间，有时间的时候又想不起来了，结果一直拖到现在，Guidance已经和大飞机一起离开了😭</p<p不过既然已经写好草稿了，我就还是发一下，万一谁用得到呢（？）</p<p——————————以下为正文——————————</p<p使用T6梅花螺丝刀拆除外壳。先打开上盖(风扇一侧)，用镊子拔掉风扇的电源线。风扇的电源线非常细，操作时务必小心(下图中T30作为尺寸参照物)。</p<p<img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/df1a302c
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: (过时的开源)大疆Guidance电源故障维修. Ứng dụng trong phân mảng Khác.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>(过时的开源)大疆Guidance电源故障维修</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1968245" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 风之影</p>
+    <p><strong>Chuyên mục:</strong> Khác</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/df1a302c78cc40b2a65ad8214e8e4f971788191243115/23293414-bd57-4b31-8754-ff54970c65b4.png" alt="(过时的开源)大疆Guidance电源故障维修" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <hr>
+  <div class="article-body">
+<p>一个很早之前就想发但是总是忘记发的贴子。。。每次想起来的时候都没时间，有时间的时候又想不起来了，结果一直拖到现在，Guidance已经和大飞机一起离开了😭</p><p>不过既然已经写好草稿了，我就还是发一下，万一谁用得到呢（？）</p><p>——————————以下为正文——————————</p><p>使用T6梅花螺丝刀拆除外壳。先打开上盖(风扇一侧)，用镊子拔掉风扇的电源线。风扇的电源线非常细，操作时务必小心(下图中XT30作为尺寸参照物)。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/df1a302c78cc40b2a65ad8214e8e4f971788191243115/23293414-bd57-4b31-8754-ff54970c65b4.png" alt="23293414-bd57-4b31-8754-ff54970c65b4.png" data-href="" data-file-md5="17549da90e636ce4e7e2dd946705e6ed" data-file-len="6627410" style="width: 50%;"/></p><p>然后拆除底壳，露出主板。主板与中框之间有导热垫，由于导热垫有一定黏性，可能导致不易分离，必要时可以使用塑料撬棒辅助分离。</p><p>取下主板后，找到电源线附近的54540及其外围电路。通电，测试54540的输入端及输出端是否正常有电。注意测量时可能需要除去三防漆。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/9ce80524d8a7414f8fa54e08cd7ff8131788191270222/20625f3b-6aed-46fe-b41e-7943e5ca06b3.png" alt="20625f3b-6aed-46fe-b41e-7943e5ca06b3.png" data-href="" data-file-md5="3b7d1a078ca9b532568e3d6e298214fc" data-file-len="19417810" style="width: 50%;"/></p><p>如54540输入端无电，则拆除电源线，拆除输入侧滤波电容，拆除共模电感。</p><p>由于有三防漆，电容建议用两把烙铁拆除，共模电感需要分别烫过两侧焊点去除三防漆后再用热风枪拆除。每拆除一个元器件后，都应使用吸锡带与洗板水清洁板面，洁净的板面有助于你看清板子当前的状况。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/736ff56f8121469c936bb4aa268695771788191303200/0ea6b4e8-bdc7-44c8-b502-c1402f3a9533.png" alt="0ea6b4e8-bdc7-44c8-b502-c1402f3a9533.png" data-href="" data-file-md5="e6cb70a0750f64258977370f2e88e4b1" data-file-len="18853363" style="width: 50%;"/></p><p>飞线，添加输入侧滤波电容与临时的电源输入线，上电测试</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/0665933d7562435182c365029c2520831788191335194/d3fa050a-d161-498f-aec6-34b0b5487623.png" alt="d3fa050a-d161-498f-aec6-34b0b5487623.png" data-href="" data-file-md5="ace6f498c6af44434e18b884309ffe79" data-file-len="15893299" style="width: 50%;"/></p><p>电源设置适当的电压与限流，电压使用12V即可，限流应给的较低，但不可过低，应保证5w以上的功率否则无法正常启动。上电几秒钟至十几秒后，指示灯红灯闪烁，表明启动成功</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/5b148e7e708d40878eea64b6415e5a0a1788191358714/f8700d01-51b7-40b2-b7ab-6a2e47e60f69.png" alt="f8700d01-51b7-40b2-b7ab-6a2e47e60f69.png" data-href="" data-file-md5="c2ed657752c33ab77787e9da3b3b8b31" data-file-len="18227010" style="width: 50%;"/></p><p>更换新的共模电感，装回电容，完成维修。共模电感嘉立创料号C92126</p><p><br></p><p>感谢东北大学提供的初版共模电感料号，虽然当时的规格并不完全合适，但是提供的参数极大地方便了我找到正确的器件</p>
+  </div>
+</article>

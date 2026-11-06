@@ -1,0 +1,43 @@
+<!-- METADATA
+Tiêu đề: 
+Chuyên mục: Điều khiển
+Tác giả: 半盏.
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/33fdfe60d28f4138b8e5f9ae724318011788265676311/image.png
+Nguồn: https://bbs.robomaster.com/article/1969128
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p<span style="color: rgba(0, 0, 0, 0.85); background-color: rgb(255, 255, 255); font-size: 24p;"<strong研发背景：</strong</span</p<p 2006的扭矩对于隧道构型的折叠云台来说，扭矩不足；3508电机直驱拨盘尺寸过高，如果传动驱动结构复杂；lk4005根据电控的反馈来说，相对难以控制，故排除选择。参考山东理工大学的隧道步兵构型，给了一个不错的思路：12位DM4310拨盘。端面输出，方便安装，而且电机扭矩较大，对于下个赛季要发展的折叠运动隧道构型来说
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: . Ứng dụng trong phân mảng Điều khiển.
+Tệp đính kèm: banh-omni-motor-3508-tai-nguyen.zip (Trực tuyến - 55.7 MB), banh-omni-motor-3508-tai-nguyen.zip (Trực tuyến - 118.3 MB), banh-omni-motor-3508-tai-nguyen.pdf (Cục bộ - 0.64 MB)
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1></h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1969128" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 半盏.</p>
+    <p><strong>Chuyên mục:</strong> Điều khiển</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/33fdfe60d28f4138b8e5f9ae724318011788265676311/image.png" alt="" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
+    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
+    <ul style="margin-bottom:0;">
+      <li><a href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/2a02021f714841d58763493261610a361788265648959/4310直驱17mm切线拨盘-测试总装.zip" target="_blank"><strong>banh-omni-motor-3508-tai-nguyen.zip</strong></a> (🌐 Link tải trực tiếp - 55.7 MB)</li>
+      <li><a href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e8968056c3a942b985ceb8add26b91801792923978674/4310直驱17mm切线拨盘-测试-V4.zip" target="_blank"><strong>banh-omni-motor-3508-tai-nguyen.zip</strong></a> (🌐 Link tải trực tiếp - 118.3 MB)</li>
+      <li><a href="./attachments/banh-omni-motor-3508-tai-nguyen.pdf" target="_blank"><strong>banh-omni-motor-3508-tai-nguyen.pdf</strong></a> (📁 Đã tải trong thư mục attachments/ - 0.64 MB)</li>
+    </ul>
+  </div>
+  <hr>
+  <div class="article-body">
+<p><span style="color: rgba(0, 0, 0, 0.85); background-color: rgb(255, 255, 255); font-size: 24px;"><strong>研发背景：</strong></span></p><p> &nbsp; &nbsp;2006的扭矩对于隧道构型的折叠云台来说，扭矩不足；3508电机直驱拨盘尺寸过高，如果传动驱动结构复杂；lk4005根据电控的反馈来说，相对难以控制，故排除选择。参考山东理工大学的隧道步兵构型，给了一个不错的思路：12位DM4310拨盘。端面输出，方便安装，而且电机扭矩较大，对于下个赛季要发展的折叠运动隧道构型来说是个不错的选择。</p><p> &nbsp; &nbsp;此外，为了增加拨盘寿命（看着工位旁边炸了的打印的拨盘发愁中），真正做到一盘传三代，人走盘还在，所以采用了全CNC的设计思路（其实退弹坡和引流斜面也能CNC,但是打印足够使用），这样子会很酷~~~</p><p> &nbsp; &nbsp;免责声明：本切线供弹拨盘基于合工苍穹2022-2024赛季已部署的切线供弹拨盘设计思路衍生迭代，参考26赛季我自己开源的中心供弹设计思路，汇集各种小巧思融于一炉所得出，目前只完成了全尺寸3D打印测试（由于本人的代码水平一般，暴力测试没有完成3d打印件就损毁了（毕竟是CNC的设计要求））。<span id="referenceDom-1" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/1943339/1" data-order="1">[1]</span></p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/33fdfe60d28f4138b8e5f9ae724318011788265676311/image.png" alt="image.png" data-href="" data-file-md5="e8e716889beb978bbdf047998e052b40" data-file-len="349212" style=""/></p><p><br></p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="76796fb73b42e4dbd339ca4c57f4d108" data-file-len="28494764" data-file-name="VID_20260901_153415.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/090b44b4203347ed876ef93a3ab428ac1788265940309/VID_20260901_153415.mp4" type="video/mp4"/></video>
+</div><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/2a02021f714841d58763493261610a361788265648959/4310直驱17mm切线拨盘-测试总装.zip" data-file-name="4310直驱17mm切线拨盘-测试总装.zip" data-file-md5="d7b428fd804598538c81e65396ecb96f" data-file-len="58457815" data-file-key="1788265627253-58457815-4310直驱17mm切线拨盘-测试总装.zip-C9b4lBDMqp0LKh7-GV5yj" data-file-state="uploadSuccess">4310直驱17mm切线拨盘-测试总装.zip</a></p><p>2026/10/15--更新V3版本拨盘，和V1版本孔位兼容。</p><p>2026/10/25--更新V4版本拨盘，删除V3开源版本，更新设计文档</p><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e8968056c3a942b985ceb8add26b91801792923978674/4310直驱17mm切线拨盘-测试-V4.zip" data-file-name="4310直驱17mm切线拨盘-测试-V4.zip" data-file-md5="eea275ab8f073e6d35bcb40e10eafc19" data-file-len="124029394" data-file-key="1792556416659-124029394-4310直驱17mm切线拨盘-测试-V4.zip-M6JbSXTkGGKzL-ke17B_j" data-file-state="uploadSuccess">4310直驱17mm切线拨盘-测试-V4.zip</a><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/78dc9848fcfe4978bd9930025f7262431792923993523/4310拨盘设计过程说明文档.pdf" data-file-name="4310拨盘设计过程说明文档.pdf" data-file-md5="1927e41a922328575c8fb369c4e5fdb8" data-file-len="669109" data-file-key="1792923851394-669109-4310拨盘设计过程说明文档.pdf-kusutEAExyPxiLENKoi1R" data-file-state="uploadSuccess">4310拨盘设计过程说明文档.pdf</a></p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/6f56597c0347491882496ae079c1adc31788265570840/8M`)S(`{TOHGE(J94{50ISJ.jpg" alt="8M`)S(`{TOHGE(J94{50ISJ.jpg" data-href="" data-file-md5="284cd4ef268ca042e517d4b46c65248f" data-file-len="166813" style=""/></p><p><span style="color: rgba(0, 0, 0, 0.85); background-color: rgb(255, 255, 255); font-size: 24px;"><strong>已更新中心供弹的全CNC版本开源，参考下一篇文档</strong></span></p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/7a5e339ad7e84cb3b9f4133ddb8c21f51788266072591/image.png" alt="image.png" data-href="" data-file-md5="ce3ca10e0f7da5a1ef09cef382089b30" data-file-len="444376" style=""/></p><p><span style="color: rgba(0, 0, 0, 0.85); background-color: rgb(255, 255, 255); font-size: 24px;"><strong> &nbsp;参考文献:</strong></span></p><p><span style="color: rgba(0, 0, 0, 0.85); background-color: rgb(255, 255, 255); font-size: 24px;"> </span><span style="color: rgba(0, 0, 0, 0.85); background-color: rgb(255, 255, 255);"> [1] 【RM2026 全向过洞步兵结构开源】山东理工大学 齐奇战队 </span></p>
+  </div>
+</article>

@@ -64,6 +64,12 @@ Chạy **installImportTrigger** trong Apps Script nếu muốn nhập mỗi 6 gi
 
 ## Phát triển và kiểm tra
 
+### Hiệu năng giao diện
+
+Trang chủ hiển thị 18 bài đầu, nút **Xem thêm** mở thêm 18 bài. Quản trị chia trang 40 bài; tìm kiếm và bộ lọc vẫn áp dụng trên toàn bộ danh sách đã tải. Tìm kiếm thư viện lớn chờ 120 ms sau lần gõ cuối để giảm dựng lại DOM. Trang chủ dùng font hệ thống và chỉ trang đọc/biên tập mới tải DOMPurify. Ảnh giải mã bất đồng bộ; ảnh ngoài vùng đầu trang tải khi cần.
+
+API hiện vẫn trả toàn bộ metadata, nên thời gian kết nối Apps Script và dung lượng danh sách chưa được giải quyết bằng phân trang phía server. Thay đổi backend cần cập nhật Code.gs và triển khai phiên bản Apps Script mới; cập nhật giao diện quản trị nhúng bằng `npm run build:admin` rồi chép Admin.html. Test JSDOM với 1.000 bài kiểm tra giới hạn DOM và tìm kiếm, không thay thế đo hiệu năng trên trình duyệt thật.
+
 Node.js 22 trở lên. `npm ci`, `npm test`. Test backend dùng mock Google, test trình đọc dùng JSDOM và DOMPurify thật; không thay thế thử Google/Drive/email/trình duyệt thật.
 
 Sửa UI quản trị tại admin.html, admin.css, admin.js, html-viewer.js. Chạy **npm run build:admin** để tạo lại `google-apps-script/Admin.html` trước khi triển khai.
