@@ -1,0 +1,33 @@
+<!-- METADATA
+Tiêu đề: 南京理工大学江阴校区-Combat战队
+Chuyên mục: Thị giác máy
+Tác giả: 通讯信息 QQ：2942349330
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a9483c337c3a47f98795f56a93be97c91779862206188/a7cdd851f52b427c48aacde9c0746a0b.jpg
+Nguồn: https://bbs.robomaster.com/article/1884180
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <h3<strong1.项目介绍</strong</h3<h4<strong1.1 项目简介：</strong</h4<h4<span style="color: rgb(0, 0, 0); font-size: 16p;"本项目为南京理工大学江阴校区 Combat 战队 2026 赛季雷达解析信息波部分，覆盖干扰波接收、信息波接收、协议编解码、波形生成、频点参数配置以及与主程序服务器的联动通信。本项目仅需要一块pluto sdr模块可实现对干扰波和信息波的接收，在开启gui_launcher.py时，东部赛区实测稳定解析2次干扰波，但信息波解析率较低（大概率是由于信息波和干扰波功率相差较大而
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 南京理工大学江阴校区-Combat战队. Ứng dụng trong phân mảng Thị giác máy.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>南京理工大学江阴校区-Combat战队</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1884180" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 通讯信息 QQ：2942349330</p>
+    <p><strong>Chuyên mục:</strong> Thị giác máy</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a9483c337c3a47f98795f56a93be97c91779862206188/a7cdd851f52b427c48aacde9c0746a0b.jpg" alt="南京理工大学江阴校区-Combat战队" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <hr>
+  <div class="article-body">
+<h3><strong>1.项目介绍</strong></h3><h4><strong>1.1 项目简介：</strong></h4><h4><span style="color: rgb(0, 0, 0); font-size: 16px;">本项目为南京理工大学江阴校区 Combat 战队 2026 赛季雷达解析信息波部分，覆盖干扰波接收、信息波接收、协议编解码、波形生成、频点参数配置以及与主程序服务器的联动通信。本项目仅需要一块pluto sdr模块可实现对干扰波和信息波的接收，在开启gui_launcher.py时，东部赛区实测稳定解析2次干扰波，但信息波解析率较低（大概率是由于信息波和干扰波功率相差较大而信息波被覆盖，实测比赛开始和结束时都能接收到几帧信息波数据）。安装python依赖后即可部署。</span></h4><p><span style="color: rgb(0, 0, 0); font-size: 16px;">雷达解析信息波作为今年提出的新规，雷达组成员也只是出于摸索阶段，水平有限，旨在开源已经在赛场上实际验证可行的sdr方案，存在诸多不足的地方请大家多多包涵，仅供参考，并提醒sdr使用请遵守国家法律法规，不承担任何他人使用不当造成的不良后果，希望能给各位RMer带来一些帮助！</span></p><h4><strong>1.2 硬件选型：</strong></h4><h6><span style="color: rgb(0, 0, 0); font-size: 16px;">整个开发周期共使用了三个sdr，均为基于移植</span>pluto-fw-v0.38<span style="color: rgb(0, 0, 0); font-size: 16px;">固件的成品模块，与运算端均采用5m长千兆网线通讯，同时采用一根5m双typec带有信号放大器的数据线连接板卡上的usb口与运算端用于识别连接pluto设备以及供电（实测用普通5m数据传输线信号衰减较严重，运算端无法稳定连接上sdr设备）。天线方面由于我们是将设备放置在官方发射源旁，信号功率较强，利用商家赠送的拉杆天线垂直极化也可稳定接收，水平有限，对于天线没有较多研究，不过天线确实很值得研究，有助于提升接收的上限，可以参考其他相关的开源项目。</span></h6><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a9483c337c3a47f98795f56a93be97c91779862206188/a7cdd851f52b427c48aacde9c0746a0b.jpg" alt="a7cdd851f52b427c48aacde9c0746a0b.jpg" data-href="" data-file-md5="2fd78dafe7f023b0640b9a37d7ed8cf6" data-file-len="797625" style=""/></p><p>第一块板卡为7020+AD9361/AD9363 pluto sdr卡,也是比赛时采用的接收板卡，详细参数请参考商品页面</p><p><a href="https://m.tb.cn/h.Rfm1NCK?tk=L8Hb5xczYf6" target="_blank">https://m.tb.cn/h.Rfm1NCK?tk=L8Hb5xczYf6</a> HU006</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/6f64da22f8494e8a90bbbc4b44574ce81779863019383/28892a133ad8751a56325f3df74f20b0.jpg" alt="28892a133ad8751a56325f3df74f20b0.jpg" data-href="" data-file-md5="910962f39035037aafc911abcc44cf73" data-file-len="435222" style=""/></p><p>第二块板卡为7010+AD9363 Pluto SDR，本来是准备采用双sdr接收方案的，但是运算端网络通讯有些问题当时无法解决，所以就舍弃了，但是硬件资源应对于解析密钥也是够用的，详见</p><p><a href="https://m.tb.cn/h.R4acFBX?tk=xZN55xXdsuF" target="_blank">https://m.tb.cn/h.R4acFBX?tk=xZN55xXdsuF</a> CZ057</p><p>第三块为旧版7010+AD9363 pluto SDR板卡，主要用于模拟发射源，作为测试用的板卡，已被下架</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/edae05c0fb404f67a7bff4d8a3a35b4e1779863442614/704d53c242ef44351467d66b1c21a7bf.jpg" alt="704d53c242ef44351467d66b1c21a7bf.jpg" data-href="" data-file-md5="f3f0d545aeff534fe6e35dc67f4e0994" data-file-len="835200" style=""/></p><h4><strong>1.3 软件需求:</strong></h4><ul><li style="text-align: start;">Python3.9</li><li style="text-align: start;">Windows10、Linux（Ubuntu支持，其他Linux系统可能需要适配）</li></ul><p>比赛时使用Ubuntu22.04,pip install requirements.txt中所含库即可直接运行。</p><h4><strong>1.4 实战效果：</strong></h4><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/1661440809fc43d49904d06b025d11151779861433972/396963803e7fc5d7f0e16f0866c54645.jpg" alt="396963803e7fc5d7f0e16f0866c54645.jpg" data-href="" data-file-md5="90cae58868776571492a008a1560a3ec" data-file-len="150214" style=""/></p><p><br></p><p>由于前几场比赛参数配置有误，导致前几场雷达没有正常运行，还有几场在测试信息波解析在不同等级干扰波下的解析能力，实测可以稳定解析两次密钥，在赛场干扰波环境下难以解析信息波。</p><h4><strong>1.5 项目地址：</strong></h4><p>雷达无线电程序： <a href="https://github.com/qianchuan-wys/CombatRadarSdr2026.git" target="_blank">https://github.com/qianchuan-wys/CombatRadarSdr2026.git</a></p><p>雷达定位主程序： <a href="https://github.com/KellenCevo122/CombatRadar2026.git" target="_blank">https://github.com/KellenCevo122/CombatRadar2026.git</a> </p><p>无线电程序与主程序均仅供参考，附上主程序旨在提供与无线电进程间高效易用的方式</p><p>最后感谢南京理工大学江阴校区Combat战队所有成员的支持，感谢雷达组成员的集体付出，感谢南京理工大学Aliance战队雷达组成员对本项目提供的帮助</p><p><br></p>
+  </div>
+</article>

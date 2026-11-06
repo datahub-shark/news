@@ -1,0 +1,33 @@
+<!-- METADATA
+Tiêu đề: 河北科技大学 Actor&Thinker 战队
+Chuyên mục: Thị giác máy
+Tác giả: 通讯信息 QQ: 3675987198
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/437fffa043c9447dba5595c0699a757e1781023253165/QQ_1781023232103.png
+Nguồn: https://bbs.robomaster.com/article/1887395
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <h3简介</h3<pDaedalus 是由 Actor&Thinker 战队 开发的 RoboMaster 视觉算法验证模拟器，用于在仿真环境中测试和验证机器人自瞄及工程机器人相关视觉算法。<br项目旨在于算法上车、上场前，提供一个可控、可复现、可调试的验证环境，以降低联调成本、提升开发效率，并加快算法迭代与问题定位。<br目前，Daedalus 已覆盖 RoboMaster 中多个核心视觉目标，包括能量机关、前哨站、地面机器人、激光检测模块、科技核心等，并尽可能还原其外观特征与状态变化，为视觉算法测试提供仿真支撑。</p<p项目名称 Daedalus 来源于希腊神话中的代达罗斯。我们希望这
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 河北科技大学 Actor&Thinker 战队. Ứng dụng trong phân mảng Thị giác máy.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>河北科技大学 Actor&Thinker 战队</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1887395" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 通讯信息 QQ: 3675987198</p>
+    <p><strong>Chuyên mục:</strong> Thị giác máy</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/437fffa043c9447dba5595c0699a757e1781023253165/QQ_1781023232103.png" alt="河北科技大学 Actor&Thinker 战队" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <hr>
+  <div class="article-body">
+<h3>简介</h3><p>Daedalus 是由 Actor&Thinker 战队 开发的 RoboMaster 视觉算法验证模拟器，用于在仿真环境中测试和验证机器人自瞄及工程机器人相关视觉算法。<br>项目旨在于算法上车、上场前，提供一个可控、可复现、可调试的验证环境，以降低联调成本、提升开发效率，并加快算法迭代与问题定位。<br>目前，Daedalus 已覆盖 RoboMaster 中多个核心视觉目标，包括能量机关、前哨站、地面机器人、激光检测模块、科技核心等，并尽可能还原其外观特征与状态变化，为视觉算法测试提供仿真支撑。</p><p>项目名称 Daedalus 来源于希腊神话中的代达罗斯。我们希望这个项目能够像代达罗斯建造迷宫与机械造物一样，为 RoboMaster 视觉算法开发提供一个结构清晰、可验证、可扩展的实验场。</p><h3 style="text-align: start;">项目定位</h3><p style="text-align: start;">Daedalus 的核心目标是为算法开发提供一个更低成本、更高可控性、更便于复现问题的中间验证层。</p><p style="text-align: start;">我们认为，视觉算法开发中大量问题并不一定需要直接在真机上发现。目标识别是否稳定、姿态解算是否异常、控制反馈是否符合预期、特定场景能否复现，这些问题都可以先在仿真环境中进行初步验证。</p><p style="text-align: start;">因此，Daedalus 更像是一个面向 RoboMaster 视觉算法的实验场：</p><p style="text-align: start;">在这里，算法可以先经历一轮可控的测试，再进入真实机器人与真实赛场环境。</p><h3>面向自动瞄准链路的验证环境</h3><p>Daedalus 原生打通了 数据采集 → 自动瞄准推理 → 控制反馈 的验证闭环，可用于“看—算—打”流程的仿真验证。<br>在此基础上，模拟器支持在仿真环境中对目标识别、目标跟踪、姿态解算及部分控制链路进行测试。<br>相比仅依赖离线数据集或真机联调，仿真环境能够提供更稳定的输入条件与更高的可重复性。例如，在算法调试过程中，可以反复复现特定距离、角度、遮挡、运动状态下的目标表现，从而更便于验证算法改动效果。</p><p style="text-align: center;"><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/437fffa043c9447dba5595c0699a757e1781023253165/QQ_1781023232103.png" alt="foxglove_with_talos" data-href="" data-file-md5="d23b43ea36f9f20026c6b3c76015048e" data-file-len="1183477" style="width: 50%;"></p><h3>面向工程机器人部分视觉任务验证环境</h3><p>除自动瞄准任务外，Daedalus 也面向工程机器人相关的部分视觉任务提供了基础验证能力。<br>目前，Daedalus 已实现科技核心的多种状态模拟，可用于相关视觉算法的开发、调试与验证。通过在仿真环境中构造不同状态、不同视角和不同距离下的科技核心表现，算法开发者可以在真实调试前完成一部分前期验证工作。<br>这部分能力仍在持续扩展中。我们希望 Daedalus 后续不仅能够服务于传统自瞄链路，也能够逐步覆盖更多 RoboMaster 赛场中的视觉任务。</p><p style="text-align: center;"><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/684210c29e5f4e5a92e3117d3384e8291781025186346/screenshot-0.png" alt="screenshot-0.png" data-href="" data-file-md5="db8c3757379a79005587740fe251db41" data-file-len="1732993" style="width: 50%;"></p><h3><s>面向哨兵机器人的部分任务验证环境</s></h3><p>在仓库中，我们也保留了部分与哨兵机器人自主决策仿真相关的探索性内容。<br>这部分工作目前尚未完全完成，但已经进行了一定的前期尝试。后续我们希望在现有仿真基础上，进一步扩展面向哨兵以及多机器人协同任务的验证能力，使 Daedalus 能够支持更复杂的任务链路测试。</p><p style="text-align: center;"><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/0c1cfea3a2e54dde91efe6d0eee3ac591781024188757/15a915c31adf910007829fb82b5a49ce.png" alt="15a915c31adf910007829fb82b5a49ce.png" data-href="" data-file-md5="bce6ecb41716933be2ae3ba2a932824c" data-file-len="1185095" style="width: 50%;"></p><h3>实际应用案例: 雷达站反制无人机功能开发</h3><p>本赛季我们基于 Daedalus 完成了反制无人机相关算法的前期开发与验证。</p><p>该算法的主要流程首先在仿真环境中完成构建与调试，后续仅结合部分真实数据进行微调，便能够投入实际使用。这一过程表明，仿真环境能够在一定程度上承担前期开发、问题定位与方案验证工作，并降低真实场景下的联调成本。<br>在实际比赛中，该算法也完成了一定程度的效果验证。在沈阳站第六十六场中雷达站完成了两次对空中机器人的反制，使激光检测模块进入熄灭状态。</p><p style="text-align: center;"><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/1af99afb43104f3ba037b16c3e6bdb461781024781474/d8c13dea-036d-49d6-8eec-876d63376837.png" alt="d8c13dea-036d-49d6-8eec-876d63376837.png" data-href="" data-file-md5="396cd073a5530a5e384d7696603c5aef" data-file-len="3452022" style="width: 50%;"></p><p style="text-align: center;">沈阳站第六十六场：雷达站完成对空中机器人的两次反制，使激光检测模块进入熄灭状态</p><h3>开源说明</h3><p>Daedalus 采用 AGPL v3 协议开源。<br>我们选择开放这个项目，是因为 RoboMaster 视觉算法的发展离不开可复现的实验环境。希望 Daedalus 能够为社区提供一个可用的起点，让更多战队可以在此基础上进行验证、扩展与改进。<br>欢迎大家通过 GitHub Issues 或 Pull Requests 进行交流与贡献。<br>项目地址：<a href="https://github.com/Blackjack200/bevy_robomaster_simulator.git" target="_blank">Github</a></p><p style="text-align: start;"><br></p><p style="text-align: center;">Actor&amp;Thinker 战队</p>
+  </div>
+</article>

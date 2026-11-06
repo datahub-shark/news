@@ -118,13 +118,22 @@ export async function crawlBatch(limit = 40) {
 
   // Sắp xếp ưu tiên:
   // 1. Bài chứa từ khóa cơ khí/kết cấu/CAD/động cơ
-  // 2. ID giảm dần (mới nhất)
+  // 2. Bài chứa từ khóa thuật toán, kỹ thuật, robot, nguồn mở
+  // 3. ID giảm dần (mới nhất)
   const mechKws = ['机械', '结构', '发射', '供弹', '底盘', '云台', '平衡', '步兵', '英雄', '哨兵', '工程', '无人机', '夹爪', '连杆', '减速', '电机', 'cad', 'step', 'sw', 'solidworks', '3d', '舵轮', '轮足', '轮腿'];
-  
+  const techKws = ['技术报告', '开源', '设计', '算法', '视觉', '自瞄', '雷达', '电控', '传承', '排球', '飞镖', '仿真', '控制', '上位机', '超级电容', 'mpc', 'slam', 'yolo', 'ros'];
+
   uncrawled.sort((a, b) => {
-    const aMech = mechKws.some(k => a.title.toLowerCase().includes(k)) ? 1 : 0;
-    const bMech = mechKws.some(k => b.title.toLowerCase().includes(k)) ? 1 : 0;
+    const aTitle = a.title.toLowerCase();
+    const bTitle = b.title.toLowerCase();
+    const aMech = mechKws.some(k => aTitle.includes(k)) ? 1 : 0;
+    const bMech = mechKws.some(k => bTitle.includes(k)) ? 1 : 0;
     if (bMech !== aMech) return bMech - aMech;
+
+    const aTech = techKws.filter(k => aTitle.includes(k)).length;
+    const bTech = techKws.filter(k => bTitle.includes(k)).length;
+    if (bTech !== aTech) return bTech - aTech;
+
     return Number(b.id) - Number(a.id);
   });
 

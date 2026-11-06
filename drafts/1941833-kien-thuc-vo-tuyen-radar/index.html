@@ -1,0 +1,43 @@
+<!-- METADATA
+Tiêu đề: 局均易伤「全国第一」的雷达解析信息波算法及其应用-保姆级开源
+Chuyên mục: Thị giác máy
+Tác giả: 通讯信息
+Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e55b037eace041988473a4a5fb2b7a921787451559815/%E9%9B%B7%E8%BE%BE%E5%AE%9E%E7%89%A9%E5%9B%BE.png
+Nguồn: https://bbs.robomaster.com/article/1941833
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p<strong*本帖将开源复旦大学星云EGA战队RM2026赛季的雷达解析信息波项目。</strong</p<h2 style="tet-align: center;"<img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e55b037eace041988473a4a5fb2b7a921787451559815/雷达实物图.png" alt="雷达实物图.png" data-href="" data-file-md5="b3dccc3f0f8ee836ffc31b4c88dd9699" data-file-len
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 局均易伤「全国第一」的雷达解析信息波算法及其应用-保姆级开源. Ứng dụng trong phân mảng Thị giác máy.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>局均易伤「全国第一」的雷达解析信息波算法及其应用-保姆级开源</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1941833" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 通讯信息</p>
+    <p><strong>Chuyên mục:</strong> Thị giác máy</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e55b037eace041988473a4a5fb2b7a921787451559815/%E9%9B%B7%E8%BE%BE%E5%AE%9E%E7%89%A9%E5%9B%BE.png" alt="局均易伤「全国第一」的雷达解析信息波算法及其应用-保姆级开源" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <hr>
+  <div class="article-body">
+<p><strong>*本帖将开源复旦大学星云EGA战队RM2026赛季的雷达解析信息波项目。</strong></p><h2 style="text-align: center;"><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e55b037eace041988473a4a5fb2b7a921787451559815/雷达实物图.png" alt="雷达实物图.png" data-href="" data-file-md5="b3dccc3f0f8ee836ffc31b4c88dd9699" data-file-len="1096157" style=""></h2><div data-w-e-type="video" data-w-e-is-void>
+<iframe class="iframe_video" src="https://player.bilibili.com/player.html?bvid=BV1Vd846yEPq" width="auto" height="auto"></iframe>
+</div><h2><strong>简介</strong></h2><p>在国赛中，我队雷达的局均易伤时间<strong>（2303.7秒）</strong>和解析成功次数<strong>（2次）</strong>均排名<strong>「全国第一」</strong>；解析结果进一步用于哨兵目标筛选、路径决策和操作手动态UI，间接帮助我队哨兵机器人取得<strong>「全国第一」</strong>的命中率。一些关键数据的实时转发，也让不少战略战术落地，让操作手少犯唐。</p><p style="text-align: center;"><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/ac39e4169b1c4f8893b00d3436d02b491787409835998/785882201df04fc2333e0770cd724420.jpg" alt="785882201df04fc2333e0770cd724420.jpg" data-href="" data-file-md5="004f6cfb86ebf64944fb50a7356b58f7" data-file-len="132072" style="width: 50%;"></p><p>本项目使用<strong>两块运行Pluto兼容固件的SDR</strong>接收并解析电磁波，<strong>基于MATLAB进行开发</strong>，包含：</p><ul><li>信息波持续接收与解析；</li><li>正式比赛一级、二级干扰波解析与密钥回传；</li><li>三级干扰波波源配置、手动收发和物理层测试；</li><li>双接收板掉线后的自动接管；</li><li>裁判系统比赛状态驱动；</li><li>解析结果缓存、有效性与新鲜度管理；</li><li>向裁判系统及己方机器人发送和利用解析结果；</li><li>双Pluto Web实时调试与频谱诊断。</li></ul><p>比赛中实际使用的SDR是<strong>微相E310</strong>。选择它主要是因为该板具有<strong>2T2R</strong>能力，方便后续继续进行MIMO方向的开发；当前项目本身仍按单接收通道工作，并不强制使用E310。<strong>原则上，只要SDR能够运行Pluto兼容固件，并能被libiio和MATLAB Pluto支持包识别，就可以使用。</strong></p><p style="text-align: center;"><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/be7b15ff5183471e9e6f2adf9f3a4c141787410781041/Option AB Decision Flow-2026-08-22-145930.png" alt="Option AB Decision Flow-2026-08-22-145930.png" data-href="" data-file-md5="3ba3958d7922fad06fa9a1da1200fffa" data-file-len="346226" style=""></p><p>算法流程如上图所示，具体不在本帖赘述。仓库中已经提供了完整README、解析算法说明、通信与数据利用说明、Linux部署教程、Web调试工具和测试脚本，开袋即食。</p><p><em><strong>开源地址： </strong></em><a href="https://github.com/Breeze-by/FDUEGA_RM2026_Waves_Analyze.git" target="_blank"><em><strong>https://github.com/Breeze-by/FDUEGA_RM2026_Waves_Analyze.git</strong></em></a><em><strong> </strong></em></p><h2 style="text-align: left;"><strong>下游功能展示</strong></h2><p><strong>1、三级干扰波解析能力</strong></p><p>场均14秒解出三级干扰波。一个比较好的方法是提前预热pluto，因为pluto启动需要时间。</p><p style="text-align: center;"><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e064f2a27b264cbfab7c5b9329c394901787410930200/场均14秒解出三级干扰波.png" alt="场均14秒解出三级干扰波.png" data-href="" data-file-md5="0ec1c47f92e5737ace61c311aa43dc29" data-file-len="9333019" style="width: 50%;"></p><p><strong>2、敌方无人机发弹量与剩余经济实时显示</strong></p><p>信息波解析得到敌方空中机器人的允许发弹量，以及敌方剩余经济后，会通过裁判系统交互消息发送给己方工程机器人。</p><p>工程操作手闲的时候报一下数据，以便做战术安排。</p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="aafc86da945fbf94a0290450e168b129" data-file-len="7451652" data-file-name="敌方无人机发弹量、剩余经济实时显示.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/fde7e599a163482ca582cbaab795ecd31787410988852/敌方无人机发弹量、剩余经济实时显示.mp4" type="video/mp4"/></video>
+</div><p><strong>3、敌方血量、增益和发弹量动态显示</strong></p><p>整理敌方英雄、工程、3号、4号和哨兵的血量百分比（出现过的最高血量即为满血血量）、允许发弹量、防御、负防御以及可瞄准状态（是否无敌）。这些数据会发送给己方机器人，并结合自瞄当前识别到的敌方机器人ID，在动态UI上显示对应目标的信息。</p><p>操作手看对方血量状态和允许发弹量就知道这波打不打得过。</p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="22002923030b539e3afb35e4fe3b5ff7" data-file-len="38159737" data-file-name="敌方血量、增益、发弹量实时显示.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/41eb4af45bf446b0a41b55f8dc3a41cd1787411263608/敌方血量、增益、发弹量实时显示.mp4" type="video/mp4"/></video>
+</div><p><strong>4、哨兵不打无敌目标</strong></p><p>根据解析出来的敌方机器人的增益、姿态和主状态，计算各目标当前是否可以被攻击，并将结果持续发送给己方哨兵。哨兵收到状态后，会过滤无敌或不可攻击目标，避免在无效目标上浪费弹量和错过timing。</p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="c4be4b64f5674f823bf0327d0e3751c3" data-file-len="8122476" data-file-name="哨兵不打无敌目标.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c2b27867bbcc47618d40ce6d6c56d4e51787411353925/哨兵不打无敌目标.mp4" type="video/mp4"/></video>
+</div><p><strong>5、哨兵过洞路径判断</strong></p><p>敌方坐标除了用于雷达向裁判系统发送位置，还可以继续用于战术决策。我们根据敌方机器人在两个洞口附近的分布，判断哪一侧更加空旷，并把结果提供给哨兵。哨兵会优先选择威胁更小的洞口进入敌方半区。</p><div data-w-e-type="video" data-w-e-is-void>
+<video poster="" controls="true" width="auto" height="auto" data-file-md5="4d47f040b49097077c661273d7300c7a" data-file-len="22631116" data-file-name="哨兵过洞路径判断.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/d0400ee020314adca124110d5ea827671787411396478/哨兵过洞路径判断.mp4" type="video/mp4"/></video>
+</div><p><strong>6、双Pluto Web实时调试</strong></p><p>项目保留了Web实时调试页面，可以同时观察两块SDR的：</p><ul><li>实时频谱和瀑布图；</li><li>接收增益、信号强度和ADC削顶情况；</li><li>SNR与频偏估计；</li><li>Access Code候选数量；</li><li>有效OTA包与协议帧数量；</li><li>五类信息波命令的解析和更新情况。</li></ul><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/fef1c913757b4ea3811dde21e61376e31787411463654/web端调试页面.jpg" alt="web端调试页面.jpg" data-href="" data-file-md5="087d8aa77cff4cd2527851e2597c75bd" data-file-len="184999" style="width: 100%;"/></p><h2>BUG记录</h2><p>个人认为解析信息波这个项目并非难在解析算法本身，而是<strong>难在如何使用以及和裁判系统“干架”😭</strong>。因此向大家提供了许多我们利用解析得到的信息的案例，仅供大家参考。下面列一下本赛季遇到的一些Bug，说不定大家也卡在这里。</p><ul><li><strong>先吐槽一下规则改动，懂的人已经哭了</strong>，RRC都做完了，还在和硬件组研究怎么搞前端滤波，怎么突然就全改了。但是虽然看起来好像可能会有频谱泄露导致重叠，但实际并未重叠。二级干扰波和信息波虽无gap，但是干扰波的能量较高可以直接解到三级再解信息波。</li><li>发送到裁判系统的包，以及裁判系统发到机器人的包（例如多机通信0x0301等）都是WIFI传输，实测<strong>丢包严重</strong>。学生版丢包率约80%，赛场亦有丢包。因此出现过以1Hz频率发送的包短则立刻收到，长则几十秒收一次，导致机器人收不到多机通信包，以及密钥和双倍易伤无法触发。<strong>解决方法：提高发送频率，让多机通信链路尽量用满30Hz的限制。</strong></li><li>裁判系统是按顺序处理收到的包，处理速度有限，因此如果过快、过早地发送串口包给裁判系统，比如比赛还没开始就给裁判系统发，会出现比赛开始时发的包，在比赛最后几秒结束时才会响应，这就是裁判系统端串口堵塞导致的。<strong>解决方法：比赛开始后才开始向裁判系统发送包，并且发送频率严格遵照通信协议要求。</strong></li><li>Pluto无法软改射频参数，<strong>需要clear重启</strong>后才能设置参数到硬件上生效。</li><li>八木天线的近场环境较为复杂，对位置要求较为苛刻，个人觉得不太好用，区赛用过效果不佳；吸盘天线更是狗都不用；最后选择的是<strong>433MHz的羊角贴片天线</strong>，贴着官方发射源放置即可。</li><li>自己测试时可以搞几个便宜的SDR，<strong>两个当官方发射源发，两个自己的收</strong>，便于测试。国赛前没这条件，吃了很多亏。</li></ul><h2>开源与致谢</h2><p><strong>开源地址： </strong><a href="https://github.com/Breeze-by/FDUEGA_RM2026_Waves_Analyze.git" target="_blank"><strong>https://github.com/Breeze-by/FDUEGA_RM2026_Waves_Analyze.git</strong></a><strong> </strong></p><p><strong>如果觉得项目有帮助，欢迎给仓库点一个Star！</strong></p><p><strong>开源者：</strong>复旦大学星云EGA战队 • 包毅</p><p><strong>特别鸣谢：</strong>复旦大学星云EGA战队雷达组（尹晓文、林益民、黄宇瀚、傅玉然、王宣）、复旦大学星云EGA战队 • 谢家伟、复旦大学星云EGA战队 • 段金生</p><p><strong>同济大学SuperPower战队、北京理工大学追梦战队、深圳大学RobotPilots战队</strong>的相关项目负责人在我开发过程中提供了许多帮助，非常感谢！</p><p style="text-align: center;"><em><strong>希望星云EGA越来越好！</strong></em></p>
+  </div>
+</article>

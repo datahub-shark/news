@@ -1,0 +1,33 @@
+<!-- METADATA
+Tiêu đề: ros2-web-desktop：浏览器远程开发查看 RViz2 / rqt，无需 X11 转发
+Chuyên mục: AI & ROS
+Tác giả: 通讯信息 email:gavinxleele@gmail.com
+Ảnh bìa: https://raw.githubusercontent.com/lizuju/ros2-web-desktop/ros2-humble/docs/images/demo.gif
+Nguồn: https://bbs.robomaster.com/article/1884006
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p<img src="https://raw.githubusercontent.com/lizuju/ros2-web-desktop/ros2-humble/docs/images/demo.gif" alt="ros2-web-desktop demo" data-href="https://github.com/lizuju/ros2-web-desktop" data-file-md5="" data-file-len="" style=""/</p<p大家好，我最近把一个调 ROS 2 图形界面的小工具整理开源了：ros2-web-desktop。</p<pGitHub：<a h
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: ros2-web-desktop：浏览器远程开发查看 RViz2 / rqt，无需 X11 转发. Ứng dụng trong phân mảng AI & ROS.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>ros2-web-desktop：浏览器远程开发查看 RViz2 / rqt，无需 X11 转发</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1884006" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 通讯信息 email:gavinxleele@gmail.com</p>
+    <p><strong>Chuyên mục:</strong> AI & ROS</p>
+  </div>
+  
+  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
+    <img src="https://raw.githubusercontent.com/lizuju/ros2-web-desktop/ros2-humble/docs/images/demo.gif" alt="ros2-web-desktop：浏览器远程开发查看 RViz2 / rqt，无需 X11 转发" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  
+  <hr>
+  <div class="article-body">
+<p><img src="https://raw.githubusercontent.com/lizuju/ros2-web-desktop/ros2-humble/docs/images/demo.gif" alt="ros2-web-desktop demo" data-href="https://github.com/lizuju/ros2-web-desktop" data-file-md5="" data-file-len="" style=""/></p><p>大家好，我最近把一个调 ROS 2 图形界面的小工具整理开源了：ros2-web-desktop。</p><p>GitHub：<a href="https://github.com/lizuju/ros2-web-desktop" target="_blank">https://github.com/lizuju/ros2-web-desktop</a></p><p>它解决的问题很具体：远程 Ubuntu / ROS 2 设备上跑 RViz2、rqt、rqt_graph、rqt_image_view，本地 Mac / Windows / Linux 只用浏览器和 SSH 查看并终端开发，不用 X11 转发，也不用本地安装 ROS、RViz、VNC 客户端。</p><p><strong>核心特点</strong></p><ul><li>本地轻量：浏览器 + SSH 即可。</li><li>保留原生 RViz2 / rqt 调试习惯，不用迁移配置。</li><li>默认 SSH 隧道，不直接暴露 noVNC 服务。</li></ul><p><strong>对比</strong><br>Foxglove 更适合数据面板和录包回放；ros2-web-desktop 更适合直接打开原生 RViz2 / rqt。</p><p>ToDesk / NoMachine 更像完整远程桌面；这个项目更偏 ROS 2 开发调试，本地不用客户端，也不需要账号体系。</p><p><strong>RoboMaster 工作流</strong><br><br>写自瞄和导航算法时，用 VS Code Remote SSH 改代码和跑 launch，再用这个工具看和操作相机图像、检测结果、tf 和调试 marker。</p><p>也可以在浏览器里操作 map、LaserScan、PointCloud、RobotModel、TF、costmap 和规划路径，终端里直接跑 ros2 topic list、rqt_graph 排查。</p><p>安装、启动、自检、断连命令都在 README 和 Releases 里。<br><br>如果有帮助，欢迎在 GitHub 点个 Star，也欢迎 issue / PR。</p>
+  </div>
+</article>

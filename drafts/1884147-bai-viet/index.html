@@ -1,0 +1,30 @@
+<!-- METADATA
+Tiêu đề: + 开发计划
+Chuyên mục: Cơ khí
+Tác giả: 陈厚然
+Ảnh bìa: 
+Nguồn: https://bbs.robomaster.com/article/1884147
+Tên nguồn: RoboMaster BBS
+Tóm tắt: <p<span style="font-size: 19p;"<strong紧赶慢赶，也是成功的开源了这依托石山👍</strong</span<span style="font-size: 19p;"👍👍👍👍</span</p<h1不调！好不？发布！</h1<p<span style="font-size: 19p;"<strong本次开源仓库更新支持RMUC V1.4+版规则的射频设计要求</strong</span</p<p<span style="font-size: 16p;"<strong（5/22晚更新：笑死，一觉睡醒才发现这篇文章里面没放仓库地址，熬夜熬迷糊了属于是）<
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: + 开发计划. Ứng dụng trong phân mảng Cơ khí.
+Tệp đính kèm: Không có
+Trạng thái: DRAFT
+HƯỚNG DẪN: 
+- Bạn có thể chỉnh sửa tự do Tiêu đề, Tóm tắt, Gợi ý ứng dụng và Nội dung bên dưới.
+- Tệp đính kèm (.zip, .pdf...) nằm trong thư mục attachments/ cùng cấp.
+- Khi duyệt xong bài này, đổi dòng "Trạng thái: DRAFT" thành "Trạng thái: READY" rồi bấm publish.bat để đẩy lên web!
+-->
+
+<article class="robot-ideas-article">
+  <h1>+ 开发计划</h1>
+  <div class="article-meta">
+    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1884147" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 陈厚然</p>
+    <p><strong>Chuyên mục:</strong> Cơ khí</p>
+  </div>
+  
+  
+  <hr>
+  <div class="article-body">
+<p><span style="font-size: 19px;"><strong>紧赶慢赶，也是成功的开源了这依托石山👍</strong></span><span style="font-size: 19px;">👍👍👍👍</span></p><h1>不调！好不？发布！</h1><p><span style="font-size: 19px;"><strong>本次开源仓库更新支持RMUC V1.4+版规则的射频设计要求</strong></span></p><p><span style="font-size: 16px;"><strong>（5/22晚更新：笑死，一觉睡醒才发现这篇文章里面没放仓库地址，熬夜熬迷糊了属于是）</strong></span></p><p><span style="font-size: 19px;"><strong> &nbsp; &nbsp;开源仓库地址： </strong></span><a href="https://github.com/dfdtc/RMUC2026_RF" target="_blank" style="text-align: start;">https://github.com/dfdtc/RMUC2026_RF</a><span style="color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); font-size: 16px;"> </span></p><p><span style="font-size: 16px;"><strong>（其实和一阶段开源是一个仓库，不过目录结构进行了很多修改）</strong></span></p><p><strong>本文中"~/" = "/RMUC2026/Software/V1_4/"</strong></p><p><br></p><h3>软件：</h3><h4>Tips：</h4><p> &nbsp; &nbsp;考虑到GNURadio采用的GPL-3.0协议的传染性，本项目代码同样基于GPL-3.0协议开源。</p><p> &nbsp; &nbsp;本项目中使用了来自华南农业大学的部分开源代码，涉及TX的数据帧生成及其配套交互代码<span id="referenceDom-1" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/1882730/1" data-order="1">[1]</span>，这里特别感谢<span style="color: rgba(0, 0, 0, 0.85); background-color: rgb(255, 255, 255);">华南师范大学PIONEER。</span></p><p> &nbsp; &nbsp;因为赶工，本项目中测试发射部分暂未测试，仅供参考，谨慎使用，可能去去问问重理哥们是否打算开源他们采集的波源信号。</p><p> &nbsp; &nbsp;同样的，很多东西都没完全设计，希望各位大佬测试并多提issues。</p><p> &nbsp; &nbsp;不提供对于来自其他开源项目的代码的保修与技术支持。</p><p> &nbsp; &nbsp;本仓库维护者（本人）的Git水平很差，如果发生什么意外库爆炸事件，请自行检索历史记录。</p><p> &nbsp; &nbsp;本项目大量使用AI生成代码，请谨慎使用。</p><h4>本项目包含：</h4><h5> &nbsp; &nbsp;TX：模拟发射代码</h5><p> &nbsp; &nbsp;包含数据组包，空口包生成，GFSK调制发射，射频参数需要自行调整，bw和可以freq可以推送，但其中的access code因为block的限制，无法推送修改，也没有做幅度推送（TODO）（已经设置好protocol format，只需在formatter里面改一下对象就行了）</p><p> &nbsp;（Tips：本部分暂未测试，谨慎使用）</p><h5> &nbsp; &nbsp;RX：接收解调相关代码</h5><p> &nbsp; &nbsp; &nbsp; &nbsp;其中包含使用预制的GFSK Demod模块完成的解调流，以及自行完整实现的fm解调到时钟恢复（预制GFSK demod在流图中被disable掉了，需要可以打开来，如果找不到请检查是否hide disable blocks）</p><p> &nbsp; &nbsp; &nbsp; &nbsp;以及zmq_decoder.py，这个模块接收GNURadio解调来自流图的zmq publish信息，并解码输出信息（Tips，需要重写output_result函数实现自定义的输出操作，目前仅为print结果；且这个脚本虽然设计为通用解码，但是仅测试了干扰波密码帧解码，谨慎推广使用）</p><h5> &nbsp; &nbsp;Tools：可调用的交互式工具</h5><p> &nbsp; &nbsp; &nbsp; &nbsp;如波源参数分发工具para_distro，不过RX数据帧解析的脚本在~/RX里面</p><h5> &nbsp; &nbsp;Lab： 一些测试的代码</h5><p> &nbsp; &nbsp; &nbsp; &nbsp;里面的test_ssb_fm是一个测试流图，设计计划通过滤波器过滤掉干扰源的两个符号和广播源与干扰源相邻的符号，只接收广播源离干扰较远端符号，将2GFSK退化为一个OOK来接收，模拟流里面还可以用，但是实际流不太能解调，很考验信噪比。</p><h5> &nbsp; &nbsp;decode_lib：数据帧解码工具库</h5><p> &nbsp; &nbsp; &nbsp; &nbsp;但是目前没引用到，仅供技术参考，相关代码在zmq_decoder里面有更适合流处理的实现</p><h4>用法：</h4><p> &nbsp; &nbsp;解码相关代码的参数可以经由~/tools/para_distro.py进行分发，该脚本直接运行为一个测试性质的数据分发系统，初始化为蓝方波源列表，每隔15秒对干扰源参数进行升级，最后关闭参数分发，你也可以恢复被注释的CLI param接收系统。</p><p> &nbsp; &nbsp;其设计使用方法，应该是import其中的类，并在您的雷达决策代码中调用，初始化ParaDistro类需要填入队伍颜色，其会导入JSON存储的波源参数，并根据指定的队伍颜色选择相关波源列表，接下来初始化一个zmq publisher并bind一个地址和端口；调用send_parameters（inter_level）将会将本方广播源和所选本方干扰源的波源参数推送出去一次；或者配置Auto_Distributor，start之后，它会自动连续推送所选广播源和干扰源信息，通过update_inter_level进行干扰源等级更改。</p><p> &nbsp; &nbsp;目前解调程序还是需要分为两个代码，分别接收干扰源和广播源，不过仅参数不同（zmq接收模块配置为“boardcast”或者“inter”，可以选择本模块是接收广播源还是干扰源的参数）；</p><p> &nbsp; &nbsp;注意需要设置plutosdr的地址，默认使用file source对预先录制的基带采样信号进行本地测试解调，plutosdr需要去enable一下那个plutosdr source；filesink设计为接收解调并repack之后的字节流，如果不需要留存用于分析则可以disable。</p><p> &nbsp; &nbsp;如果搞不明白zmq分发工具，您也可以复制一大堆副本，然把里面的参数修改为相关每种干扰源和广播源的参数，这套系统在脱离zmq分发主机的情况下会保持“cent_freq”, "bw", "access_code"变量初始值</p><p> &nbsp; &nbsp;解码程序是rx里面的zmq_decoder.py，这个模块接收GNURadio解调来自流图的zmq publish信息，并解码输出信息（Tips，需要重写output_result函数实现自定义的输出操作，目前仅为print结果；且这个脚本虽然设计为通用解码，但是仅测试了干扰波密码帧解码，谨慎推广使用）</p><p><br></p><h3>硬件：</h3><p> &nbsp; &nbsp;开源了一个LNA，具体请见对应文件夹里面的readme，这里不再赘述，请使用kicad10打开工程文件，注意外壳还未完成，目前模型有问题</p><p><br></p><h3>TODO：</h3><p><strong> &nbsp; &nbsp;肯定有bug，肯定不稳定，接着修</strong></p><p><strong> &nbsp; &nbsp;LNA壳子要画完</strong></p><p><strong> &nbsp; &nbsp;接着完善外围程序脚本（如zmq_decoder）</strong></p><p><strong> &nbsp; &nbsp;接着测试</strong></p><p><br></p><p><strong>不写了，发布！</strong></p>
+  </div>
+</article>
