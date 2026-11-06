@@ -28,11 +28,12 @@ function doGet(e){const p=e&&e.parameter||{};if(p.view==='admin')return HtmlServ
  return json_({ok:true,apiVersion:2,articles:rows_().map(r=>r.article).filter(a=>a.status==='published').map(publicArticle_).sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt))});
  }catch(e){console.error(e);return json_({ok:false,error:'Không đọc được dữ liệu bài viết.'});}}
 function doPost(e){try{const raw=e&&e.postData&&e.postData.contents||'';if(raw.length>800000)throw Error('Yêu cầu quá lớn.');const req=JSON.parse(raw);return json_(adminApi(req.action,req.payload));}catch(e){return json_({ok:false,error:e.message});}}
-function publicArticle_(a){return {id:a.id,title:a.title,summary:a.summary,category:a.category,tags:a.tags,robotIdea:a.robotIdea,sourceName:a.sourceName,sourceUrl:a.sourceUrl,publishedAt:a.publishedAt};}
+function publicArticle_(a){return {id:a.id,title:a.title,summary:a.summary,category:a.category,tags:a.tags,coverImage:a.coverImage||'',robotIdea:a.robotIdea,sourceName:a.sourceName,sourceUrl:a.sourceUrl,publishedAt:a.publishedAt};}
 function metadata_(a){const {content,html,...meta}=a;return meta;}
 function escapeHtml_(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function readHtml_(a){if(a.fileId)return DriveApp.getFileById(a.fileId).getBlob().getDataAsString('UTF-8');return '<p>'+escapeHtml_(a.content).replace(/\n/g,'<br>')+'</p>';}
 function ensureFolder_(){const props=properties_();const id=props.getProperty('HTML_FOLDER_ID');if(id)return DriveApp.getFolderById(id);const folder=DriveApp.createFolder('Robot Ideas · Private HTML');folder.setSharing(DriveApp.Access.PRIVATE,DriveApp.Permission.NONE);props.setProperty('HTML_FOLDER_ID',folder.getId());return folder;}
+function ensureCoverFolder_(){const props=properties_();const id=props.getProperty('COVER_FOLDER_ID');if(id){try{return DriveApp.getFolderById(id);}catch(e){}}const folder=DriveApp.createFolder('Robot Ideas · Cover Images');try{const access=(DriveApp.Access&&DriveApp.Access.ANYONE_WITH_LINK)?DriveApp.Access.ANYONE_WITH_LINK:DriveApp.Access.PRIVATE;const perm=(DriveApp.Permission&&DriveApp.Permission.VIEW)?DriveApp.Permission.VIEW:DriveApp.Permission.NONE;folder.setSharing(access,perm);}catch(e){}props.setProperty('COVER_FOLDER_ID',folder.getId());return folder;}
 function digest_(value){return Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,value));}
 function random_(){return Utilities.getUuid()+Utilities.getUuid();}
 function locked_(fn){const lock=LockService.getScriptLock();lock.waitLock(10000);try{return fn();}finally{lock.releaseLock();}}
@@ -71,7 +72,20 @@ function save_(payload){
  const title=clean_(input.title,240),summary=clean_(input.summary,1000);if(!title)throw Error('Nhập tiêu đề.');
  let html;if(typeof input.html==='string')html=input.html.trim();else if(typeof input.content==='string')html='<p>'+escapeHtml_(input.content).replace(/\n/g,'<br>')+'</p>';else html=existing?readHtml_(existing.article):'';
  if(html.length>500000)throw Error('HTML vượt giới hạn 500.000 ký tự.');if(status==='published'&&(!strip_(html)||!summary))throw Error('Bài công khai cần nội dung và tóm tắt.');
- const now=new Date().toISOString();const createdAtInput=input.createdAt&&!isNaN(Date.parse(input.createdAt))?new Date(input.createdAt).toISOString():now;const publishedAtInput=input.publishedAt&&!isNaN(Date.parse(input.publishedAt))?new Date(input.publishedAt).toISOString():null;const article={id:existing?input.id:Utilities.getUuid(),title,summary,format:'html',category:CATEGORIES_.includes(input.category)?input.category:'Khác',tags:clean_(input.tags,500),robotIdea:clean_(input.robotIdea,5000),sourceName:clean_(input.sourceName,200),sourceUrl:https_(input.sourceUrl),status,version:existing?existing.article.version+1:1,createdAt:existing?existing.article.createdAt:createdAtInput,updatedAt:now,publishedAt:status==='published'?(existing&&existing.article.publishedAt||publishedAtInput||now):publishedAtInput};
+ const now=new Date().toISOString();const createdAtInput=input.createdAt&&!isNaN(Date.parse(input.createdAt))?new Date(input.createdAt).toISOString():now;const publishedAtInput=input.publishedAt&&!isNaN(Date.parse(input.publishedAt))?new Date(input.publishedAt).toISOString():null;
+ let coverImage=clean_(input.coverImage,500000);
+ if(coverImage.startsWith('data:image/')){
+  try{
+   const comma=coverImage.indexOf(','),mime=coverImage.slice(5,coverImage.indexOf(';'));
+   const base64=coverImage.slice(comma+1);const bytes=Utilities.base64Decode(base64);
+   const ext=mime.includes('png')?'.png':(mime.includes('webp')?'.webp':(mime.includes('gif')?'.gif':'.jpg'));
+   const blob=Utilities.newBlob(bytes,mime,(existing?input.id:(input.id||Utilities.getUuid()))+'-cover'+ext);
+   const coverFile=ensureCoverFolder_().createFile(blob);
+   try{const access=(DriveApp.Access&&DriveApp.Access.ANYONE_WITH_LINK)?DriveApp.Access.ANYONE_WITH_LINK:DriveApp.Access.PRIVATE;const perm=(DriveApp.Permission&&DriveApp.Permission.VIEW)?DriveApp.Permission.VIEW:DriveApp.Permission.NONE;coverFile.setSharing(access,perm);}catch(e){}
+   coverImage='https://drive.google.com/thumbnail?id='+coverFile.getId()+'&sz=w1000';
+  }catch(e){console.warn('Cover upload: '+e.message);}
+ }
+ const article={id:existing?input.id:Utilities.getUuid(),title,summary,format:'html',category:CATEGORIES_.includes(input.category)?input.category:'Khác',tags:clean_(input.tags,500),coverImage:clean_(coverImage,2000),robotIdea:clean_(input.robotIdea,5000),sourceName:clean_(input.sourceName,200),sourceUrl:https_(input.sourceUrl),status,version:existing?existing.article.version+1:1,createdAt:existing?existing.article.createdAt:createdAtInput,updatedAt:now,publishedAt:status==='published'?(existing&&existing.article.publishedAt||publishedAtInput||now):publishedAtInput};
  if(article.sourceUrl&&rows_().some(r=>r.article.id!==article.id&&r.article.sourceUrl===article.sourceUrl))throw Error('URL nguồn đã có trong thư viện.');
  // New private revision first; never overwrite a file readers may already be using.
  const file=ensureFolder_().createFile(Utilities.newBlob(html,'text/html',article.id+'-v'+article.version+'.html'));

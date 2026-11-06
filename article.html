@@ -170,6 +170,9 @@
     </div>
 
     <article id="articleContainer" hidden>
+      <div id="articleCoverWrap" style="margin-bottom:24px;border-radius:8px;overflow:hidden;border:1px solid var(--line);max-height:420px;" hidden>
+        <img id="articleCoverImg" src="" alt="Ảnh bìa" style="width:100%;height:100%;object-fit:cover;display:block;">
+      </div>
       <div class="article-header">
         <div class="article-meta-bar">
           <span id="articleCategory" class="tag" style="font-size:11px;">Chuyên mục</span>
@@ -274,6 +277,13 @@
       }) : '';
       $('articleDate').textContent = dateStr ? `Ngày đăng: ${dateStr}` : 'Cộng đồng kỹ sư';
       $('articleSource').textContent = `Nguồn: ${a.sourceName || 'Robot Ideas'}`;
+
+      if (a.coverImage) {
+        $('articleCoverWrap').hidden = false;
+        $('articleCoverImg').src = a.coverImage;
+      } else {
+        $('articleCoverWrap').hidden = true;
+      }
 
       if (a.robotIdea) {
         $('robotIdeaBox').hidden = false;

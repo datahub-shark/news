@@ -30,6 +30,7 @@ async function updateArticle(id, articleData) {
       sourceUrl: articleData.sourceUrl || current.article.sourceUrl,
       title: articleData.title,
       summary: articleData.summary,
+      coverImage: articleData.coverImage || current.article.coverImage || '',
       robotIdea: articleData.robotIdea,
       html: articleData.html
     }
@@ -51,6 +52,7 @@ const robomarkData = {
   category: 'Thị giác máy',
   sourceName: 'RoboMaster BBS (AIM Lab)',
   sourceUrl: 'https://bbs.robomaster.com/article/1972431',
+  coverImage: 'https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/3adff5fc389b42269a9041284d7285511793168673738/03-model-eval.png',
   summary: 'Giải pháp ứng dụng các mô hình ngôn ngữ thị giác lớn (VLM như GLM-5.3, Claude Sonnet) qua giao thức OpenAI / vLLM để tự động gán nhãn sơ bộ (pre-annotation) cho dữ liệu hình ảnh robot. Giúp giảm hơn 80% thời gian vẽ nhãn thủ công, hỗ trợ kiểm tra nhãn góc giáp xe 4-8 điểm và xuất dataset trực tiếp sang chuẩn YOLOv8, Darknet, COCO.',
   robotIdea: 'Áp dụng vào pipeline huấn luyện mô hình nhận diện cho xe tự hành (AGV/AMR) và robot thi đấu. Tận dụng sức mạnh suy luận của mô hình ngôn ngữ thị giác lớn để vẽ khung ứng viên tự động, kỹ sư chỉ cần ngồi kiểm tra và tinh chỉnh lại các góc lệch, tăng tốc độ hoàn thiện dataset từ vài tuần xuống vài ngày.',
   html: `
@@ -151,6 +153,7 @@ const omniWheelData = {
   category: 'Robot di động',
   sourceName: 'RoboMaster BBS (铃谷Suzu)',
   sourceUrl: 'https://bbs.robomaster.com/article/1972643',
+  coverImage: 'https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/8ed9054d5f6c4facaf249d6bddeddefc1792746121460/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-10-23%20170145.png',
   summary: 'Giải pháp thiết kế cụm bánh xe đa hướng (Omni wheel) nhúng trực tiếp động cơ DJI M3508 nguyên bản mà không cần gia công lại hộp giảm tốc. Giúp hạ thấp trọng tâm robot, thu gọn kích thước cụm bánh xe và tối ưu hóa các chi tiết cơ khí để có thể tự gia công qua in 3D kết hợp cắt CNC tấm kim loại chi phí thấp.',
   robotIdea: 'Ứng dụng trong việc chế tạo khung gầm robot di động đa hướng (Omni mobile robot) cho các robot thi đấu hoặc xe tự hành AGV trong phòng Lab. Giúp thu gọn kích thước cụm bánh xe, hạ thấp trọng tâm khung gầm và chế tạo dễ dàng bằng phương pháp gia công tấm CNC kết hợp in 3D.',
   html: `
@@ -164,11 +167,10 @@ const omniWheelData = {
   </header>
 
   <div class="resource-box" style="background:#f4fbf7;border:1px solid #2e7d32;padding:16px;border-radius:8px;margin:20px 0;">
-    <h3 style="margin-top:0;color:#2e7d32;">📁 Tệp thiết kế cơ khí 3D đính kèm</h3>
-    <p style="margin:0 0 10px;font-size:14px;color:#1b5e20;">File bản vẽ lắp ráp và mô hình CAD 3D (.STEP, SolidWorks) đã được tải sẵn về máy của anh:</p>
+    <h3 style="margin-top:0;color:#2e7d32;">📁 Tệp thiết kế cơ khí 3D CAD đính kèm</h3>
     <ul style="margin-bottom:0;line-height:1.8;">
-      <li><strong>Đường dẫn file trên máy:</strong> <code>G:\\My Drive\\Robot Ideas Articles\\1972643-banh-omni-motor-3508\\attachments\\内嵌全向轮1.2.zip</code> (Dung lượng: 9.94 MB)</li>
-      <li><strong>Bao gồm:</strong> Toàn bộ chi tiết gia công tấm kim loại, file in 3D nắp bánh con lăn và file lắp ráp hoàn chỉnh.</li>
+      <li><strong>Link tải công khai trực tiếp:</strong> <a href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/4da01f2023f84829959b9362b7c855c61793281373157/%E5%86%85%E5%B5%8C%E5%85%A8%E5%90%91%E8%BD%AE1.2.zip" target="_blank" rel="noopener" style="font-weight:bold;color:#2e7d32;">Tải file 内嵌全向轮1.2.zip (9.94 MB) ↗</a></li>
+      <li><strong>Bao gồm:</strong> Toàn bộ chi tiết gia công tấm kim loại, file in 3D nắp bánh con lăn và file lắp ráp hoàn chỉnh (.STEP, SolidWorks).</li>
     </ul>
   </div>
 
@@ -190,9 +192,18 @@ const omniWheelData = {
       <li><strong>Tối ưu hóa gia công:</strong> Các chi tiết khung đỡ được thiết kế thành các tấm phẳng (Sheet metal) có thể cắt laser CNC đơn giản, các gối đỡ con lăn nhỏ có thể in 3D bằng nhựa kỹ thuật chịu lực.</li>
     </ul>
 
-    <h2>3. Phân tích kết cấu lắp ráp chi tiết</h2>
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/8ed9054d5f6c4facaf249d6bddeddefc1792746121460/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-10-23%20170145.png" alt="Mô hình 3D cụm bánh xe Omni nhúng motor 3508" style="max-width:100%;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 1: Mô hình 3D cụm bánh xe đa hướng sau khi tối ưu hóa kết cấu</em></p>
+    </div>
+
+    <h2>3. Phân tích kết cấu lắp ráp chi tiết (Exploded View)</h2>
     <p>Dưới đây là hình vẽ phân rã (Exploded view) toàn bộ các chi tiết cấu thành cụm bánh xe:</p>
-    <p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/f91029bf63fd48c5a73b769791d80d801792418589862/微信图片_2026-10-19_220252_287.jpg" alt="Bản vẽ phân rã cụm bánh xe Omni nhúng motor 3508" style="max-width:100%;border-radius:6px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.1);"></p>
+    
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/095c52ccf6ff4c15ad2eaec93a2dbf4f1792898030898/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202026-10-24%20223321.png" alt="Bản vẽ phân rã chi tiết cụm bánh xe đa hướng" style="max-width:100%;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 2: Bản vẽ bóc tách từng chi tiết (Exploded view) thể hiện rõ vị trí lắp đặt motor DJI M3508</em></p>
+    </div>
 
     <p><strong>Nguyên lý chịu lực:</strong></p>
     <ol>
@@ -200,6 +211,11 @@ const omniWheelData = {
       <li>Toàn bộ tải trọng tĩnh và xung lực khi robot va chạm được truyền qua vòng bi cỡ lớn đỡ ngoài, không dồn trực tiếp làm cong trục motor.</li>
       <li>Các con lăn phụ (Sub-rollers) được xếp sole 2 hàng với góc lệch tính toán chính xác để khi bánh xe quay tròn, bề mặt tiếp xúc với mặt đất luôn liên tục, giảm thiểu tối đa hiện tượng rung lắc (vibration) cho cảm biến IMU.</li>
     </ol>
+
+    <div style="text-align:center;margin:24px 0;">
+      <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a4ad9e738e014f90a505dd951377004d1792745813891/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20261023165423_15_459.jpg" alt="Thử nghiệm xe Sentry thực tế trên sân đấu" style="max-width:100%;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <p style="font-size:0.85em;color:#666;margin-top:6px;"><em>Hình 3: Xe robot thực tế lắp đặt cụm 4 bánh đa hướng chạy thử nghiệm</em></p>
+    </div>
 
     <h2>4. Lưu ý về vật liệu chế tạo</h2>
     <table style="width:100%;border-collapse:collapse;margin:20px 0;font-size:14px;">
@@ -244,6 +260,7 @@ const motorbenchData = {
   category: 'Điều khiển',
   sourceName: 'RoboMaster BBS (wbz2006)',
   sourceUrl: 'https://bbs.robomaster.com/article/1971904',
+  coverImage: 'https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/ef7d49f3d6244a59b7395bff229315b31792844524622/overview-photo.png',
   summary: 'Tôi tổng hợp giải pháp bàn thử nghiệm và cân chỉnh động cơ RM-MotorBench phục vụ phòng Lab: Cho phép thêm động cơ trực tiếp trên giao diện Web UI theo ID gạt mã ESC, đặt tốc độ vòng quay và gửi lệnh qua USB CDC xuống bo điều khiển để lái bus CAN. Điểm mạnh vượt trội là thay đổi động cơ và tinh chỉnh PID tức thì mà không cần sửa code hay nạp lại firmware, đồng thời hiển thị đồ thị thời gian thực về tốc độ, dòng điện và nhiệt độ.',
   robotIdea: 'Áp dụng ngay cho phòng Lab hoặc xưởng chế tạo robot: Căn chỉnh thông số PID và kiểm tra tải thực tế cho các dòng động cơ DJI (M3508, M2006, GM6020) và Đạt Diệu Damiao (DM4310, DM8009P). Tiết kiệm hàng chục giờ nạp code lặp đi lặp lại khi kiểm tra cơ cấu nạp đạn, bánh đà hoặc khớp quay robot.',
   html: `
@@ -349,12 +366,24 @@ const motorbenchData = {
   `.trim()
 };
 
+// 4. Dữ liệu chuẩn hóa bài Hiện tượng rung IMU bánh đà
+const imuData = {
+  title: 'Hiện tượng rung IMU do bánh đà ma sát: Bản chất toán học và 4 giải pháp triệt tiêu dao động giả',
+  category: 'Điều khiển',
+  sourceName: 'RoboMaster BBS (红竹)',
+  sourceUrl: 'https://bbs.robomaster.com/article/1972619',
+  coverImage: 'https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/839267f664b44eb1ad8fe947f801e2be1793286469540/%E5%9B%BE3.png',
+  summary: 'Tôi tổng hợp phân tích chuyên sâu về hiện tượng bệ ngắm gimbal bị gật gù (Pitch oscillation) khi quay bánh đà ma sát tốc độ cao: Bản chất không phải do cộng hưởng kết cấu tần số thấp, mà do phép chuẩn hóa vector gia tốc trong thuật toán Mahony vô tình nhân chéo hai tần số rung cao thành tần số phách (beat frequency) siêu thấp. Bài viết chia sẻ 4 giải pháp kỹ thuật thực chiến gồm: cân bằng động, bộ lọc thông thấp 20Hz trước Mahony, chuẩn hóa gia tốc cố định a/g, và triển khai thuật toán VQF triệt tiêu 98% rung lắc mà không gây trễ pha.',
+  robotIdea: 'Áp dụng trực tiếp cho hệ thống điều khiển bệ ngắm (Gimbal / Turret) trên robot tự hành và cơ cấu phóng bắn cơ khí. Giúp loại bỏ hoàn toàn hiện tượng lệch góc Pitch do rung động bánh đà, đảm bảo độ chính xác ổn định điểm ngắm ở cự ly xa mà không cần hạ thấp đáp ứng của hệ điều khiển.',
+  html: fs.readFileSync('published/1972619-khac-phuc-rung-imu-banh-da/index.html', 'utf8').replace(/<!--\s*METADATA[\s\S]*?-->/, '').trim()
+};
+
 async function main() {
   console.log('🔄 Đang biên tập lại bài RoboMark theo phong cách chia sẻ tri thức...');
   await updateArticle('af61c7b4-a8dd-41c7-87d7-a509b926519e', robomarkData);
   console.log('✅ Đã cập nhật xong bài RoboMark!\n');
 
-  console.log('🔄 Đang biên tập lại bài Bánh xe Omni theo phong cách chia sẻ tri thức...');
+  console.log('🔄 Đang sửa hình ảnh & link tải công khai bài Bánh xe Omni...');
   await updateArticle('8775e721-2bfd-49cf-9385-b909cdbfb42f', omniWheelData);
   console.log('✅ Đã cập nhật xong bài Bánh xe Omni!\n');
 
@@ -362,7 +391,11 @@ async function main() {
   await updateArticle('8ff8f6af-a2b0-473b-b3d1-3273ae7f7070', motorbenchData);
   console.log('✅ Đã cập nhật xong bài RM-MotorBench!\n');
 
-  console.log('🎉 Hoàn tất! Tất cả bài viết đã được chắt lọc tinh gọn, tập trung 100% vào tri thức kỹ thuật.');
+  console.log('🔄 Đang thêm ảnh bìa bài Hiện tượng rung IMU...');
+  await updateArticle('7a68d0f2-2995-474f-9ceb-38b39f5075ab', imuData);
+  console.log('✅ Đã cập nhật xong bài Hiện tượng rung IMU!\n');
+
+  console.log('🎉 Hoàn tất! Tất cả bài viết đã được cập nhật ảnh bìa và hình ảnh chuẩn xác.');
 }
 
 main().catch(console.error);
