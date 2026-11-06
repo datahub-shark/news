@@ -220,6 +220,12 @@ export async function crawlRoboMasterArticles(options = {}) {
       }
       const category = detectCategory(title, summary);
 
+      // Trích xuất mốc thời gian xuất bản nguyên tác từ Nuxt SSR
+      const createAtMatch = html.match(/createAt:"([^"]+)"/);
+      const updateAtMatch = html.match(/updateAt:"([^"]+)"/);
+      const createdAt = createAtMatch ? createAtMatch[1] : new Date().toISOString();
+      const publishedAt = updateAtMatch ? updateAtMatch[1] : createdAt;
+
       const articleData = {
         title,
         summary: summary || title,
@@ -229,6 +235,8 @@ export async function crawlRoboMasterArticles(options = {}) {
         sourceUrl: url,
         robotIdea: `Giải pháp kỹ thuật tham khảo từ bài viết: ${title}. Ứng dụng trong phân mảng ${category}.`,
         html: bodyHtml,
+        createdAt,
+        publishedAt,
         scrapedAt: new Date().toISOString()
       };
 
