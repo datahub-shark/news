@@ -4,7 +4,7 @@ Bản mã chuyển đăng nhập email sang Google Identity Services. Người d
 
 **Kích hoạt theo thứ tự: OAuth client → backend Apps Script mới → frontend admin mới.** Không thay trang admin đang chạy bằng bản Google login khi backend vẫn dùng mã email, vì hai cơ chế không tương thích và có thể gián đoạn đăng nhập quản trị. Tích hợp linkS có thể được triển khai trước để dùng bản nháp trên máy; chức năng lưu tài khoản chỉ hoạt động sau khi hoàn tất cấu hình và triển khai backend. Việc có file mới trong repo không xác nhận API đang chạy đã nâng cấp.
 
-Trạng thái kiểm tra trước kích hoạt ngày 07/11/2026: endpoint đang chạy vẫn trả API cũ, chưa có `googleClientId` từ `authConfig`. Vì vậy Google login, phân quyền và lưu dự án tài khoản trong bản mã này còn chờ cấu hình OAuth, nâng cấp deployment và kiểm tra thực tế.
+Trạng thái kiểm tra ngày 07/11/2026: backend đang chạy đã trả đúng `googleClientId` và `registrationMode: member`; cấp challenge Google thành công, từ chối API dự án/tài khoản khi chưa đăng nhập và vô hiệu cơ chế mã email cũ. Cần kiểm tra tiếp lần đăng nhập Google thật và thao tác lưu/mở dự án bằng tài khoản của chủ sau khi frontend mới được xuất bản.
 
 ## 1. Tạo Google OAuth Web client
 
