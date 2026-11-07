@@ -24,10 +24,16 @@ function sheet_(name){const id=properties_().getProperty('SHEET_ID');if(!id)thro
 function text_(value){const s=String(value==null?'':value);return /^[\s\u0000-\u001f]*[=+@-]/.test(s)||s.startsWith("'")?"'"+s:s;}
 function rows_(){const sh=sheet_('Articles');return sh.getLastRow()<2?[]:sh.getRange(2,1,sh.getLastRow()-1,2).getValues().map((r,i)=>({row:i+2,article:JSON.parse(r[1])}));}
 function json_(data){return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);}
+function publicCache_(){try{return CacheService&&CacheService.getScriptCache?CacheService.getScriptCache():null;}catch(e){return null;}}
+function clearPublicCache_(id){const c=publicCache_();if(!c)return;try{c.remove('public:published:v2');if(id)c.remove('public:article:v2:'+id);}catch(e){}}
 function doGet(e){const p=e&&e.parameter||{};if(p.view==='admin')return HtmlService.createHtmlOutputFromFile('Admin').setTitle('Robot Ideas · Biên tập');try{
  if(p.action==='authConfig')return json_(authConfig_());
- if(p.action==='article'){const entry=rows_().find(r=>r.article.id===p.id&&r.article.status==='published');if(!entry)return json_({ok:false,error:'Bài không tồn tại hoặc chưa công khai.'});return json_({ok:true,apiVersion:2,article:{...publicArticle_(entry.article),html:readHtml_(entry.article)}});}
- return json_({ok:true,apiVersion:2,articles:rows_().map(r=>r.article).filter(a=>a.status==='published').map(publicArticle_).sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt))});
+ const cache=publicCache_();
+ if(p.action==='article'){const key='public:article:v2:'+String(p.id||'');if(cache){const hit=cache.get(key);if(hit)try{return json_(JSON.parse(hit));}catch(e){}}const entry=rows_().find(r=>r.article.id===p.id&&r.article.status==='published');if(!entry)return json_({ok:false,error:'Bài không tồn tại hoặc chưa công khai.'});const payload={ok:true,apiVersion:2,article:{...publicArticle_(entry.article),html:readHtml_(entry.article)}};if(cache){const raw=JSON.stringify(payload);if(raw.length<=95000)try{cache.put(key,raw,300);}catch(e){}}return json_(payload);}
+ if(cache){const hit=cache.get('public:published:v2');if(hit)try{return json_(JSON.parse(hit));}catch(e){}}
+ const payload={ok:true,apiVersion:2,articles:rows_().map(r=>r.article).filter(a=>a.status==='published').map(publicArticle_).sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt))};
+ if(cache){const raw=JSON.stringify(payload);if(raw.length<=95000)try{cache.put('public:published:v2',raw,180);}catch(e){}}
+ return json_(payload);
  }catch(e){console.error(e);return json_(p.action==='authConfig'?{ok:false,error:e.message,code:e.code||'AUTH_CONFIG_REQUIRED'}:{ok:false,error:'Không đọc được dữ liệu bài viết.'});}}
 function doPost(e){try{const raw=e&&e.postData&&e.postData.contents||'';if(raw.length>800000)throw Error('Yêu cầu quá lớn.');const req=JSON.parse(raw);return json_(adminApi(req.action,req.payload));}catch(e){return json_({ok:false,error:e.message});}}
 function publicArticle_(a){return {id:a.id,title:a.title,summary:a.summary,category:a.category,tags:a.tags,coverImage:a.coverImage||'',robotIdea:a.robotIdea,sourceName:a.sourceName,sourceUrl:a.sourceUrl,publishedAt:a.publishedAt};}
@@ -109,6 +115,7 @@ function adminApi(action,payload){payload=payload||{};try{
  if(action==='sources')return {ok:true,sources:sources_()};
  if(action==='saveSource')return adminLocked_(payload.token,()=>saveSource_(payload.source||{}));
  if(action==='save')return adminLocked_(payload.token,()=>save_(payload));
+ if(action==='setStatus')return adminLocked_(payload.token,()=>setStatus_(payload));
  if(action==='savePlaylist')return adminLocked_(payload.token,()=>savePlaylist_(payload.playlist||{}));
  if(action==='deletePlaylist')return adminLocked_(payload.token,()=>deletePlaylist_(payload));
  if(action==='setArticlePlaylists')return adminLocked_(payload.token,()=>setArticlePlaylists_(payload));
@@ -213,16 +220,31 @@ function save_(payload,importFileId,privateLinks){
  }
  const article={id:existing?input.id:Utilities.getUuid(),title,summary,format:'html',category:CATEGORIES_.includes(input.category)?input.category:'Khác',tags:clean_(input.tags,500),coverImage:clean_(coverImage,2000),robotIdea:clean_(input.robotIdea,5000),sourceName:clean_(input.sourceName,200),sourceUrl:https_(input.sourceUrl),status,version:existing?existing.article.version+1:1,createdAt:existing?existing.article.createdAt:createdAtInput,updatedAt:now,publishedAt:status==='published'?(existing&&existing.article.publishedAt||publishedAtInput||now):publishedAtInput};
  if(article.sourceUrl&&entries.some(r=>r.article.id!==article.id&&r.article.sourceUrl===article.sourceUrl))throw Error('URL nguồn đã có trong thư viện.');
- // New private revision first; never overwrite a file readers may already be using.
- const file=ensureFolder_().createFile(Utilities.newBlob(html,'text/html',article.id+'-v'+article.version+'.html'));
+ // New private revision when HTML/content is supplied; reuse existing private fileId on metadata-only edits.
+ const hasBodyInput=typeof input.html==='string'||typeof input.content==='string';
+ const file=(existing&&existing.article.fileId&&!hasBodyInput)?null:ensureFolder_().createFile(Utilities.newBlob(html,'text/html',article.id+'-v'+article.version+'.html'));
  if(importFileId)article.importFileId=importFileId;
  else if(existing&&existing.article.importFileId)article.importFileId=existing.article.importFileId;
- try{file.setSharing(DriveApp.Access.PRIVATE,DriveApp.Permission.NONE);article.fileId=file.getId();const encoded=JSON.stringify(article);
+ try{if(file){file.setSharing(DriveApp.Access.PRIVATE,DriveApp.Permission.NONE);article.fileId=file.getId();}else{article.fileId=existing.article.fileId;}const encoded=JSON.stringify(article);
  if(existing)sheet_('Articles').getRange(existing.row,1,1,2).setValues([[text_(article.id),encoded]]);else sheet_('Articles').appendRow([text_(article.id),encoded]);
- }catch(e){try{file.setTrashed(true);}catch(cleanupError){console.warn(cleanupError);}throw e;}
+ }catch(e){if(file)try{file.setTrashed(true);}catch(cleanupError){console.warn(cleanupError);}throw e;}
+ clearPublicCache_(article.id);
  try{sheet_('Audit').appendRow([now,status,text_(article.id)]);}catch(e){console.warn('Audit: '+e.message);}
- if(!importFileId&&!privateLinks)try{autoShareDriveLinks_(html+' '+(input.robotIdea||'')+' '+(input.summary||''));}catch(e){console.warn('Auto share: '+e.message);}
+ if(!importFileId&&!privateLinks&&hasBodyInput)try{autoShareDriveLinks_(html+' '+(input.robotIdea||'')+' '+(input.summary||''));}catch(e){console.warn('Auto share: '+e.message);}
  return {ok:true,article:{...article,html}};
+}
+function setStatus_(payload){
+ const id=clean_(payload.id,120),status=payload.status;if(!id)throw Error('Thiếu mã bài viết.');
+ if(!['draft','pending','published','rejected'].includes(status))throw Error('Trạng thái không hợp lệ.');
+ const entry=rows_().find(r=>r.article.id===id);if(!entry)throw Error('Bài không tồn tại.');
+ if(payload.version!==undefined&&payload.version!==entry.article.version)throw Error('Bài đã thay đổi ở phiên khác. Tải lại trước khi sửa.');
+ const a=entry.article;
+ if(status==='published'){if(!clean_(a.summary,1000))throw Error('Bài công khai cần nội dung và tóm tắt.');const html=readHtml_(a);if(!strip_(html))throw Error('Bài công khai cần nội dung và tóm tắt.');}
+ const now=new Date().toISOString(),article={...metadata_(a),status,version:(a.version||1)+1,updatedAt:now,publishedAt:status==='published'?(a.publishedAt||now):a.publishedAt||null};
+ sheet_('Articles').getRange(entry.row,1,1,2).setValues([[text_(article.id),JSON.stringify(article)]]);
+ clearPublicCache_(article.id);
+ try{sheet_('Audit').appendRow([now,status,text_(article.id)]);}catch(e){console.warn('Audit: '+e.message);}
+ return {ok:true,article};
 }
 function strip_(html){return String(html||'').replace(/<[^>]*>/g,' ').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/\s+/g,' ').trim();}
 /** Reads only configured feeds. Imports are always drafts, never auto-published. */

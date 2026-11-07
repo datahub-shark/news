@@ -297,12 +297,51 @@
     $('year').textContent = new Date().getFullYear();
 
     const ADMIN_SESSION_KEY = 'robot_ideas_user_session';
+    const PUBLISHED_CACHE_KEY = 'robot_ideas_published_cache_v1';
+    const ARTICLE_BODY_CACHE_PREFIX = 'robot_ideas_article_html_v1:';
     const STATUS_LABELS = {
       published: '✓ Đã duyệt',
       pending: '◷ Đang chờ duyệt',
       rejected: '✕ Từ chối',
       draft: 'Bản nháp'
     };
+
+    function readPublishedMetadata(id) {
+      try {
+        const raw = localStorage.getItem(PUBLISHED_CACHE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.articles)) {
+          return parsed.articles.find(a => a && a.id === id) || null;
+        }
+      } catch {}
+      return null;
+    }
+
+    function readCachedArticle(id, stamp) {
+      try {
+        const raw = sessionStorage.getItem(ARTICLE_BODY_CACHE_PREFIX + id) || localStorage.getItem(ARTICLE_BODY_CACHE_PREFIX + id);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.article && typeof parsed.article.html === 'string' && (!stamp || !parsed.stamp || parsed.stamp === stamp)) {
+          return parsed.article;
+        }
+      } catch {}
+      return null;
+    }
+
+    function writeCachedArticle(id, article) {
+      if (!id || !article || typeof article.html !== 'string') return;
+      const payload = JSON.stringify({ savedAt: Date.now(), stamp: article.publishedAt || article.updatedAt || '', article });
+      try { sessionStorage.setItem(ARTICLE_BODY_CACHE_PREFIX + id, payload); } catch {}
+      try { if (payload.length <= 180000) localStorage.setItem(ARTICLE_BODY_CACHE_PREFIX + id, payload); } catch {}
+    }
+
+    function removeCachedArticle(id) {
+      if (!id) return;
+      try { sessionStorage.removeItem(ARTICLE_BODY_CACHE_PREFIX + id); } catch {}
+      try { localStorage.removeItem(ARTICLE_BODY_CACHE_PREFIX + id); } catch {}
+    }
 
     function safeHttpsUrl(value) {
       try {
@@ -392,6 +431,12 @@
           currentArticle = saved.article;
           updateStatusBadges(saved.article.status);
           $('adminReviewNotice').textContent = `Đã cập nhật: ${STATUS_LABELS[saved.article.status] || saved.article.status}`;
+          if (saved.article.status === 'published') {
+            writeCachedArticle(id, saved.article);
+          } else {
+            removeCachedArticle(id);
+          }
+          try { localStorage.removeItem(PUBLISHED_CACHE_KEY); } catch {}
           try { localStorage.setItem('robot_ideas_last_saved', Date.now().toString()); } catch {}
         } catch (err) {
           $('adminReviewNotice').textContent = `Lỗi: ${err.message}`;
@@ -436,16 +481,31 @@
           }
         }
 
-        const res = await fetch(`${api}?action=article&id=${encodeURIComponent(id)}&t=${Date.now()}`);
+        if (!isPreview) {
+          const cachedMeta = readPublishedMetadata(id);
+          const cachedFull = readCachedArticle(id, cachedMeta?.publishedAt || '');
+          if (cachedFull) {
+            currentArticle = { ...cachedFull, status: 'published' };
+            renderArticle(currentArticle, true);
+            setupAdminBar(api, id, session, 'published');
+          } else if (cachedMeta) {
+            renderArticle({ ...cachedMeta, status: 'published' }, false);
+            setupAdminBar(api, id, session, 'published');
+          }
+        }
+
+        const res = await fetch(`${api}?action=article&id=${encodeURIComponent(id)}`);
         if (!res.ok) throw new Error(`Máy chủ phản hồi lỗi: ${res.status}`);
         const data = await res.json();
 
         if (data.ok && data.article) {
           currentArticle = { ...data.article, status: 'published' };
-          renderArticle(currentArticle);
+          writeCachedArticle(id, currentArticle);
+          renderArticle(currentArticle, true);
           setupAdminBar(api, id, session, 'published');
           return;
         }
+        removeCachedArticle(id);
 
         // Fallback: bài chưa công khai nhưng người xem đang có phiên Quản trị hợp lệ
         if (session) {
@@ -467,7 +527,9 @@
       }
     }
 
-    function renderArticle(a) {
+    let lastRenderedHtml = null;
+
+    function renderArticle(a, hasFullBody = true) {
       $('loadingBox').hidden = true;
       $('errorBox').hidden = true;
       $('articleContainer').hidden = false;
@@ -511,9 +573,18 @@
         $('originalSourceLink').hidden = true;
       }
 
-      // Đưa nội dung HTML vào sandbox iframe an toàn
-      const frame = articleFrame(a.html, safeSource, true);
-      $('articleFrameContainer').replaceChildren(frame);
+      if (!hasFullBody && typeof a.html !== 'string') {
+        const loadingBody = document.createElement('div');
+        loadingBody.className = 'loading-state';
+        loadingBody.innerHTML = '<div class="loading-spinner"></div><p>Đang tải chi tiết bài viết…</p>';
+        $('articleFrameContainer').replaceChildren(loadingBody);
+        lastRenderedHtml = null;
+      } else if (a.html !== lastRenderedHtml || !$('articleFrameContainer').querySelector('iframe')) {
+        // Đưa nội dung HTML vào sandbox iframe an toàn
+        const frame = articleFrame(a.html, safeSource, true);
+        $('articleFrameContainer').replaceChildren(frame);
+        lastRenderedHtml = a.html;
+      }
 
       // Nút copy link công khai sạch (bỏ tham số preview=1)
       $('btnCopyLink').onclick = async () => {

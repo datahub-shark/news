@@ -55,3 +55,22 @@ test('one article can join multiple playlists atomically, with optimistic versio
  assert.equal(f.api('setArticlePlaylists',{token,articleId:'missing',playlistIds:[],versions:{}}).ok,false);assert.equal(f.api('setArticlePlaylists',{token,articleId:a.id,playlistIds:['missing'],versions:{}}).ok,false);
  assert.equal(f.api('get',{token,id:a.id}).article.status,'pending');
 });
+
+test('doGet uses ScriptCache for published list and article reads, and setStatus/save invalidate cache without redundant Drive writes',()=>{
+ const f=fixture(),token=f.login();
+ const a=f.api('save',{token,article:{title:'Fast Robot',summary:'Fast summary',html:'<p>Fast HTML</p>',status:'published'}}).article;
+ const filesAfterCreate=f.files.size;
+ const readsBefore=f.getReads();
+ // First public article read hits Drive and populates cache
+ assert.equal(f.ctx.doGet({parameter:{action:'article',id:a.id}}).article.html,'<p>Fast HTML</p>');
+ assert.equal(f.getReads(),readsBefore+1);
+ // Second public article read is served from ScriptCache (0 Drive reads!)
+ assert.equal(f.ctx.doGet({parameter:{action:'article',id:a.id}}).article.html,'<p>Fast HTML</p>');
+ assert.equal(f.getReads(),readsBefore+1);
+ // setStatus changes status without creating a new Drive file and invalidates public cache
+ const rejected=f.api('setStatus',{token,id:a.id,version:a.version,status:'rejected'});
+ assert.equal(rejected.ok,true);
+ assert.equal(f.files.size,filesAfterCreate);
+ assert.equal(f.ctx.doGet({}).articles.length,0);
+ assert.equal(f.ctx.doGet({parameter:{action:'article',id:a.id}}).ok,false);
+});
