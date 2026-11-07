@@ -12,103 +12,13 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import readline from 'node:readline';
+import { createEditorialClient, getEditorialCredential } from './editorial-auth.mjs';
 import { JSDOM } from 'jsdom';
 import { crawlRoboMaster } from './crawl-robomaster.mjs';
 
-const DATA_DIR = path.resolve('data');
 const DRAFTS_DIR = path.resolve('drafts');
 const PUBLISHED_DIR = path.resolve('published');
-const SESSION_FILE = path.join(DATA_DIR, '.admin_session.json');
-
-function getApiUrl() {
-  try {
-    const configContent = fs.readFileSync('config.js', 'utf8');
-    const match = configContent.match(/apiUrl:\s*['"]([^'"]+)['"]/);
-    if (match) return match[1];
-  } catch {}
-  return '';
-}
-
-const API_URL = getApiUrl();
-
-async function callApi(action, payload = {}, token = '') {
-  if (!API_URL) throw new Error('Chưa cấu hình apiUrl trong config.js.');
-
-  const request = { ...payload, token };
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-    body: JSON.stringify({ action, payload: request })
-  });
-
-  if (!res.ok) throw new Error(`Lỗi kết nối máy chủ Google: ${res.status}`);
-  const data = await res.json();
-  if (!data.ok) {
-    const err = new Error(data.error || 'Thao tác thất bại.');
-    err.code = data.code;
-    throw err;
-  }
-  return data;
-}
-
-function ask(question) {
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-  return new Promise(resolve => rl.question(question, ans => { rl.close(); resolve(ans.trim()); }));
-}
-
-function loadSession() {
-  if (!fs.existsSync(SESSION_FILE)) return null;
-  try {
-    const session = JSON.parse(fs.readFileSync(SESSION_FILE, 'utf8'));
-    if (session.token && session.expiresAt > Date.now()) {
-      return session;
-    }
-  } catch {}
-  return null;
-}
-
-function saveSession(session) {
-  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-  fs.writeFileSync(SESSION_FILE, JSON.stringify(session, null, 2), 'utf8');
-}
-
-const DEFAULT_SYNC_KEY = 'robot-ideas-sync-secret-2026';
-
-async function ensureSession() {
-  let session = loadSession();
-  if (session) return session.token;
-
-  // Kiểm tra khóa tự động hóa ngầm (SYNC_KEY)
-  try {
-    const test = await callApi('list', {}, DEFAULT_SYNC_KEY);
-    if (test && test.ok) {
-      console.log('⚡ Sử dụng khóa đồng bộ tự động (SYNC_KEY) · Không cần nhập OTP!');
-      return DEFAULT_SYNC_KEY;
-    }
-  } catch {}
-
-  console.log('\n======================================================');
-  console.log('🔑 ĐĂNG NHẬP XÁC THỰC LẦN ĐẦU ĐỂ TỰ ĐỘNG ĐẨY LÊN GOOGLE');
-  console.log('======================================================\n');
-
-  const codeArgIdx = process.argv.indexOf('--code');
-  let code = codeArgIdx !== -1 && process.argv[codeArgIdx + 1] ? process.argv[codeArgIdx + 1] : '';
-
-  if (!code) {
-    console.log('Đang gửi mã OTP đến email quản trị...');
-    await callApi('requestCode');
-    console.log('✅ Đã gửi mã OTP đến email quản trị.');
-    code = await ask('\n👉 Nhập mã OTP 6 số từ email: ');
-  }
-
-  if (!code) throw new Error('Chưa nhập mã OTP.');
-
-  const res = await callApi('login', { code });
-  saveSession({ token: res.token, expiresAt: res.expiresAt });
-  console.log('🎉 Đăng nhập thành công! Phiên tự động lưu trong 30 ngày.\n');
-  return res.token;
-}
+const callApi = createEditorialClient();
 
 /**
  * Dịch một đoạn văn bản từ tiếng Trung (hoặc auto) sang tiếng Việt
@@ -167,7 +77,8 @@ export async function runAutoSync() {
   console.log('================================================================\n');
 
   // 1. Xác thực phiên làm việc
-  const token = await ensureSession();
+  getEditorialCredential();
+  await callApi('list');
 
   // 2. Chạy crawler thu thập bài viết mới
   console.log('📥 Bước 1: Đang quét bài viết mới từ nguồn kỹ thuật...');
@@ -246,7 +157,7 @@ export async function runAutoSync() {
         }
       };
 
-      await callApi('save', payload, token);
+      await callApi('save', payload);
       console.log(`  ✅ [THÀNH CÔNG] Đã lưu vào Drive & Sheet với trạng thái: PENDING (Chờ duyệt)!`);
       pushedCount++;
 

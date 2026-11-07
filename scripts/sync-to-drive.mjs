@@ -2,7 +2,7 @@
  * Robot Ideas - Tự động đồng bộ bài viết đã cào lên Google Drive & Google Sheets
  *
  * Chức năng:
- * 1. Xác thực bằng phiên quản trị (Session Token 30 ngày).
+ * 1. Xác thực bằng biến môi trường của chủ website, không lưu token vào file.
  * 2. Gọi backend Google Apps Script để tạo file HTML riêng tư trên Google Drive.
  * 3. Đưa bài vào mục "Hàng chờ duyệt" (status: 'pending') trên Google Sheets.
  * 4. Tự động bỏ qua các bài đã có trong hệ thống.
@@ -10,102 +10,17 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import readline from 'node:readline';
+import { createEditorialClient, getEditorialCredential } from './editorial-auth.mjs';
 
 const DATA_DIR = path.resolve('data');
-const SESSION_FILE = path.join(DATA_DIR, '.admin_session.json');
 const ARTICLES_FILE = path.join(DATA_DIR, 'crawled_articles.json');
-
-function getApiUrl() {
-  try {
-    const configContent = fs.readFileSync('config.js', 'utf8');
-    const match = configContent.match(/apiUrl:\s*['"]([^'"]+)['"]/);
-    if (match) return match[1];
-  } catch {}
-  return '';
-}
-
-const API_URL = getApiUrl();
-
-async function callApi(action, payload = {}, token = '') {
-  if (!API_URL) throw new Error('Chưa tìm thấy apiUrl trong config.js.');
-
-  const request = { ...payload, token };
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-    body: JSON.stringify({ action, payload: request })
-  });
-
-  if (!res.ok) throw new Error(`Lỗi kết nối máy chủ Google: ${res.status}`);
-  const data = await res.json();
-  if (!data.ok) {
-    const err = new Error(data.error || 'Thao tác thất bại.');
-    err.code = data.code;
-    throw err;
-  }
-  return data;
-}
-
-function ask(question) {
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-  return new Promise(resolve => rl.question(question, ans => { rl.close(); resolve(ans.trim()); }));
-}
-
-function loadSession() {
-  if (!fs.existsSync(SESSION_FILE)) return null;
-  try {
-    const session = JSON.parse(fs.readFileSync(SESSION_FILE, 'utf8'));
-    if (session.token && session.expiresAt > Date.now()) {
-      return session;
-    }
-  } catch {}
-  return null;
-}
-
-function saveSession(session) {
-  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-  fs.writeFileSync(SESSION_FILE, JSON.stringify(session, null, 2), 'utf8');
-}
-
-/**
- * Đăng nhập để lấy session token (chỉ làm 1 lần, lưu 30 ngày)
- */
-async function loginFlow() {
-  console.log('\n======================================================');
-  console.log('🔑 ĐĂNG NHẬP QUẢN TRỊ VIÊN ROBOT IDEAS');
-  console.log('Hệ thống sẽ gửi mã xác nhận 6 số đến email quản trị.');
-  console.log('======================================================\n');
-
-  console.log('Đang yêu cầu gửi mã xác nhận...');
-  await callApi('requestCode');
-  console.log('✅ Mã OTP đã được gửi về email quản trị (có hiệu lực 10 phút).');
-
-  const code = await ask('\n👉 Nhập mã OTP 6 số từ email của bạn: ');
-  if (!code) throw new Error('Chưa nhập mã OTP.');
-
-  console.log('Đang xác thực...');
-  const res = await callApi('login', { code });
-  saveSession({ token: res.token, expiresAt: res.expiresAt });
-  console.log('🎉 Đăng nhập thành công! Phiên làm việc đã được lưu trong 30 ngày.\n');
-  return res.token;
-}
+const callApi = createEditorialClient();
 
 /**
  * Đồng bộ toàn bộ bài viết trong data/crawled_articles.json lên Drive & Sheets
  */
-export async function syncToDrive(options = {}) {
-  let session = loadSession();
-
-  // Kiểm tra cờ --login hoặc nếu chưa có session
-  if (options.forceLogin || !session) {
-    if (process.argv.includes('--non-interactive')) {
-      console.log('⚠️ Chưa có phiên đăng nhập Admin. Chạy "npm run sync:drive -- --login" trước.');
-      return;
-    }
-    const token = await loginFlow();
-    session = { token };
-  }
+export async function syncToDrive() {
+  getEditorialCredential();
 
   // Đọc danh sách bài đã cào
   if (!fs.existsSync(ARTICLES_FILE)) {
@@ -138,7 +53,7 @@ export async function syncToDrive(options = {}) {
         }
       };
 
-      const result = await callApi('save', payload, session.token);
+      await callApi('save', payload);
       console.log(`✅ [ĐÃ LÊN DRIVE & SHEETS] [${art.category}] ${art.title.slice(0, 50)}...`);
       uploaded++;
 
@@ -147,15 +62,7 @@ export async function syncToDrive(options = {}) {
         console.log(`⏭️  [ĐÃ CÓ TRÊN DRIVE] ${art.title.slice(0, 50)}...`);
         skipped++;
       } else if (err.code === 'AUTH_REQUIRED' || (err.message && err.message.includes('Phiên đăng nhập'))) {
-        console.warn('⚠️ Phiên đăng nhập hết hạn. Cần đăng nhập lại.');
-        if (!options.isRetrying) {
-          const newToken = await loginFlow();
-          session.token = newToken;
-          options.isRetrying = true;
-          // Thử lại bài này
-          return syncToDrive(options);
-        }
-        break;
+        throw new Error('Phiên hết hạn hoặc khóa không hợp lệ. Cập nhật biến môi trường theo GOOGLE-AUTH-SETUP.md rồi chạy lại.');
       } else {
         console.warn(`❌ [LỖI] ${art.title.slice(0, 40)}: ${err.message}`);
         errors++;
@@ -173,6 +80,5 @@ export async function syncToDrive(options = {}) {
 
 // Chạy trực tiếp từ CLI
 if (process.argv[1] && process.argv[1].endsWith('sync-to-drive.mjs')) {
-  const forceLogin = process.argv.includes('--login');
-  syncToDrive({ forceLogin }).catch(console.error);
+  syncToDrive().catch(error => { console.error(error.message); process.exitCode = 1; });
 }

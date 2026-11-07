@@ -84,11 +84,15 @@ a.recent-item:hover{background:rgba(40,94,70,0.04)}
 .admin-shell>*{min-width:0}
 @media(max-width:800px){.admin-shell{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:500px){.article-table{min-width:720px}.article-info-cell{min-width:270px}.article-table th:nth-child(4),.article-table td:nth-child(4){display:none}.playlist-grid{grid-template-columns:1fr}#viewPlaylists .section-title{align-items:flex-start;flex-direction:column}.playlist-dialog{padding:17px}}
+
+/* Google accounts and user permissions */
+#accountLogin{margin-top:20px}.users-table{width:100%;border-collapse:collapse;font-size:13px;min-width:650px}.users-table th,.users-table td{padding:14px 12px;text-align:left;border-bottom:1px solid #e1e7db}.users-table th{font-size:11px;color:#68766c}.users-table td:first-child{overflow-wrap:anywhere}.users-table td small{display:block;color:#68766c}.users-table button{font-size:12px;padding:8px 12px}#userForm{max-width:760px}#userEmail[readonly]{background:#f1f4eb}#adminAccessMessage:not(:empty){padding:12px;border:1px solid #d9c98d;background:#fff8de;color:#6b551b;border-radius:6px}
+</style><style>.robot-account{font:14px/1.6 system-ui,-apple-system,'Segoe UI',sans-serif;color:inherit}.robot-account .account-message{font-size:13px;line-height:1.7;color:inherit;margin:12px 0;max-width:480px}.robot-account .account-error{color:#9c3027}.robot-account .account-google-button{min-height:44px;max-width:100%;overflow:hidden;margin:16px 0}.robot-account .account-identity{display:grid;gap:3px;overflow-wrap:anywhere}.robot-account .account-identity span,.robot-account .account-identity small{font-size:12px;opacity:.8}.robot-account button.account-logout,.robot-account button.account-retry{margin-top:12px;background:#e5ecdf;color:#18392d;border:1px solid #c9d3c4;border-radius:5px;padding:9px 14px;cursor:pointer;font:inherit}.robot-account button:focus-visible{outline:3px solid #9bb765;outline-offset:3px}.robot-account button:disabled{opacity:.5;cursor:wait}
 </style></head><body>
 <header><a href="https://datahub-shark.github.io/news/">Robot <b>Ideas</b> / Quản trị</a><button id="logout" class="secondary" hidden>Đăng xuất</button></header>
 <main><p id="notice" role="status" aria-live="polite"></p>
-<section id="login" class="panel login"><p class="eyebrow">KHÔNG GIAN RIÊNG TƯ</p><h1>Biên tập ý tưởng</h1><p>Đăng nhập để đọc bài nháp, chỉnh sửa HTML và duyệt bài trước khi công khai.</p><button id="request" type="button">Gửi mã đến email quản trị</button><form id="loginForm"><label for="code">Mã đăng nhập 6 chữ số</label><input id="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required><button>Đăng nhập</button></form><p class="hint">Chỉ email quản trị đã cấu hình mới nhận được mã. Phiên đăng nhập được lưu trên trình duyệt trong 30 ngày. Đăng xuất khi dùng máy chung.</p></section>
-<section id="workspace" hidden><div class="admin-shell"><aside class="sidebar"><p class="eyebrow">BẢNG ĐIỀU KHIỂN</p><nav aria-label="Quản trị"><button data-view="overview" class="nav-item active">◫ Tổng quan</button><button data-view="articles" class="nav-item">▤ Tất cả bài viết</button><button id="navPending" class="nav-item">◷ Đang chờ <span id="pendingNav">0</span></button><button id="navPublished" class="nav-item">✓ Đã duyệt <span id="publishedNav">0</span></button><button id="navRejected" class="nav-item">✕ Từ chối <span id="rejectedNav">0</span></button><button data-view="playlists" class="nav-item">☷ Playlist <span id="playlistNav">0</span></button><button data-view="sources" class="nav-item">↗ Nguồn thu thập</button><button data-view="system" class="nav-item">⚙ Hệ thống</button></nav><button id="sidebarNew">+ Tạo bài viết</button><a class="public-link" href="https://datahub-shark.github.io/news/" target="_blank" rel="noopener">Xem website ↗</a><p class="hint">Không gian quản trị riêng tư<br>Nội dung chỉ công khai sau khi duyệt.</p></aside><div class="dashboard-main"><div class="page-heading"><div><p class="eyebrow">ROBOT IDEAS / ADMIN</p><h1 id="pageTitle">Tổng quan</h1></div><button id="reload" class="secondary">↻ Làm mới dữ liệu</button></div>
+<section id="login" class="panel login" hidden><p class="eyebrow">TÀI KHOẢN ROBOT IDEAS</p><h1>Biên tập ý tưởng</h1><p>Đăng nhập bằng Google để truy cập Robot Ideas. Bảng điều khiển biên tập dành cho tài khoản Quản trị viên.</p><div id="accountLogin"></div><p id="adminAccessMessage" class="hint" role="status"></p><p class="hint">Tài khoản mới được đăng ký với quyền Thành viên. Quản trị viên có thể cấp quyền VIP hoặc quyền quản trị trong mục Người dùng.</p></section>
+<section id="workspace" hidden><div class="admin-shell"><aside class="sidebar"><p class="eyebrow">BẢNG ĐIỀU KHIỂN</p><nav aria-label="Quản trị"><button data-view="overview" class="nav-item active">◫ Tổng quan</button><button data-view="articles" class="nav-item">▤ Tất cả bài viết</button><button id="navPending" class="nav-item">◷ Đang chờ <span id="pendingNav">0</span></button><button id="navPublished" class="nav-item">✓ Đã duyệt <span id="publishedNav">0</span></button><button id="navRejected" class="nav-item">✕ Từ chối <span id="rejectedNav">0</span></button><button data-view="playlists" class="nav-item">☷ Playlist <span id="playlistNav">0</span></button><button data-view="sources" class="nav-item">↗ Nguồn thu thập</button><button data-view="users" class="nav-item">♙ Người dùng</button><button data-view="system" class="nav-item">⚙ Hệ thống</button></nav><button id="sidebarNew">+ Tạo bài viết</button><a class="public-link" href="https://datahub-shark.github.io/news/" target="_blank" rel="noopener">Xem website ↗</a><p class="hint">Không gian quản trị riêng tư<br>Nội dung chỉ công khai sau khi duyệt.</p></aside><div class="dashboard-main"><div class="page-heading"><div><p class="eyebrow">ROBOT IDEAS / ADMIN</p><h1 id="pageTitle">Tổng quan</h1></div><button id="reload" class="secondary">↻ Làm mới dữ liệu</button></div>
 <section id="viewOverview"><div class="stats"><button data-stat="pending"><span>Đang chờ</span><b id="statPending">0</b><small>Cần duyệt ↗</small></button><button data-stat="published"><span>Đã duyệt</span><b id="statPublished">0</b><small>Đang hiển thị ↗</small></button><button data-stat="rejected"><span>Từ chối</span><b id="statRejected">0</b><small>Đã loại bỏ ↗</small></button><button data-stat="all"><span>Tổng bài viết</span><b id="statAll">0</b><small>Toàn bộ kho bài ↗</small></button><span id="statDraft" hidden>0</span></div><div class="welcome panel"><div><p class="eyebrow">TỪ Ý TƯỞNG ĐẾN BÀI VIẾT</p><h2>Hôm nay anh muốn chia sẻ điều gì?</h2><p>Nhập file HTML, kiểm tra nội dung rồi chọn ai được đọc bài.</p></div><button id="startNew">+ Tạo bài mới</button></div><div class="panel"><div class="section-title"><h2>Cập nhật gần đây</h2><button id="seeAll" class="text-button">Xem tất cả ↗</button></div><div id="recent"></div></div></section>
 <section id="viewArticles" hidden><div class="panel"><div class="section-title"><div><h2 id="articleListTitle">Tất cả bài viết</h2><p class="hint" id="articleCount"></p></div><button id="new">+ Bài mới</button></div><div class="status-tabs" id="statusTabs"><button type="button" class="status-tab active" data-tab-filter="all">Tất cả</button><button type="button" class="status-tab" data-tab-filter="pending">◷ Đang chờ</button><button type="button" class="status-tab" data-tab-filter="published">✓ Đã duyệt</button><button type="button" class="status-tab" data-tab-filter="rejected">✕ Từ chối</button></div><div class="table-tools"><input id="articleSearch" type="search" placeholder="Tìm tiêu đề, chủ đề, nguồn…" aria-label="Tìm bài quản trị"><select id="filter" aria-label="Lọc trạng thái"><option value="all">Tất cả trạng thái</option><option value="pending">◷ Đang chờ (Cần duyệt)</option><option value="published">✓ Đã duyệt (Công khai)</option><option value="rejected">✕ Từ chối (Không đăng)</option><option value="draft">Bản nháp</option></select><select id="categoryFilter" aria-label="Lọc chủ đề"><option value="all">Tất cả chủ đề</option><option value="Cơ khí">⚙ Cơ khí</option><option value="Thị giác máy">👁 Thị giác máy</option><option value="Điều khiển">🕹 Điều khiển</option><option value="Robot di động">🤖 Robot di động</option><option value="AI & ROS">🧠 AI & ROS</option><option value="Khác">⌘ Khác</option></select><select id="playlistFilter" aria-label="Lọc playlist"><option value="all">Tất cả playlist</option><option value="unassigned">Chưa vào playlist</option></select></div>
 <div id="playlistContext" class="playlist-context" hidden><div><strong id="playlistContextName"></strong><p id="playlistContextDescription" class="hint"></p></div><button id="editActivePlaylist" type="button" class="secondary">Đổi tên / mô tả</button></div>
@@ -96,7 +100,8 @@ a.recent-item:hover{background:rgba(40,94,70,0.04)}
 <div class="table-scroll"><table class="article-table"><thead><tr><th class="selection-cell"><input id="selectArticlePage" type="checkbox" aria-label="Chọn tất cả bài trong trang này"></th><th>Bài viết</th><th>Trạng thái</th><th>Cập nhật</th><th>Thao tác</th></tr></thead><tbody id="list"></tbody></table></div><p id="listEmpty" class="empty" hidden>Chưa có bài phù hợp. Anh có thể tạo bài mới hoặc nhập RSS.</p></div></section>
 <section id="viewPlaylists" hidden><div class="panel"><div class="section-title"><div><h2>Playlist bài viết</h2><p class="hint">Gom bài theo dự án hoặc chủ đề. Một bài có thể nằm trong nhiều playlist; phân loại không thay đổi trạng thái duyệt.</p></div><button id="newPlaylist" type="button">+ Tạo playlist</button></div><div id="playlistCards" class="playlist-grid"></div><p id="playlistEmpty" class="empty" hidden>Chưa có playlist. Tạo một playlist, rồi chọn các bài trong danh sách để thêm vào.</p></div></section>
 <section id="viewSources" hidden><div class="panel"><div class="section-title"><div><h2>Nguồn thu thập</h2><p class="hint">Quản lý RSS/Atom ngay tại đây. Chỉ nhập từ các nguồn anh cho phép.</p></div><button id="import" class="secondary">Nhập RSS ngay</button></div><p class="hint">Thu thập tạo bản nháp riêng tư; chưa có AI tự dịch hay tự xuất bản.</p><div id="sourceList"></div><hr><h2 id="sourceFormTitle">Thêm nguồn</h2><form id="sourceForm"><div class="pair"><div><label for="sourceLabel">Tên nguồn *</label><input id="sourceLabel" required maxlength="200"></div><div><label for="feedUrl">URL RSS / Atom (HTTPS) *</label><input id="feedUrl" type="url" required maxlength="2000" placeholder="https://example.com/feed.xml"></div></div><label class="image-toggle"><input id="sourceEnabled" type="checkbox" checked> Bật thu thập nguồn này</label><div class="actions"><button>Lưu nguồn</button><button id="cancelSource" type="button" class="secondary">Hủy chỉnh sửa</button></div></form></div></section>
-<section id="viewSystem" hidden><div class="panel"><h2>Hệ thống website</h2><dl class="system-details"><dt>Nội dung bài viết</dt><dd>File HTML riêng tư trên Google Drive</dd><dt>Danh sách và trạng thái</dt><dd>Google Sheets</dd><dt>Đăng nhập</dt><dd>Mã email quản trị; phiên 30 ngày</dd><dt>Xuất bản</dt><dd>Chỉ bài có trạng thái Công khai được trả cho độc giả</dd><dt>AI tự tìm và dịch</dt><dd>Chưa tích hợp. Hiện nhận file HTML và RSS.</dd></dl><div style="margin:20px 0;padding:16px;background:#f8fafc;border:1px solid #dce1d8;border-radius:8px;"><h3 style="margin-top:0;">🔗 Tự động chia sẻ file Google Drive</h3><p class="hint">Mọi bài viết có chứa link Google Drive khi Lưu sẽ tự động được cấp quyền <em>"Bất kỳ ai có đường liên kết đều có thể xem"</em>. Bạn cũng có thể bấm nút bên dưới để quét và bật quyền công khai cho toàn bộ tệp trong thư mục <strong>Robot Ideas Articles</strong>.</p><button type="button" id="shareDriveBtn" class="secondary">🔗 Bật chia sẻ công khai toàn bộ file Drive</button></div><p class="hint">Email quản trị và thông tin kết nối lưu trong Script properties của Google Apps Script. Trang này không hiển thị khóa hay token.</p><a class="text-button" href="https://github.com/datahub-shark/news#readme" target="_blank" rel="noopener">Hướng dẫn cấu hình ↗</a></div></section>
+<section id="viewUsers" hidden><div class="panel"><div class="section-title"><div><h2>Người dùng</h2><p class="hint">Tài khoản Google mới tự đăng ký với quyền Thành viên. Cấp quyền và bật hoặc khóa tài khoản tại đây.</p></div><button id="reloadUsers" type="button" class="secondary">Làm mới</button></div><div class="table-scroll"><table class="users-table"><thead><tr><th>Tài khoản</th><th>Quyền</th><th>Hoạt động</th><th>Phiên bản</th><th>Thao tác</th></tr></thead><tbody id="userList"></tbody></table></div><p id="usersEmpty" class="empty" hidden>Chưa có tài khoản.</p><hr><h2 id="userFormTitle">Cấp quyền theo email</h2><form id="userForm"><div class="pair"><div><label for="userEmail">Email Google *</label><input id="userEmail" type="email" required maxlength="254" autocomplete="off"></div><div><label for="userRole">Quyền</label><select id="userRole"><option value="member">Thành viên</option><option value="vip">VIP</option><option value="admin">Quản trị viên</option></select></div></div><label class="image-toggle"><input id="userActive" type="checkbox" checked> Tài khoản hoạt động</label><p id="userVersion" class="hint"></p><div class="actions"><button type="submit">Lưu người dùng</button><button id="cancelUser" type="button" class="secondary">Hủy chỉnh sửa</button></div></form></div></section>
+<section id="viewSystem" hidden><div class="panel"><h2>Hệ thống website</h2><dl class="system-details"><dt>Nội dung bài viết</dt><dd>File HTML riêng tư trên Google Drive</dd><dt>Danh sách và trạng thái</dt><dd>Google Sheets</dd><dt>Đăng nhập</dt><dd>Google Sign-In; phân quyền Quản trị viên / VIP / Thành viên</dd><dt>Xuất bản</dt><dd>Chỉ bài có trạng thái Công khai được trả cho độc giả</dd><dt>AI tự tìm và dịch</dt><dd>Chưa tích hợp. Hiện nhận file HTML và RSS.</dd></dl><div style="margin:20px 0;padding:16px;background:#f8fafc;border:1px solid #dce1d8;border-radius:8px;"><h3 style="margin-top:0;">🔗 Tự động chia sẻ file Google Drive</h3><p class="hint">Mọi bài viết có chứa link Google Drive khi Lưu sẽ tự động được cấp quyền <em>"Bất kỳ ai có đường liên kết đều có thể xem"</em>. Bạn cũng có thể bấm nút bên dưới để quét và bật quyền công khai cho toàn bộ tệp trong thư mục <strong>Robot Ideas Articles</strong>.</p><button type="button" id="shareDriveBtn" class="secondary">🔗 Bật chia sẻ công khai toàn bộ file Drive</button></div><p class="hint">Email quản trị và thông tin kết nối lưu trong Script properties của Google Apps Script. Trang này không hiển thị khóa hay token.</p><a class="text-button" href="https://github.com/datahub-shark/news#readme" target="_blank" rel="noopener">Hướng dẫn cấu hình ↗</a></div></section>
 <section id="viewEditor" hidden><button id="backToArticles" type="button" class="text-button">← Quay lại danh sách</button><form id="editor" class="panel"><div class="editor-head"><h2 id="editorTitle">Bài mới</h2><span id="badge">Riêng tư</span></div><label for="title">Tiêu đề *</label><input id="title" maxlength="240" required><div class="pair"><div><label for="category">Chủ đề</label><select id="category"><option>Robot di động</option><option>Thị giác máy</option><option>Điều khiển</option><option>Cơ khí</option><option>AI &amp; ROS</option><option>Khác</option></select></div><div><label for="tags">Từ khóa</label><input id="tags" maxlength="500" placeholder="ROS 2, SLAM, LiDAR"></div></div><label for="summary">Tóm tắt (hiển thị ngoài thư viện)</label><textarea id="summary" rows="3" maxlength="1000"></textarea>
 <div class="cover-image-group"><label for="coverImage">Ảnh bìa xem trước (Hiển thị ở trang chủ)</label><div class="cover-input-row"><input id="coverImage" type="text" placeholder="Dán link ảnh https://... hoặc tải ảnh từ máy tính"><label class="upload-btn">📷 Tải ảnh bìa<input id="coverFileInput" type="file" accept="image/*" style="display:none"></label></div><div id="coverPreviewWrap" class="cover-preview-wrap" hidden><img id="coverPreviewImg" src="" alt="Xem trước ảnh bìa"><button type="button" id="removeCoverBtn" class="text-button" style="color:#c62828;">✕ Gỡ ảnh bìa</button></div><p class="hint">Ảnh bìa làm thumbnail xem trước ở trang chủ. Hệ thống tự động thu nhỏ &amp; tối ưu dung lượng ảnh, sau đó lưu lên Google Drive khi bạn Lưu bài viết.</p></div>
 <div class="html-tools"><label class="upload">↑ Nhập file .html<input id="htmlFile" type="file" accept=".html,.htm,text/html"></label><button id="preview" type="button" class="secondary">Xem trước nội dung</button><a id="openArticleView" class="secondary" href="#" target="_blank" hidden>Xem trang bài viết ↗</a></div><p class="hint">Chọn file HTML do AI tạo hoặc dán mã bên dưới. Nhập file chỉ thay nội dung đang sửa; bấm Lưu để ghi lên Drive.</p><label for="html">Nội dung HTML</label><textarea id="html" class="code" rows="17" maxlength="500000" placeholder="<article><h1>Tiêu đề</h1><p>Nội dung bài viết…</p></article>"></textarea>
@@ -107,8 +112,150 @@ a.recent-item:hover{background:rgba(40,94,70,0.04)}
 <script>window.NEWS_CONFIG = {
   // URL triển khai Google Apps Script kết thúc bằng /exec.
   apiUrl: 'https://script.google.com/macros/s/AKfycbzptC6MVeswlOqbKiIVXSohkfdU0aZeAkkKeRB9r1xbX7gZvzf_NKmiLJY3DzT_sSwB/exec',
+  // OAuth Web Client ID công khai; để trống để lấy từ backend authConfig.
+  googleClientId: '',
   name: 'Robot Ideas'
 };
+</script><script>(function () {
+  'use strict';
+  const STORAGE_KEY = 'robot_ideas_user_session';
+  const listeners = new Set();
+  let verifiedSession = null, readyPromise, expiryTimer, gisPromise, configPromise;
+
+  function emit() { for (const listener of listeners) { try { listener(verifiedSession); } catch (error) { console.error('Account listener failed', error); } } }
+  function readSaved() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null'); } catch { return null; } }
+  function clear() {
+    clearTimeout(expiryTimer); verifiedSession = null;
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+    emit();
+  }
+  function normalize(result, token) {
+    const user = result.user;
+    if (typeof token !== 'string' || !token || !Number.isFinite(result.expiresAt) || result.expiresAt <= Date.now() || !user || typeof user.email !== 'string' || !['admin', 'vip', 'member'].includes(user.role) || user.active !== true) throw Error('Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại.');
+    return { token, expiresAt: result.expiresAt, user: { ...user } };
+  }
+  function accept(result, token) {
+    const session = normalize(result, token);
+    verifiedSession = session;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(session)); localStorage.removeItem('robot_ideas_admin_session'); } catch {}
+    clearTimeout(expiryTimer);
+    function arm() { const remaining = session.expiresAt - Date.now(); if (remaining <= 0) { clear(); return; } expiryTimer = setTimeout(arm, Math.min(remaining, 2147483647)); }
+    arm(); readyPromise = Promise.resolve(session); emit(); return session;
+  }
+  async function request(action, payload = {}) {
+    let result;
+    if (window.google?.script?.run) {
+      result = await new Promise((resolve, reject) => window.google.script.run.withSuccessHandler(resolve).withFailureHandler(error => reject(Error(error.message || 'Không kết nối được máy chủ.'))).adminApi(action, payload));
+    } else {
+      const api = window.NEWS_CONFIG?.apiUrl;
+      if (!api) throw Error('Chưa cấu hình kết nối tài khoản.');
+      const controller = new AbortController(), timer = setTimeout(() => controller.abort(), 90000);
+      try {
+        const response = await fetch(api, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: JSON.stringify({ action, payload }), redirect: 'follow', signal: controller.signal });
+        if (!response.ok) throw Error('Không kết nối được máy chủ tài khoản.');
+        result = await response.json();
+      } catch (error) { if (error.name === 'AbortError') throw Error('Hết thời gian chờ máy chủ. Vui lòng thử lại.'); throw error; }
+      finally { clearTimeout(timer); }
+    }
+    if (!result?.ok) { const error = Error(result?.error || 'Thao tác tài khoản thất bại.'); error.code = result?.code; throw error; }
+    return result;
+  }
+  function ready() {
+    if (!readyPromise) readyPromise = (async () => {
+      const saved = readSaved();
+      if (!saved || typeof saved.token !== 'string' || !saved.token || !Number.isFinite(saved.expiresAt) || saved.expiresAt <= Date.now()) { clear(); return null; }
+      try { const result = await request('session', { token: saved.token }); if (readSaved()?.token !== saved.token) return verifiedSession; return accept(result, saved.token); }
+      catch (error) { verifiedSession = null; if (error.code === 'AUTH_REQUIRED' || error.code === 'ACCOUNT_DISABLED' || !error.code && /không hợp lệ/.test(error.message)) clear(); else emit(); throw error; }
+    })().catch(error => { readyPromise = null; throw error; });
+    return readyPromise;
+  }
+  async function call(action, payload = {}) {
+    await ready();
+    if (!verifiedSession) { const error = Error('Vui lòng đăng nhập Google để tiếp tục.'); error.code = 'AUTH_REQUIRED'; throw error; }
+    if (verifiedSession.expiresAt <= Date.now()) { clear(); const error = Error('Phiên đăng nhập đã hết hạn.'); error.code = 'AUTH_REQUIRED'; throw error; }
+    const requestToken = verifiedSession.token;
+    try {
+      const result = await request(action, { ...payload, token: requestToken });
+      if (verifiedSession?.token !== requestToken) { const error = Error('Phiên đăng nhập đã thay đổi. Vui lòng thử lại.'); error.code = 'AUTH_REQUIRED'; throw error; }
+      return result;
+    }
+    catch (error) { if (verifiedSession?.token === requestToken && (error.code === 'AUTH_REQUIRED' || error.code === 'ACCOUNT_DISABLED')) clear(); throw error; }
+  }
+  async function logout() {
+    const token = verifiedSession?.token;
+    clear(); readyPromise = Promise.resolve(null);
+    window.google?.accounts?.id?.disableAutoSelect();
+    if (token) await request('logout', { token });
+  }
+  function subscribe(listener) { listeners.add(listener); listener(verifiedSession); return () => listeners.delete(listener); }
+  function getConfig() {
+    if (!configPromise) configPromise = (async () => {
+      if (window.NEWS_CONFIG?.googleClientId) return { googleClientId: window.NEWS_CONFIG.googleClientId };
+      const api = window.NEWS_CONFIG?.apiUrl;
+      if (!api) throw Error('Chưa cấu hình kết nối tài khoản.');
+      const url = new URL(api); url.searchParams.set('action', 'authConfig');
+      const controller = new AbortController(), timer = setTimeout(() => controller.abort(), 30000);
+      try { const response = await fetch(url.href, { redirect: 'follow', signal: controller.signal }); if (!response.ok) throw Error('Không tải được cấu hình đăng nhập Google.'); const config = await response.json(); if (!config?.ok) throw Error(config?.error || 'Không tải được cấu hình đăng nhập Google.'); return config; }
+      finally { clearTimeout(timer); }
+    })().catch(error => { configPromise = null; throw error; });
+    return configPromise;
+  }
+  function loadGoogle() {
+    if (window.google?.accounts?.id) return Promise.resolve(window.google.accounts.id);
+    if (!gisPromise) gisPromise = new Promise((resolve, reject) => {
+      const script = document.createElement('script'); script.src = 'https://accounts.google.com/gsi/client?hl=vi'; script.async = true; script.defer = true;
+      const timer = setTimeout(() => { script.remove(); gisPromise = null; reject(Error('Không tải được Google Sign-In. Kiểm tra kết nối và thử lại.')); }, 30000);
+      script.onload = () => { clearTimeout(timer); if (window.google?.accounts?.id) resolve(window.google.accounts.id); else { gisPromise = null; reject(Error('Google Sign-In chưa sẵn sàng.')); } };
+      script.onerror = () => { clearTimeout(timer); script.remove(); gisPromise = null; reject(Error('Không tải được Google Sign-In. Kiểm tra kết nối và thử lại.')); };
+      document.head.append(script);
+    });
+    return gisPromise;
+  }
+  function node(tag, text, className) { const item = document.createElement(tag); if (text !== undefined) item.textContent = text; if (className) item.className = className; return item; }
+  async function mount(element) {
+    if (!element || typeof element.replaceChildren !== 'function') throw Error('Không tìm thấy vùng tài khoản.');
+    element.classList.add('robot-account');
+    if (window.google?.script?.run) {
+      const message = node('p', 'Đăng nhập Google tại trang quản trị chính của Robot Ideas.', 'account-message');
+      const link = node('a', 'Mở trang đăng nhập Google ↗', 'account-canonical-link');
+      link.href = 'https://datahub-shark.github.io/news/admin.html'; link.target = '_blank'; link.rel = 'noopener noreferrer';
+      element.replaceChildren(message, link); return;
+    }
+    let sequence = 0, signingIn = false;
+    async function render(session) {
+      const current = ++sequence; element.replaceChildren();
+      if (session) {
+        const identity = node('div', undefined, 'account-identity'); identity.append(node('strong', session.user.name || session.user.email), node('span', session.user.email), node('small', { admin: 'Quản trị viên', vip: 'VIP', member: 'Thành viên' }[session.user.role]));
+        const button = node('button', 'Đăng xuất', 'account-logout'); button.type = 'button'; button.onclick = async () => { button.disabled = true; try { await logout(); } catch (error) { element.append(node('p', error.message, 'account-message')); } };
+        element.append(identity, button); return;
+      }
+      const status = node('p', 'Đang chuẩn bị đăng nhập Google…', 'account-message'); status.setAttribute('role', 'status'); element.append(status);
+      try {
+        const config = await getConfig(); if (current !== sequence) return;
+        if (!config.googleClientId) { status.textContent = 'Đăng nhập Google chưa được cấu hình. Chủ website cần tạo OAuth Client ID loại Web và cấu hình ứng dụng trước khi sử dụng.'; return; }
+        const [googleId, challenge] = await Promise.all([loadGoogle(), request('googleChallenge')]); if (current !== sequence) return;
+        if (typeof challenge.nonce !== 'string' || !challenge.nonce) throw Error('Máy chủ chưa cấp mã xác thực Google. Vui lòng thử lại.');
+        const holder = node('div', undefined, 'account-google-button'); status.textContent = 'Đăng nhập hoặc tạo tài khoản bằng Google. Tài khoản mới có quyền Thành viên.'; element.append(holder);
+        googleId.initialize({ client_id: config.googleClientId, nonce: challenge.nonce, auto_select: false, ux_mode: 'popup', callback: async response => {
+          if (signingIn || current !== sequence) return; signingIn = true; status.textContent = 'Đang xác minh tài khoản…';
+          try { if (!response?.credential) throw Error('Google chưa cung cấp thông tin đăng nhập.'); const result = await request('googleLogin', { idToken: response.credential, nonce: challenge.nonce }); if (current !== sequence) return; const session = accept(result, result.token); readyPromise = Promise.resolve(session); }
+          catch (error) { await render(null); if (current < sequence) { const feedback = node('p', error.message, 'account-message account-error'); feedback.setAttribute('role', 'alert'); element.prepend(feedback); } }
+          finally { signingIn = false; }
+        } });
+        googleId.renderButton(holder, { type: 'standard', theme: 'outline', size: 'large', text: 'continue_with', locale: 'vi', width: 280 });
+      } catch (error) { if (current !== sequence) return; status.textContent = error.message; const retry = node('button', 'Thử lại', 'account-retry'); retry.type = 'button'; retry.onclick = () => render(null); element.append(retry); }
+    }
+    try { await ready(); } catch (error) { element.replaceChildren(node('p', error.message, 'account-message')); }
+    listeners.add(session => { void render(session); });
+    await render(verifiedSession);
+  }
+  window.addEventListener('storage', event => {
+    if (event.key !== STORAGE_KEY) return;
+    clearTimeout(expiryTimer); verifiedSession = null; emit(); readyPromise = null;
+    if (event.newValue) void ready().catch(() => {}); else readyPromise = Promise.resolve(null);
+  });
+  window.RobotAccount = Object.freeze({ ready, mount, call, get session() { return verifiedSession ? { ...verifiedSession, user: { ...verifiedSession.user } } : null; }, subscribe, logout });
+})();
 </script><script>/*! @license DOMPurify 3.4.17 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/3.4.17/LICENSE */
 (function(e,t){typeof exports==`object`&&typeof module<`u`?module.exports=t():typeof define==`function`&&define.amd?define([],t):(e=typeof globalThis<`u`?globalThis:e||self,e.DOMPurify=t())})(this,function(){"use strict";function e(e,t){this.v=e,this.k=t}function t(e,t){(t==null||t>e.length)&&(t=e.length);for(var n=0,r=Array(t);n<t;n++)r[n]=e[n];return r}function n(e){if(Array.isArray(e))return e}function r(e,t){var n=e==null?null:typeof Symbol<`u`&&e[Symbol.iterator]||e[`@@iterator`];if(n!=null){var r,i,a,o,s=[],c=!0,l=!1;try{if(a=(n=n.call(e)).next,t===0){if(Object(n)!==n)return;c=!1}else for(;!(c=(r=a.call(n)).done)&&(s.push(r.value),s.length!==t);c=!0);}catch(e){l=!0,i=e}finally{try{if(!c&&n.return!=null&&(o=n.return(),Object(o)!==o))return}finally{if(l)throw i}}return s}}function i(){throw TypeError(`Invalid attempt to destructure non-iterable instance.
 In order to be iterable, non-array objects must have a [Symbol.iterator]() method.`)}
@@ -128,16 +275,10 @@ function a(e,t){return n(e)||r(e,t)||o(e,t)||i()}function o(e,n){if(e){if(typeof
  window.articleFrame=function(html,sourceUrl,images=true){const frame=document.createElement('iframe');frame.title='Nội dung bài viết';frame.className='article-frame';frame.setAttribute('sandbox','allow-popups');frame.setAttribute('referrerpolicy','no-referrer');frame.srcdoc=articleDocument(html,sourceUrl,images);return frame;};
 })();
 </script><script>const $=id=>document.getElementById(id);let token='',articles=[],playlists=[],playlistSupported=false,current={},busy=false,dirty=false;const selectedArticles=new Set();let visibleArticles=[];const fields=['title','category','tags','summary','coverImage','html','robotIdea','sourceName','sourceUrl'];const labels={draft:'Bản nháp',pending:'Đang chờ',published:'Đã duyệt',rejected:'Từ chối'};
-const SESSION_KEY='robot_ideas_admin_session';let sessionTimer;
-function forgetSession(){try{localStorage.removeItem(SESSION_KEY)}catch{}clearTimeout(sessionTimer);}
-function armSessionExpiry(expiresAt){const remaining=expiresAt-Date.now();if(remaining<=0){clearPrivate();message('Phiên đăng nhập đã hết hạn. Anh đăng nhập lại để tiếp tục.');return;}sessionTimer=setTimeout(()=>armSessionExpiry(expiresAt),Math.min(remaining,2147483647));}
-function rememberSession(value){clearTimeout(sessionTimer);const expiresAt=Number.isFinite(value?.expiresAt)?value.expiresAt:(Date.now()+30*24*60*60*1000);try{localStorage.setItem(SESSION_KEY,JSON.stringify({token:value?.token||token,expiresAt}))}catch{message('Trình duyệt không cho lưu phiên; phiên hiện tại chỉ dùng trong tab này.');}armSessionExpiry(expiresAt);}
 function message(s){$('notice').textContent=s}
 async function call(action,payload={}){
- const request={...payload,token};let result;
- if(window.google?.script?.run){result=await new Promise((resolve,reject)=>google.script.run.withSuccessHandler(resolve).withFailureHandler(e=>reject(Error(e.message||'Lỗi kết nối'))).adminApi(action,request));}
- else{const api=window.NEWS_CONFIG?.apiUrl;if(!api)throw Error('Chưa cấu hình backend Google.');const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),90000);try{const response=await fetch(api,{method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify({action,payload:request}),redirect:'follow',signal:controller.signal});if(!response.ok)throw Error('Không kết nối được backend Google.');result=await response.json();}catch(e){if(e.name==='AbortError')throw Error('Hết thời gian chờ. Hãy tải lại kho bài để kiểm tra trước khi lưu lại.');throw e;}finally{clearTimeout(timeout);}}
- if(!result.ok){if(result.code==='AUTH_REQUIRED')clearPrivate();const error=Error(result.error||'Thao tác thất bại.');error.code=result.code;throw error;}return result;
+ if(window.RobotAccount?.session?.user.role!=='admin')throw Error('Tài khoản này không có quyền quản trị.');
+ return window.RobotAccount.call(action,payload);
 }
 async function task(fn){if(busy)return;busy=true;const controls=[...document.querySelectorAll('button,input,textarea,select')].map(control=>[control,control.disabled]);controls.forEach(([control])=>control.disabled=true);try{await fn()}catch(e){message(e.message)}finally{busy=false;controls.forEach(([control,disabled])=>{if(control.isConnected)control.disabled=disabled;});renderSelection();}}
 
@@ -209,9 +350,9 @@ function render(){
 }
 
 let activeView='overview',sourceId='',sourceDirty=false;
-function showView(view,skipConfirm=false){if(!skipConfirm&&!confirmDiscard())return false;if(view!=='sources'&&sourceDirty)editSource();activeView=view;for(const name of ['overview','articles','playlists','sources','system','editor'])$('view'+name[0].toUpperCase()+name.slice(1)).hidden=name!==view;$('pageTitle').textContent={overview:'Tổng quan',articles:'Quản lý bài viết',playlists:'Playlist bài viết',sources:'Nguồn thu thập',system:'Hệ thống',editor:'Biên tập bài viết'}[view];document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));$('navPending').classList.toggle('active',view==='articles'&&$('filter').value==='pending');if(view!=='editor')dirty=false;return true;}
+function showView(view,skipConfirm=false){if(!skipConfirm&&!confirmDiscard())return false;if(view!=='sources'&&sourceDirty)editSource();activeView=view;for(const name of ['overview','articles','playlists','sources','users','system','editor'])$('view'+name[0].toUpperCase()+name.slice(1)).hidden=name!==view;$('pageTitle').textContent={overview:'Tổng quan',articles:'Quản lý bài viết',playlists:'Playlist bài viết',sources:'Nguồn thu thập',users:'Người dùng',system:'Hệ thống',editor:'Biên tập bài viết'}[view];document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));$('navPending').classList.toggle('active',view==='articles'&&$('filter').value==='pending');if(view!=='editor')dirty=false;return true;}
 function newArticle(){if(!confirmDiscard())return;edit();showView('editor',true);message('Nhập file HTML hoặc soạn nội dung để tạo bài mới.');}
-document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{if(b.dataset.view==='articles'){showArticles('all','all');return;}if(!showView(b.dataset.view))return;if(b.dataset.view==='sources')task(loadSources);});
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{if(b.dataset.view==='articles'){showArticles('all','all');return;}if(!showView(b.dataset.view))return;if(b.dataset.view==='sources')task(loadSources);if(b.dataset.view==='users')task(loadUsers);});
 function showArticles(state='all',playlistId){if(!showView('articles'))return;$('filter').value=state;if(playlistId!==undefined)$('playlistFilter').value=playlistId;render();$('navPending').classList.toggle('active',state==='pending');if($('navPublished'))$('navPublished').classList.toggle('active',state==='published');if($('navRejected'))$('navRejected').classList.toggle('active',state==='rejected');}
 $('navPending').onclick=()=>showArticles('pending','all');if($('navPublished'))$('navPublished').onclick=()=>showArticles('published','all');if($('navRejected'))$('navRejected').onclick=()=>showArticles('rejected','all');document.querySelectorAll('[data-tab-filter]').forEach(tab=>tab.onclick=()=>showArticles(tab.dataset.tabFilter));document.querySelectorAll('[data-stat]').forEach(b=>b.onclick=()=>showArticles(b.dataset.stat));$('seeAll').onclick=()=>showArticles();$('sidebarNew').onclick=newArticle;$('startNew').onclick=newArticle;$('backToArticles').onclick=()=>{if(!confirmDiscard())return;if(window.opener){try{window.close();}catch(e){}}showArticles();};$('articleSearch').oninput=()=>{clearTimeout(adminSearchTimer);if(articles.length>100)adminSearchTimer=setTimeout(render,120);else render()};
 function editSource(source={}){sourceId=source.id||'';$('sourceLabel').value=source.name||'';$('feedUrl').value=source.feedUrl||'';$('sourceEnabled').checked=source.enabled!==false;$('sourceFormTitle').textContent=source.id?'Chỉnh sửa nguồn':'Thêm nguồn';sourceDirty=false;}
@@ -219,16 +360,27 @@ async function loadSources(){const r=await call('sources');$('sourceList').repla
 $('sourceForm').oninput=()=>sourceDirty=true;$('cancelSource').onclick=()=>{if(!sourceDirty||confirm('Bỏ thay đổi nguồn chưa lưu?'))editSource();};$('sourceForm').onsubmit=e=>{e.preventDefault();task(async()=>{await call('saveSource',{source:{id:sourceId||undefined,name:$('sourceLabel').value,feedUrl:$('feedUrl').value,enabled:$('sourceEnabled').checked}});editSource();await loadSources();message('Đã lưu nguồn thu thập.');});};
 function confirmDiscard(){if((dirty||sourceDirty)&&!confirm('Bỏ thay đổi chưa lưu?'))return false;return true}
 $('editor').oninput=()=>dirty=true;window.onbeforeunload=e=>{if(dirty||sourceDirty){e.preventDefault();e.returnValue=''}};
-async function reload(){const r=await call('list');if(r.apiVersion!==2)throw Error('Backend chưa được nâng cấp HTML. Hãy cập nhật Code.gs và Admin.html, chạy setup rồi Deploy phiên bản mới.');articles=r.articles;playlists=Array.isArray(r.playlists)?r.playlists:[];playlistSupported=r.playlistVersion===1;for(const id of selectedArticles)if(!articles.some(a=>a.id===id))selectedArticles.delete(id);refreshPlaylistSelects();render()}
-$('request').onclick=()=>task(async()=>{await call('requestCode');message('Đã gửi mã đến email quản trị. Mã có hiệu lực 10 phút.');});
-$('loginForm').onsubmit=e=>{e.preventDefault();task(async()=>{const r=await call('login',{code:$('code').value});token=r.token;rememberSession(r);const editId=initialEditId();await reload();await enterDashboard(editId);if(!editId)message('Đã đăng nhập. Trình duyệt sẽ ghi nhớ phiên trong 30 ngày.');})};
-async function enterDashboard(editId=initialEditId()){$('login').hidden=true;$('workspace').hidden=false;$('logout').hidden=false;$('code').value='';edit();if(editId){try{await loadEditor(editId);}catch(e){showView('overview',true);throw e;}}else{showView('overview',true);}}
-function clearPrivate(){forgetSession();token='';articles=[];playlists=[];playlistSupported=false;editingPlaylist=null;assigningArticle=null;selectedArticles.clear();refreshPlaylistSelects();$('playlistEditorDialog').close();$('articlePlaylistsDialog').close();$('articlePlaylistChoices').replaceChildren();$('articlePlaylistsName').textContent='';$('playlistName').value='';$('playlistDescription').value='';edit();editSource();$('sourceList').replaceChildren();$('workspace').hidden=true;$('login').hidden=false;$('logout').hidden=true;$('previewDialog').close();$('previewContent').replaceChildren();$('list').replaceChildren();if($('coverPreviewWrap')){$('coverPreviewWrap').hidden=true;$('coverPreviewImg').src='';}dirty=false;}
-$('logout').onclick=()=>{if(!confirmDiscard())return;task(async()=>{try{await call('logout');clearPrivate();message('Đã đăng xuất và thu hồi phiên đăng nhập.');}catch(e){clearPrivate();message('Đã xóa phiên trên thiết bị. Chưa xác nhận thu hồi ở server: '+e.message);}})};
-window.addEventListener('storage',e=>{if(e.key===SESSION_KEY&&!e.newValue){clearPrivate();message('Phiên đã đăng xuất ở tab khác.');}if(e.key==='robot_ideas_last_saved'&&token){reload().then(()=>{if(activeView==='articles')render();});}});
-async function restoreSession(){let saved;try{saved=JSON.parse(localStorage.getItem(SESSION_KEY)||'null')}catch{forgetSession();return;}if(!saved)return;if(typeof saved.token!=='string'||!Number.isFinite(saved.expiresAt)||saved.expiresAt<=Date.now()){forgetSession();return;}const editId=initialEditId();$('login').hidden=true;await task(async()=>{token=saved.token;message(editId?'Đang mở bài viết…':'Đang khôi phục phiên đăng nhập…');let restored=false;try{let r;try{r=await call('session');}catch(e){if(e.message&&e.message.includes('Thao tác không hợp lệ')){await call('list');r={expiresAt:saved.expiresAt};}else throw e;}rememberSession({token,expiresAt:r.expiresAt});restored=true;if(editId){const [,got]=await Promise.all([reload(),call('get',{id:editId}).catch(error=>({error}))]);$('login').hidden=true;$('workspace').hidden=false;$('logout').hidden=false;$('code').value='';if(got.error){edit();showView('overview',true);message(got.error.message);}else{edit(got.article);showView('editor',true);message('Đã mở bài viết.');}}else{await reload();await enterDashboard('');message('Đã khôi phục phiên đăng nhập.');}}catch(e){if(!restored){token='';$('login').hidden=false;}message(e.code==='AUTH_REQUIRED'?'Phiên đã hết hạn hoặc bị thu hồi. Anh đăng nhập lại.':'Chưa khôi phục được phiên: '+e.message+' Tải lại trang để thử lại.');}});}
+async function reload(){const requestedToken=token;const r=await call('list');if(!token||token!==requestedToken)return;if(r.apiVersion!==2)throw Error('Backend chưa được nâng cấp HTML. Hãy cập nhật Code.gs và Admin.html, chạy setup rồi Deploy phiên bản mới.');articles=r.articles;playlists=Array.isArray(r.playlists)?r.playlists:[];playlistSupported=r.playlistVersion===1;for(const id of selectedArticles)if(!articles.some(a=>a.id===id))selectedArticles.delete(id);refreshPlaylistSelects();render()}
+async function enterDashboard(editId=initialEditId()){$('login').hidden=true;$('workspace').hidden=false;$('logout').hidden=false;edit();if(editId){try{await loadEditor(editId);}catch(e){showView('overview',true);throw e;}}else{showView('overview',true);}}
+function clearPrivate(){token='';articles=[];playlists=[];playlistSupported=false;users=[];editingUser=null;editingPlaylist=null;assigningArticle=null;selectedArticles.clear();refreshPlaylistSelects();$('playlistEditorDialog').close();$('articlePlaylistsDialog').close();$('articlePlaylistChoices').replaceChildren();$('articlePlaylistsName').textContent='';$('playlistName').value='';$('playlistDescription').value='';edit();editSource();editUser();$('sourceList').replaceChildren();$('userList').replaceChildren();$('workspace').hidden=true;$('login').hidden=false;$('logout').hidden=true;$('previewDialog').close();$('previewContent').replaceChildren();$('list').replaceChildren();if($('coverPreviewWrap')){$('coverPreviewWrap').hidden=true;$('coverPreviewImg').src='';}dirty=false;}
+$('logout').onclick=()=>{if(!confirmDiscard())return;task(async()=>{try{await window.RobotAccount.logout();message('Đã đăng xuất và thu hồi phiên đăng nhập.');}catch(e){clearPrivate();message('Đã xóa phiên trên thiết bị. Chưa xác nhận thu hồi ở server: '+e.message);}})};
+window.addEventListener('storage',e=>{if(e.key==='robot_ideas_last_saved'&&token){reload().then(()=>{if(activeView==='articles')render();}).catch(error=>message(error.message));}});
+let accountRevision=0;
+async function applyAccount(session){
+ const revision=++accountRevision;
+ if(!session||session.user.role!=='admin'||!session.user.active){clearPrivate();$('adminAccessMessage').textContent=session?'Tài khoản '+session.user.email+' có quyền '+({member:'Thành viên',vip:'VIP'}[session.user.role]||session.user.role)+'. Chỉ Quản trị viên được truy cập bảng điều khiển này.':'';return;}
+ token=session.token;$('login').hidden=true;message('Đang mở bảng điều khiển…');
+ try{await reload();if(revision!==accountRevision)return;await enterDashboard();if(revision===accountRevision)message(initialEditId()?'Đã mở bài viết.':'Đã đăng nhập bằng Google.');}
+ catch(error){if(revision!==accountRevision)return;clearPrivate();message(error.message);}
+}
+async function initializeAccount(){
+ if(!window.RobotAccount){$('login').hidden=false;message('Chưa tải được chức năng đăng nhập. Vui lòng tải lại trang.');return;}
+ try{await window.RobotAccount.ready();}catch(error){message('Chưa xác minh được phiên: '+error.message);}
+ window.RobotAccount.subscribe(session=>{void applyAccount(session);});
+ await window.RobotAccount.mount($('accountLogin'));
+}
 $('new').onclick=newArticle;$('filter').onchange=render;if($('categoryFilter'))$('categoryFilter').onchange=render;
-$('reload').onclick=()=>{if(!confirmDiscard())return;task(async()=>{const id=current.id;await reload();if(activeView==='sources'){editSource();await loadSources();}if(id){const r=await call('get',{id});edit(r.article);}else edit();message('Đã tải lại dữ liệu.')})};
+$('reload').onclick=()=>{if(!confirmDiscard())return;task(async()=>{const id=current.id;await reload();if(activeView==='sources'){editSource();await loadSources();}if(activeView==='users'){editUser();await loadUsers();}if(id){const r=await call('get',{id});edit(r.article);}else edit();message('Đã tải lại dữ liệu.')})};
 $('editor').onsubmit=e=>{e.preventDefault();task(async()=>{const article={id:current.id,version:current.version,status:$('state').value};for(const f of fields)article[f]=$(f).value;if(article.status==='published'&&!confirm('Công khai bài này cho mọi người đọc?'))return;if(article.coverImage&&article.coverImage.startsWith('data:image/')){message('Đang lưu bài và tải ảnh bìa lên Google Drive…');}else{message('Đang lưu bài viết…');}const r=await call('save',{article});edit(r.article);message('Đã lưu bài viết · '+labels[r.article.status]+(r.article.coverImage?' (Ảnh bìa đã lưu trên Drive)':''));try{localStorage.setItem('robot_ideas_last_saved',Date.now().toString());}catch{}await reload();})};
 $('import').onclick=()=>task(async()=>{const r=await call('importFeeds');await reload();message('Đã nhập '+r.count+' bản nháp từ RSS.');});
 $('htmlFile').onchange=()=>task(async()=>{const file=$('htmlFile').files[0];if(!file)return;if(!/\.html?$/i.test(file.name)||file.size>1500000)throw Error('Chọn file .html/.htm nhỏ hơn 1,5 MB.');let html=await file.text();if(html.length>500000)throw Error('HTML vượt 500.000 ký tự.');const metaMatch=html.match(/<!--\s*METADATA([\s\S]*?)-->/);if(metaMatch){const metaText=metaMatch[1];const getValue=key=>{const m=metaText.match(new RegExp(`${key}:\\s*(.*?)(?=\\n[\\w\\s]+:|\\n-->|$)`,'i'));return m?m[1].trim():'';};if(getValue('Tiêu đề'))$('title').value=getValue('Tiêu đề').slice(0,240);if(getValue('Chuyên mục'))$('category').value=getValue('Chuyên mục');if(getValue('Nguồn'))$('sourceUrl').value=getValue('Nguồn');if(getValue('Tên nguồn'))$('sourceName').value=getValue('Tên nguồn').slice(0,200);if(getValue('Tóm tắt'))$('summary').value=getValue('Tóm tắt').slice(0,1000);if(getValue('Gợi ý ứng dụng'))$('robotIdea').value=getValue('Gợi ý ứng dụng').slice(0,5000);if(getValue('Ảnh bìa')){$('coverImage').value=getValue('Ảnh bìa');if($('coverPreviewWrap')){$('coverPreviewImg').src=getValue('Ảnh bìa');$('coverPreviewWrap').hidden=false;}}html=html.slice(metaMatch.index+metaMatch[0].length).trim();}else{const doc=new DOMParser().parseFromString(DOMPurify.sanitize(html,{WHOLE_DOCUMENT:true}),'text/html');if(!$('title').value)$('title').value=(doc.querySelector('h1')?.textContent||file.name.replace(/\.html?$/i,'')).slice(0,240);} $('html').value=html;dirty=true;message('Đã nhập '+file.name+'. Bấm Xem trước rồi Lưu bài viết.');});
@@ -284,5 +436,13 @@ $('closePlaylistEditor').onclick=()=>$('playlistEditorDialog').close();$('closeA
 $('playlistForm').onsubmit=event=>{event.preventDefault();task(async()=>{const p=await persistPlaylist({...editingPlaylist,name:$('playlistName').value,description:$('playlistDescription').value,articleIds:editingPlaylist?.articleIds||[]});$('playlistEditorDialog').close();message('Đã lưu playlist “'+p.name+'”.');});};
 $('deletePlaylist').onclick=()=>{if(!editingPlaylist||!confirm('Xóa playlist “'+editingPlaylist.name+'”? Các bài viết vẫn được giữ nguyên.'))return;task(async()=>{await call('deletePlaylist',{id:editingPlaylist.id,version:editingPlaylist.version});playlists=playlists.filter(p=>p.id!==editingPlaylist.id);refreshPlaylistSelects();render();$('playlistEditorDialog').close();message('Đã xóa playlist. Các bài viết được giữ nguyên.');});};
 $('articlePlaylistsForm').onsubmit=event=>{event.preventDefault();if(!assigningArticle)return;const playlistIds=[...$('articlePlaylistChoices').querySelectorAll('input:checked')].map(input=>input.value);task(async()=>{const result=await call('setArticlePlaylists',{articleId:assigningArticle.id,playlistIds,versions:assigningArticle.versions});playlists=result.playlists;refreshPlaylistSelects();render();$('articlePlaylistsDialog').close();message('Đã lưu phân loại playlist.');});};
-restoreSession();
+let users=[],editingUser=null;
+function editUser(user){editingUser=user?{...user}:null;$('userEmail').value=user?.email||'';$('userEmail').readOnly=Boolean(user);$('userRole').value=user?.role||'member';$('userActive').checked=user?.active!==false;$('userFormTitle').textContent=user?'Chỉnh sửa người dùng':'Cấp quyền theo email';$('userVersion').textContent=user?'Phiên bản hiện tại: '+user.version:'Tài khoản mới được tạo với email và quyền anh chọn.';}
+function renderUsers(){
+ $('userList').replaceChildren(...users.map(user=>{const row=element('tr'),identity=element('td');identity.append(element('strong',user.email),element('small',user.name||''));const action=element('td'),button=element('button','Chỉnh sửa','secondary');button.type='button';button.onclick=()=>editUser(user);action.append(button);row.append(identity,element('td',{admin:'Quản trị viên',vip:'VIP',member:'Thành viên'}[user.role]||user.role),element('td',user.active?'Đang hoạt động':'Đã khóa'),element('td',String(user.version)),action);return row;}));$('usersEmpty').hidden=users.length>0;
+}
+async function loadUsers(){const requestedToken=token,result=await call('users');if(!token||token!==requestedToken)return;users=Array.isArray(result.users)?result.users:[];renderUsers();}
+$('reloadUsers').onclick=()=>task(loadUsers);$('cancelUser').onclick=()=>editUser();
+$('userForm').onsubmit=event=>{event.preventDefault();task(async()=>{const user={email:$('userEmail').value.trim().toLowerCase(),role:$('userRole').value,active:$('userActive').checked};if(editingUser)user.version=editingUser.version;const result=await call('saveUser',{user});const index=users.findIndex(item=>item.email===result.user.email);if(index<0)users.push(result.user);else users[index]=result.user;renderUsers();editUser(result.user);message('Đã lưu quyền người dùng '+result.user.email+'.');const me=window.RobotAccount.session?.user;if(me?.email===result.user.email&&(result.user.role!=='admin'||!result.user.active))await window.RobotAccount.logout();});};
+initializeAccount();
 </script></body></html>

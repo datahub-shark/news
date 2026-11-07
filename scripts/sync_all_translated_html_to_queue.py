@@ -3,18 +3,20 @@ import time
 import re
 import urllib.request
 from pathlib import Path
+from editorial_auth import (get_editorial_token, get_editorial_api_url,
+                            assert_editorial_action, redact_editorial_error)
 
-API_URL = 'https://script.google.com/macros/s/AKfycbzptC6MVeswlOqbKiIVXSohkfdU0aZeAkkKeRB9r1xbX7gZvzf_NKmiLJY3DzT_sSwB/exec'
-SYNC_TOKEN = 'robot-ideas-sync-secret-2026'
 DATA_FILE = Path('data/crawled_articles.json')
 ZH_REGEX = re.compile(r'[\u4e00-\u9fa5]')
 
 def call_api(action, payload=None, retries=3):
     if payload is None:
         payload = {}
-    data_dict = {'action': action, 'payload': {**payload, 'token': SYNC_TOKEN}}
+    token = get_editorial_token(require_admin=True)
+    assert_editorial_action(action, payload)
+    data_dict = {'action': action, 'payload': {**payload, 'token': token}}
     req = urllib.request.Request(
-        API_URL,
+        get_editorial_api_url(),
         data=json.dumps(data_dict).encode('utf-8'),
         headers={'Content-Type': 'text/plain;charset=UTF-8'}
     )
@@ -23,7 +25,7 @@ def call_api(action, payload=None, retries=3):
             with urllib.request.urlopen(req, timeout=30) as resp:
                 res = json.loads(resp.read().decode('utf-8'))
                 if not res.get('ok'):
-                    raise Exception(res.get('error', 'API error'))
+                    raise Exception(redact_editorial_error(res.get('error', 'API error')))
                 return res
         except Exception as e:
             if attempt < retries - 1:
@@ -32,6 +34,7 @@ def call_api(action, payload=None, retries=3):
                 raise e
 
 def main():
+    get_editorial_token(require_admin=True)
     print("======================================================")
     print("☁️ ĐỒNG BỘ NỘI DUNG HTML TIẾNG VIỆT LÊN GOOGLE SHEETS QUEUE")
     print("======================================================")

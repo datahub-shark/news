@@ -6,19 +6,14 @@
  */
 
 import fs from 'node:fs';
+import { createEditorialClient, getEditorialCredential } from './editorial-auth.mjs';
 
-const API_URL = 'https://script.google.com/macros/s/AKfycbzptC6MVeswlOqbKiIVXSohkfdU0aZeAkkKeRB9r1xbX7gZvzf_NKmiLJY3DzT_sSwB/exec';
-const SYNC_TOKEN = 'robot-ideas-sync-secret-2026';
+const callApi = createEditorialClient();
 
 async function updateArticle(id, articleData) {
+  getEditorialCredential({ requireAdmin: true });
   // Lấy version hiện tại
-  const getRes = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-    body: JSON.stringify({ action: 'get', payload: { id, token: SYNC_TOKEN } })
-  });
-  const current = await getRes.json();
-  if (!current.ok) throw new Error(current.error);
+  const current = await callApi('get', { id });
 
   const payload = {
     article: {
@@ -36,14 +31,7 @@ async function updateArticle(id, articleData) {
     }
   };
 
-  const saveRes = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-    body: JSON.stringify({ action: 'save', payload: { ...payload, token: SYNC_TOKEN } })
-  });
-  const result = await saveRes.json();
-  if (!result.ok) throw new Error(result.error);
-  return result;
+  return callApi('save', payload);
 }
 
 // 1. Dữ liệu chuẩn hóa bài RoboMark

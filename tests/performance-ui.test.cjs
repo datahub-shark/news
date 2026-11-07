@@ -28,8 +28,8 @@ test('admin pagination reaches all rows and resets when searching a large librar
  const w=dom.window,d=w.document;w.confirm=()=>true;
  const articles=Array.from({length:1000},(_,i)=>({id:String(i),title:'Robot '+i,category:'Cơ khí',status:'draft',updatedAt:'2026-11-06'}));
  w.google={script:{run:{withSuccessHandler(success){return {withFailureHandler(){return {adminApi(action){queueMicrotask(()=>success(action==='list'?{ok:true,apiVersion:2,articles}:{ok:true,token:'test'}));}}}}}}}};
- w.eval(fs.readFileSync('admin.js','utf8'));
- d.getElementById('loginForm').dispatchEvent(new w.Event('submit',{cancelable:true}));await tick();
+ require('./helpers/admin-account.cjs')(w);w.eval(fs.readFileSync('admin.js','utf8'));
+ await tick();
  d.getElementById('seeAll').click();
  assert.equal(d.getElementById('list').children.length,40);
  assert.match(d.getElementById('listPager').textContent,/Trang 1 \/ 25/);
