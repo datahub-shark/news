@@ -3,7 +3,8 @@ import {resolve} from 'node:path';
 import {createHash} from 'node:crypto';
 import vm from 'node:vm';
 const source=resolve(process.argv[2]||'../link-shark-dxf/dist/linkS.html');
-const html=await readFile(source,'utf8');
+// Keep the published bytes identical after Git's Windows line-ending normalization.
+const html=(await readFile(source,'utf8')).replace(/\r\n/g,'\n');
 if(!html.includes('linkS')||!html.includes('window.LinkSharkUI')||!html.includes('window.LinkSharkForces'))throw Error('Expected the complete linkS workbench.');
 if(/<script[^>]+src=/i.test(html))throw Error('Workbench must be self-contained.');
 for(const match of html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(match[1]);
