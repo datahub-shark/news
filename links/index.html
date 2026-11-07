@@ -6,10 +6,10 @@
   <meta name="description" content="linkS trên Robot Ideas: thiết kế cơ cấu 2D và lưu dự án riêng bằng tài khoản Google.">
   <title>linkS · Robot Ideas</title>
   <link rel="stylesheet" href="../account.css">
-  <link rel="stylesheet" href="projects.css?v=previews-1">
+  <link rel="stylesheet" href="projects.css?v=single-header-1">
 </head>
 <body>
-  <header class="project-bar">
+  <header class="project-bar" hidden>
     <a class="site-home" href="../">← Robot Ideas</a>
     <strong class="product-name">link<span>S</span></strong>
     <div class="project-actions">
@@ -19,8 +19,8 @@
     </div>
     <button id="accountOpen" type="button">Đăng nhập Google</button>
   </header>
-  <p id="cloudStatus" role="status">Đăng nhập để dùng bản nháp riêng và lưu dự án lên tài khoản.</p>
-  <iframe id="workbench" data-workbench-src="linkS.html?v=workspace-ui-1" title="Bàn thiết kế cơ cấu linkS" allow="fullscreen"></iframe>
+  <p id="cloudStatus" role="status" hidden>Đăng nhập để dùng bản nháp riêng và lưu dự án lên tài khoản.</p>
+  <iframe id="workbench" data-workbench-src="linkS.html?v=single-header-1" title="Bàn thiết kế cơ cấu linkS" allow="fullscreen"></iframe>
   <dialog id="accountDialog" aria-labelledby="accountTitle">
     <div class="dialog-heading"><h2 id="accountTitle">Tài khoản Robot Ideas</h2><button type="button" data-close="accountDialog" aria-label="Đóng">×</button></div>
     <div id="accountMount"></div>
@@ -47,6 +47,6 @@
   <script src="../account.js"></script>
   <script src="workspace-storage.js?v=account-drafts-1"></script>
   <script src="project-preview.js?v=previews-1"></script>
-  <script src="projects.js?v=previews-1"></script>
+  <script src="projects.js?v=single-header-1"></script>
 </body>
 </html>

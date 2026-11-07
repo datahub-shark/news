@@ -114,6 +114,45 @@
       const select=$('links-language');if(select&&select.value!==window.LinkGoI18n.language)select.value=window.LinkGoI18n.language;
       const theme=$('links-theme'),dark=app()?.getWorkspace()?.theme==='dark';if(theme){theme.textContent=dark?'☀':'☾';theme.title=dark?'Chuyển sang giao diện sáng':'Chuyển sang giao diện tối';theme.setAttribute('aria-label',theme.title);}
       if(context&&activeKey()!==context.key)hide();
+      syncParentHost();
+    };
+    const syncParentHost=()=>{
+      if(window.parent===window)return;
+      let parentDoc;
+      try{parentDoc=window.parent.document;}catch{return;}
+      if(!parentDoc?.getElementById('cloudSave'))return;
+      let group=$('ls-cloud-actions');
+      if(!group){
+        const actions=document.querySelector('.ls-header-actions');
+        const prefs=document.querySelector('.links-preferences');
+        const header=$('ls-header');
+        if(!actions||!prefs||!header)return;
+        const back=document.createElement('a');
+        back.id='ls-site-home';back.className='ls-site-home';
+        back.href=parentDoc.querySelector('.site-home')?.href||'../';
+        back.target='_top';back.textContent='← Robot Ideas';back.title='Về trang chủ Robot Ideas';
+        header.prepend(back);
+        group=document.createElement('div');group.id='ls-cloud-actions';group.className='ls-cloud-actions';
+        const mk=(id,label,targetId,cls='',title='')=>{
+          const b=document.createElement('button');b.type='button';b.id=id;if(cls)b.className=cls;if(title)b.title=title;
+          b.textContent=label;b.onclick=()=>parentDoc.getElementById(targetId)?.click();return b;
+        };
+        group.append(
+          mk('ls-cloud-projects','Dự án của tôi','cloudProjects'),
+          mk('ls-cloud-save','Lưu lên tài khoản','cloudSave','ls-cloud-primary'),
+          mk('ls-cloud-save-copy','Lưu bản sao','cloudSaveCopy','','Lưu thành một dự án mới'),
+          Object.assign(document.createElement('span'),{className:'links-divider',ariaHidden:'true'})
+        );
+        actions.prepend(group);
+        const acct=mk('ls-account-open',parentDoc.getElementById('accountOpen')?.textContent||'Đăng nhập Google','accountOpen','ls-account-btn');
+        prefs.append(acct);
+      }
+      const pAcct=parentDoc.getElementById('accountOpen');
+      const acctBtn=$('ls-account-open');
+      if(pAcct&&acctBtn&&acctBtn.textContent!==pAcct.textContent){acctBtn.textContent=pAcct.textContent;acctBtn.title=pAcct.textContent;}
+      for(const [id,tid] of [['ls-cloud-projects','cloudProjects'],['ls-cloud-save','cloudSave'],['ls-cloud-save-copy','cloudSaveCopy']]){
+        const b=$(id),pb=parentDoc.getElementById(tid);if(b&&pb)b.disabled=pb.disabled;
+      }
     };
     for(const name of ['bindWorkspace','bindEditor']){const original=app()[name];app()[name]=function(value){original(value);sync();};}
     document.addEventListener('change',event=>{if(event.target.id==='links-language')window.LinkGoI18n.setLanguage(event.target.value);});
