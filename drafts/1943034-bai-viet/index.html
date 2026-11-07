@@ -12,17 +12,9 @@ Trạng thái: READY
 -->
 
 <article class="robot-ideas-article">
-  <h1>马术任务赛的任务与路径规划开源</h1>
-  <div class="article-meta">
-    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1943034" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 疏桐浸月</p>
-    <p><strong>Chuyên mục:</strong> Cơ khí</p>
-  </div>
-  
-  
-  <hr>
   <div class="article-body">
-<h1>序</h1><p> &nbsp; &nbsp;今年的马术任务赛要求搬运八个（四种，每种两个）随机排列的物块并要有序放置。我们的机械给出了一个很激进的上肢方案，那就是两个机械臂，每个机械臂可以取两个物块。但是这套机械方案丝毫没有考虑电控在路径规划上的难度。如果只是一股脑地拿了然后对应地放，就会出现在放物块的时候来回兜圈，丝毫没有体现出一次性可以搬运四个物块的优势。于是这个时候，就开发了一套针对本次赛题的任务与路径规划算法。</p><h1>视频</h1><p> &nbsp; &nbsp;先让各位看看算法实际跑出来的效果。下面的视频是我们在适应场地的时候拍的，因为正式比赛的时候抽签的时候抽到的排列组合太简单了，所有就找了这个比较复杂的情况。</p><div data-w-e-type="video" data-w-e-is-void>
-<video poster="" controls="true" width="auto" height="auto" data-file-md5="d974faad02bfbf3acd6619ac2b481316" data-file-len="14378979" data-file-name="5c21f6b867f2e868c6043dc4a88eed00.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/aa75612f1cbf4888997eb2a4dc8112c61787662376185/5c21f6b867f2e868c6043dc4a88eed00.mp4" type="video/mp4"/></video>
-</div><h1>链接</h1><p> &nbsp; &nbsp;github： <a href="https://github.com/shutongjinyve/TITR-ROBOCON-RoboLegged-2026-Task_Path_Planning" target="_blank">https://github.com/shutongjinyve/TITR-ROBOCON-RoboLegged-2026-Task_Path_Planning</a> </p><h1>跋</h1><p> &nbsp; &nbsp;我想在这里叠叠甲，我是第一次开源，虽然也是看了论坛里各位大佬的开源帖子，但还是不知道怎么写。对于算法，其实我是纯小白，先前在队伍里是搞控制的，上面这套代码也是我凭感觉摸索写的。有什么不到位的地方还请各位多多指教。</p><p><br></p><p><br></p>
+<h1>trình tự</h1><p>    Nhiệm vụ cưỡi ngựa năm nay yêu cầu vận chuyển tám (bốn loại, mỗi loại hai khối) được sắp xếp ngẫu nhiên và đặt chúng một cách có trật tự. Máy của chúng tôi cung cấp một giải pháp chi trên rất triệt để, đó là hai cánh tay robot, mỗi cánh tay có thể nâng hai khối. Tuy nhiên, kế hoạch cơ học này hoàn toàn không xem xét đến khó khăn trong việc lập kế hoạch đường dẫn cho điều khiển điện tử. Nếu bạn chỉ lấy tất cả cùng một lúc và đặt nó cho phù hợp, bạn sẽ đi tới đi lui theo vòng tròn khi đặt các khối, điều này không phản ánh lợi thế của việc có thể di chuyển bốn khối cùng một lúc. Vì vậy, tại thời điểm này, một bộ thuật toán lập kế hoạch nhiệm vụ và lộ trình đã được phát triển cho cuộc thi này.</p><h1>Video</h1><p>    Đầu tiên chúng ta hãy xem kết quả thực tế của thuật toán. Video dưới đây được quay khi chúng tôi đang thích nghi với địa điểm. Vì các hoán vị và tổ hợp rút ra trong cuộc thi chính thức quá đơn giản nên chúng tôi đã chọn tình huống phức tạp hơn này.</p><div data-w-e-is-void="" data-w-e-type="video">
+<video controls="true" data-file-len="14378979" data-file-md5="d974faad02bfbf3acd6619ac2b481316" data-file-name="5c21f6b867f2e868c6043dc4a88eed00.mp4" height="auto" poster="" width="auto"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/aa75612f1cbf4888997eb2a4dc8112c61787662376185/5c21f6b867f2e868c6043dc4a88eed00.mp4" type="video/mp4"/></video>
+</div><h1>liên kết</h1><p>    github： <a href="https://github.com/shutongjinyve/TITR-ROBOCON-RoboLegged-2026-Task_Path_Planning" target="_blank">https://github.com/shutongjinyve/TITR-ROBOCON-RoboLegged-2026-Task_Path_Planning</a> </p><h1>Lời tái bút</h1><p>    Tôi muốn xếp chồng lên đây. Đây là nguồn mở đầu tiên của tôi. Mặc dù đã đọc các bài viết mã nguồn mở của các ông lớn trong diễn đàn nhưng tôi vẫn chưa biết viết như thế nào. Về thuật toán, tôi thực sự là một người mới hoàn toàn. Tôi từng là người điều khiển trong nhóm. Tôi đã viết đoạn mã trên dựa trên cảm xúc của mình. Nếu có chỗ nào chưa ổn xin các bạn cho ý kiến.</p><p><br/></p><p><br/></p>
   </div>
 </article>

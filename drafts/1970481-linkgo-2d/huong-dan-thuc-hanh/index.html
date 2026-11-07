@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kho Video Hướng Dẫn Thực Hành LinkGo 2D</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-hover: #334155;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --accent: #10b981;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px;
+    }
+    header {
+      max-width: 1400px;
+      margin: 0 auto 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+    .header-title h1 {
+      font-size: 1.6rem;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-title p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover { background: var(--card-bg); }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 24px;
+    }
+    @media (max-width: 1024px) {
+      .container { grid-template-columns: 1fr; }
+    }
+    .player-section {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+    .video-wrapper {
+      position: relative;
+      background: #000;
+      aspect-ratio: 1920 / 910;
+      width: 100%;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+    }
+    .video-info {
+      padding: 20px;
+    }
+    .video-info h2 {
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .video-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .badge {
+      background: #0369a1;
+      color: #e0f2fe;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+    .video-desc {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+    .playlist-section {
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 16px;
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+    }
+    .playlist-header {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .playlist-count {
+      font-size: 0.85rem;
+      color: var(--accent);
+      background: rgba(16, 185, 129, 0.1);
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+    .playlist-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+      margin-bottom: 8px;
+    }
+    .playlist-item:hover {
+      background: var(--card-hover);
+    }
+    .playlist-item.active {
+      background: rgba(2, 132, 199, 0.15);
+      border-color: var(--primary);
+    }
+    .playlist-num {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--primary);
+      width: 28px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .playlist-details {
+      flex: 1;
+      min-width: 0;
+    }
+    .playlist-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .playlist-duration {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .guide-notes {
+      margin-top: 24px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 24px;
+      grid-column: 1 / -1;
+    }
+    .guide-notes h3 {
+      font-size: 1.2rem;
+      color: #38bdf8;
+      margin-bottom: 12px;
+    }
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .guide-card {
+      background: #0f172a;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .guide-card h4 {
+      color: #34d399;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+    .guide-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-title">
+      <h1>🎬 Kho Video Hướng Dẫn Thực Hành LinkGo 2D</h1>
+      <p>Tập hợp 8 video quay màn hình thao tác chi tiết từng tính năng thiết kế, mô phỏng và phân tích cơ cấu</p>
+    </div>
+    <div class="header-actions">
+      <a href="../attachments/linkgo-v1.1-viet-anh-huong-dan.html" target="_blank" class="btn btn-primary">
+        🚀 Mở LinkGo 2D Trực Tiếp
+      </a>
+      <a href="../index.html" class="btn btn-outline">
+        📖 Về Bài Viết Gốc
+      </a>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="player-section">
+      <div class="video-wrapper">
+        <video id="main-video" controls autoplay playsinline preload="auto">
+          <source src="video/01-co-cau-mau-va-dieu-khien.mp4" type="video/mp4">
+          Trình duyệt của bạn không hỗ trợ thẻ video HTML5.
+        </video>
+      </div>
+      <div class="video-info">
+        <h2 id="video-title">01. Khởi Động, Chọn Cơ Cấu Mẫu &amp; Điều Khiển Mô Phỏng</h2>
+        <div class="video-meta">
+          <span class="badge" id="video-tag">Bài 01</span>
+          <span id="video-dur">Thời lượng: 116.7s</span>
+          <span>Độ phân giải: 1920x910 · 60fps</span>
+        </div>
+        <div class="video-desc" id="video-desc">
+          Làm quen giao diện làm việc LinkGo 2D; mở cơ cấu bốn khâu kinh điển (Classic Crank-Rocker); điều khiển chạy/tạm dừng mô phỏng, chạy từng bước đơn (Single-step), đặt lại tư thế ban đầu (Reset), tăng giảm tốc độ phát và làm việc với nhiều cơ cấu cùng lúc trên các thẻ (Tabs).
+        </div>
+      </div>
+    </div>
+
+    <div class="playlist-section">
+      <div class="playlist-header">
+        <span>Danh Sách 8 Video Bài Giảng</span>
+        <span class="playlist-count">8 Video MP4</span>
+      </div>
+      <div id="playlist">
+        <!-- Generated by JavaScript -->
+      </div>
+    </div>
+
+    <div class="guide-notes">
+      <h3>💡 Hướng Dẫn &amp; Phân Tích Kỹ Thuật Theo Từng Phân Hệ</h3>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">
+        Mỗi video tập trung vào một nhóm công cụ chuyên sâu. Bạn có thể mở LinkGo 2D trên tab song song để vừa xem vừa thực hành:
+      </p>
+      <div class="guide-grid">
+        <div class="guide-card">
+          <h4>1. Điều Khiển &amp; Cơ Cấu Mẫu</h4>
+          <p>Tải nhanh các cơ cấu kinh điển (Four-bar, Slider-Crank, Parallel 5-Bar, v.v.). Thao tác các phím tắt Space (Chạy/Dừng), R (Reset), F (Vừa màn hình).</p>
+        </div>
+        <div class="guide-card">
+          <h4>2. Thuộc Tính &amp; Động Lực Học</h4>
+          <p>Hiệu chỉnh chiều dài, khối lượng, tỷ lệ khối tâm của từng khâu. Xem biểu đồ mô-men xoắn thời gian thực và phân tích miền làm việc (Workspace heatmap).</p>
+        </div>
+        <div class="guide-card">
+          <h4>3. Tự Vẽ Bản Vẽ Trống</h4>
+          <p>Đặt chốt xoay, gối cố định, con trượt thẳng và thanh liên kết. Bật bắt điểm đối tượng (Snap) và bắt lưới tọa độ để vẽ chuẩn xác.</p>
+        </div>
+        <div class="guide-card">
+          <h4>4. Ghi Tư Thế &amp; Tổng Hợp Quỹ Đạo</h4>
+          <p>Kéo ghi quỹ đạo chuyển động tự do; dùng bút vẽ một đường cong bất kỳ và để phần mềm tự động tính toán tổng hợp cơ cấu bám sát.</p>
+        </div>
+        <div class="guide-card">
+          <h4>5. Bánh Răng, Xích &amp; Đai Răng</h4>
+          <p>Bàn tính toán bộ truyền cơ khí tiêu chuẩn ISO/ANSI: kiểm tra ứng suất Lewis, số răng nhỏ nhất tránh cắt chân răng, hiệu ứng đa giác của xích tải.</p>
+        </div>
+        <div class="guide-card">
+          <h4>6. Đa Chọn, Căn Chỉnh &amp; Cụm Vật Rắn</h4>
+          <p>Giữ Shift quét chọn nhiều khâu khớp, căn thẳng hàng ngang/dọc, giãn cách đều và tạo cụm thanh cứng bất biến hình (Rigid bodies).</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const videos = [
+      {
+        num: "01",
+        title: "Cơ cấu mẫu & Điều khiển mô phỏng",
+        fullTitle: "01. Khởi Động, Chọn Cơ Cấu Mẫu & Điều Khiển Mô Phỏng",
+        src: "video/01-co-cau-mau-va-dieu-khien.mp4",
+        dur: "116.7s",
+        tag: "Cơ bản",
+        desc: "Làm quen giao diện làm việc LinkGo 2D; mở cơ cấu bốn khâu kinh điển (Classic Crank-Rocker); điều khiển chạy/tạm dừng mô phỏng, chạy từng bước đơn (Single-step), đặt lại tư thế ban đầu (Reset), tăng giảm tốc độ phát và làm việc với nhiều cơ cấu cùng lúc trên các thẻ (Tabs)."
+      },
+      {
+        num: "02",
+        title: "Thuộc tính nguồn dẫn động & Phân tích",
+        fullTitle: "02. Thuộc Tính Khâu Khớp, Nguồn Dẫn Động & Phân Tích Động Lực Học",
+        src: "video/02-thuoc-tinh-nguon-dan-dong-va-phan-tich.mp4",
+        dur: "154.8s",
+        tag: "Động lực học",
+        desc: "Khám phá Bảng cây mô hình bên trái: Thiết lập chiều dài, khối lượng, vị trí khối tâm của từng thanh; cấu hình nguồn dẫn động quay (quay đều, lắc hình sin) và dẫn động tịnh tiến; bóc tách biểu đồ mô-men xoắn thời gian thực (quán tính, trọng lực, cản nhớt) và tính toán bản đồ nhiệt không gian làm việc (Workspace heatmap)."
+      },
+      {
+        num: "03",
+        title: "Tự vẽ & Chỉnh sửa cơ cấu",
+        fullTitle: "03. Tự Vẽ Cơ Cấu Từ Bản Vẽ Trống, Bắt Điểm & Vùng Cản",
+        src: "video/03-tu-ve-va-chinh-sua.mp4",
+        dur: "157.0s",
+        tag: "Dựng hình",
+        desc: "Bắt đầu với một bản vẽ trống; sử dụng hộp công cụ bên phải để vẽ thanh liên kết, đặt khớp quay, đặt gối cố định trên khung giá, đặt con trượt thẳng; khai thác chế độ bắt điểm đối tượng (Element snapping) và bắt lưới tọa độ; vẽ vùng cản cố định và vùng chuyển động kiểm tra va chạm."
+      },
+      {
+        num: "04",
+        title: "Ghi tư thế & Tạo cơ cấu từ quỹ đạo",
+        fullTitle: "04. Ghi Tư Thế, Kéo Ghi Chuyển Động & Tự Động Tổng Hợp Cơ Cấu",
+        src: "video/04-ghi-tu-the-va-tao-co-cau-tu-quy-dao.mp4",
+        dur: "152.2s",
+        tag: "Tổng hợp cơ cấu",
+        desc: "Hướng dẫn hai phương pháp thiết kế ngược độc đáo: (1) Ghi chuỗi tư thế khóa hoặc nhấn kéo trực tiếp trên màn hình để tạo đường chuyển động tuần hoàn; (2) Dùng công cụ vẽ tay tự do một đường cong mục tiêu và để LinkGo tự động tính toán kích thước các khâu khớp bám sát quỹ đạo."
+      },
+      {
+        num: "05",
+        title: "Bánh răng, xích tải & Đai răng",
+        fullTitle: "05. Tính Toán Bộ Truyền Cơ Khí: Bánh Răng, Xích Tải & Đai Răng",
+        src: "video/05-banh-rang-xich-dai-va-co-cau-mau-khac.mp4",
+        dur: "134.2s",
+        tag: "Bộ truyền cơ khí",
+        desc: "Mở bàn tính toán bộ truyền cơ khí tiêu chuẩn: Tính toán chọn thông số bánh răng trụ răng thẳng ISO/DP, kiểm tra ứng suất uốn Lewis sơ bộ; chọn xích con lăn công nghiệp theo công suất và tốc độ, tính toán hiệu ứng đa giác; chọn đai răng đồng bộ và xuất thẳng cặp bộ truyền lên bản vẽ Canvas."
+      },
+      {
+        num: "06",
+        title: "Thử nghiệm các cơ cấu mẫu phức tạp",
+        fullTitle: "06. Thử Nghiệm Thực Tế Toàn Bộ Thư Viện Cơ Cấu Phức Tạp",
+        src: "video/06-thu-cac-co-cau-mau.mp4",
+        dur: "217.8s",
+        tag: "Thực nghiệm",
+        desc: "Kiểm tra thực tế các cơ cấu mẫu nâng cao tích hợp sẵn: Cơ cấu dập tay quay – con trượt (Slider-Crank), Robot song song phẳng 5 khâu 2-DOF hai động cơ độc lập, cơ cấu lắc hình sin có giới hạn góc khớp và cơ cấu chữ L hàn cứng, cơ cấu liên kết bánh răng tạo hoa văn cánh hoa và mô hình xích ảo va chạm mặt đất."
+      },
+      {
+        num: "07",
+        title: "Lưu, xuất & Cài đặt hiển thị",
+        fullTitle: "07. Quản Lý Dự Án JSON, Nhập Xuất Dữ Liệu & Cài Đặt Hiển Thị",
+        src: "video/07-luu-xuat-va-cai-dat-hien-thi.mp4",
+        dur: "273.0s",
+        tag: "Dự án & Xuất file",
+        desc: "Hướng dẫn lưu trữ thiết kế dưới dạng tệp JSON về máy tính; nạp lại dự án JSON đã lưu; xuất báo cáo tính toán cơ khí; cấu hình hiển thị lưới tọa độ, vector vận tốc/lực và chuyển đổi giao diện nền Sáng/Tối (Light/Dark mode) tối ưu cho mắt."
+      },
+      {
+        num: "08",
+        title: "Chọn nhiều, căn chỉnh & Cụm vật rắn",
+        fullTitle: "08. Thao Tác Chuyên Sâu: Chọn Theo Khung, Căn Chỉnh & Tạo Cụm Vật Rắn",
+        src: "video/08-chon-nhieu-can-chinh-va-vat-ran.mp4",
+        dur: "900.0s (15p)",
+        tag: "Thao tác nâng cao",
+        desc: "Video hướng dẫn chuyên sâu 15 phút dành cho các cơ cấu phức tạp (như chân robot Jansen/Klann): Giữ Shift quét khung chọn nhiều phần tử, căn chỉnh thẳng hàng ngang/dọc, giãn cách đều theo hai phương, liên kết nhiều thanh thành một cụm vật rắn (Rigid body) không biến dạng và sao chép nhân bản cụm cơ cấu."
+      }
+    ];
+
+    const playlistEl = document.getElementById("playlist");
+    const videoEl = document.getElementById("main-video");
+    const titleEl = document.getElementById("video-title");
+    const tagEl = document.getElementById("video-tag");
+    const durEl = document.getElementById("video-dur");
+    const descEl = document.getElementById("video-desc");
+
+    function renderPlaylist(activeIndex) {
+      playlistEl.innerHTML = "";
+      videos.forEach((v, idx) => {
+        const item = document.createElement("div");
+        item.className = "playlist-item" + (idx === activeIndex ? " active" : "");
+        item.innerHTML = `
+          <div class="playlist-num">${v.num}</div>
+          <div class="playlist-details">
+            <div class="playlist-title">${v.title}</div>
+            <div class="playlist-duration">⏱ ${v.dur} · <span style="color:#38bdf8">${v.tag}</span></div>
+          </div>
+        `;
+        item.onclick = () => selectVideo(idx);
+        playlistEl.appendChild(item);
+      });
+    }
+
+    function selectVideo(idx) {
+      const v = videos[idx];
+      videoEl.src = v.src;
+      videoEl.play().catch(() => {});
+      titleEl.innerText = v.fullTitle;
+      tagEl.innerText = "Bài " + v.num + " · " + v.tag;
+      durEl.innerText = "Thời lượng: " + v.dur;
+      descEl.innerText = v.desc;
+      renderPlaylist(idx);
+    }
+
+    renderPlaylist(0);
+  </script>
+</body>
+</html>

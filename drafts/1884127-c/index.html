@@ -12,47 +12,7 @@ Trạng thái: READY
 -->
 
 <article class="robot-ideas-article">
-  <h1>一种C板蜂鸣器播放模板</h1>
-  <div class="article-meta">
-    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1884127" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> Aleister.</p>
-    <p><strong>Chuyên mục:</strong> Cơ khí</p>
-  </div>
-  
-  
-    <div class="local-attachments" style="background:#f4f7fb;border:1.5px solid #0f62fe;padding:18px;border-radius:8px;margin:22px 0;">
-    <h3 style="margin-top:0;margin-bottom:14px;color:#0f62fe;font-size:1.15em;display:flex;align-items:center;gap:8px;">
-      📦 Tệp đính kèm &amp; Bản vẽ CAD / Tài liệu (Google Drive)
-    </h3>
-    <ul style="list-style:none;padding:0;margin:0;">
-      <li style="margin-bottom:10px;padding:10px 14px;background:#ffffff;border:1px solid #c6c6c6;border-radius:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:1.4em;">📦</span>
-          <div>
-            <a href="https://drive.google.com/file/d/1f1YJO8KCUhzf5grH0XCYsxypsv87ZSbT/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:#0f62fe;font-weight:600;text-decoration:none;font-size:1.02em;">rmdevc_buzzer.zip</a>
-            <div style="font-size:0.82em;color:#525252;margin-top:3px;">
-              <span style="background:#edf5ff;color:#0043ce;padding:1px 6px;border-radius:3px;font-weight:500;">Archive</span>
-               · 1.13 MB · Lưu trữ Google Drive
-            </div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <a href="https://drive.google.com/file/d/1f1YJO8KCUhzf5grH0XCYsxypsv87ZSbT/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="background:#0f62fe;color:#ffffff;padding:6px 14px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
-            👁️ Xem / Mở
-          </a>
-          <a href="https://drive.google.com/uc?export=download&id=1f1YJO8KCUhzf5grH0XCYsxypsv87ZSbT" target="_blank" rel="noopener noreferrer" style="background:#e8f0fe;color:#0f62fe;border:1px solid #0f62fe;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
-            ⬇️ Tải file
-          </a>
-        </div>
-      </li>
-    </ul>
-    <div style="margin-top:14px;text-align:right;">
-      <a href="https://drive.google.com/drive/folders/1KxOrz659PGR723iJC8fxUTE70pxzBYKi?usp=sharing" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;background:#ffffff;color:#0f62fe;border:1px solid #0f62fe;padding:7px 16px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:600;">
-        📂 Mở thư mục tệp đính kèm trên Google Drive ↗
-      </a>
-    </div>
-  </div>
-  <hr>
   <div class="article-body">
-<p><span style="color: rgb(33, 33, 33); background-color: rgb(255, 255, 255);">似乎有很多用蜂鸣器放音乐的视频，不过具体开源似乎不多，因此参考很多博客后写了个基于音符频率的表格封装，便于理解学习，也可以直接调用于其他创作</span>或者根据需求套用在其他程序里播放音乐,没什么太大意义但比较好玩<span style="color: rgb(33, 33, 33); background-color: rgb(255, 255, 255);">。</span></p><p><span style="color: rgb(33, 33, 33); background-color: rgb(255, 255, 255);">效果演示：</span><a href="https://www.bilibili.com/video/BV1GFLU6aEZW" target="_blank">https://www.bilibili.com/video/BV1GFLU6aEZW</a></p><p>代码随手写的可能有问题且是首次尝试开源，发现问题的话请联系我（轻喷</p><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://drive.google.com/file/d/1f1YJO8KCUhzf5grH0XCYsxypsv87ZSbT/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-file-name="RMdevC_Buzzer.zip" data-file-md5="50e7e23c10d49e7c8fbb63ad2a3a2954" data-file-len="1188928" data-file-key="1779274648156-1188928-RMdevC_Buzzer.zip-NX2pBSdhB46IzJvYdYMaI" data-file-state="uploadSuccess">RMdevC_Buzzer.zip</a></p>
+<p><span style="color: rgb(33, 33, 33); background-color: rgb(255, 255, 255);">Dường như có nhiều video sử dụng còi để phát nhạc nhưng dường như không có nhiều nguồn mở cụ thể. Vì vậy, sau khi tham khảo nhiều blog, tôi đã viết một gói bảng dựa trên tần số nốt, dễ hiểu và dễ học, đồng thời cũng có thể được sử dụng trực tiếp trong các sáng tạo khác.</span>Hoặc bạn có thể sử dụng nó để phát nhạc ở các chương trình khác tùy theo nhu cầu của mình. Nó không có nhiều ý nghĩa nhưng thú vị hơn.<span style="color: rgb(33, 33, 33); background-color: rgb(255, 255, 255);">。</span></p><p><span style="color: rgb(33, 33, 33); background-color: rgb(255, 255, 255);">Trình diễn hiệu ứng:</span><a href="https://www.bilibili.com/video/BV1GFLU6aEZW" target="_blank">https://www.bilibili.com/video/BV1GFLU6aEZW</a></p><p>Có thể có vấn đề với mã được viết ngẫu nhiên và đây là lần đầu tiên tôi thử nguồn mở. Nếu bạn tìm thấy bất kỳ vấn đề gì, xin vui lòng liên hệ với tôi (xịt nhẹ</p><p><a data-file-key="1779274648156-1188928-RMdevC_Buzzer.zip-NX2pBSdhB46IzJvYdYMaI" data-file-len="1188928" data-file-md5="50e7e23c10d49e7c8fbb63ad2a3a2954" data-file-name="RMdevC_Buzzer.zip" data-file-state="uploadSuccess" data-w-e-is-inline="" data-w-e-is-void="" data-w-e-type="attachment" href="https://drive.google.com/file/d/1f1YJO8KCUhzf5grH0XCYsxypsv87ZSbT/view?usp=sharing" rel="noopener noreferrer" target="_blank">RMdevC_Buzzer.zip</a></p>
   </div>
 </article>

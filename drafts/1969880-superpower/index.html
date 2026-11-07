@@ -12,47 +12,7 @@ Trạng thái: READY
 -->
 
 <article class="robot-ideas-article">
-  <h1>同济大学SuperPower战队</h1>
-  <div class="article-meta">
-    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1969880" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 通讯信息 dalianfashi@163.com</p>
-    <p><strong>Chuyên mục:</strong> Điều khiển</p>
-  </div>
-  
-  
-    <div class="local-attachments" style="background:#f4f7fb;border:1.5px solid #0f62fe;padding:18px;border-radius:8px;margin:22px 0;">
-    <h3 style="margin-top:0;margin-bottom:14px;color:#0f62fe;font-size:1.15em;display:flex;align-items:center;gap:8px;">
-      📦 Tệp đính kèm &amp; Bản vẽ CAD / Tài liệu (Google Drive)
-    </h3>
-    <ul style="list-style:none;padding:0;margin:0;">
-      <li style="margin-bottom:10px;padding:10px 14px;background:#ffffff;border:1px solid #c6c6c6;border-radius:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:1.4em;">📄</span>
-          <div>
-            <a href="https://drive.google.com/file/d/1YjvDZIE3Zo5G4hiPReLnjaDfWCRouLG9/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:#0f62fe;font-weight:600;text-decoration:none;font-size:1.02em;">superpower-tai-nguyen.pdf</a>
-            <div style="font-size:0.82em;color:#525252;margin-top:3px;">
-              <span style="background:#edf5ff;color:#0043ce;padding:1px 6px;border-radius:3px;font-weight:500;">PDF</span>
-               · 0.87 MB · Lưu trữ Google Drive
-            </div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <a href="https://drive.google.com/file/d/1YjvDZIE3Zo5G4hiPReLnjaDfWCRouLG9/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="background:#0f62fe;color:#ffffff;padding:6px 14px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
-            👁️ Xem / Mở
-          </a>
-          <a href="https://drive.google.com/uc?export=download&id=1YjvDZIE3Zo5G4hiPReLnjaDfWCRouLG9" target="_blank" rel="noopener noreferrer" style="background:#e8f0fe;color:#0f62fe;border:1px solid #0f62fe;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
-            ⬇️ Tải file
-          </a>
-        </div>
-      </li>
-    </ul>
-    <div style="margin-top:14px;text-align:right;">
-      <a href="https://drive.google.com/drive/folders/1W48ziS6ltVjPaqg3CA5XdkjIdtmWR7Lp?usp=sharing" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;background:#ffffff;color:#0f62fe;border:1px solid #0f62fe;padding:7px 16px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:600;">
-        📂 Mở thư mục tệp đính kèm trên Google Drive ↗
-      </a>
-    </div>
-  </div>
-  <hr>
   <div class="article-body">
-<h1>前言</h1><p>本项目整理并开源了同济大学 SuperPower 战队在 RoboMaster 2026 赛季串联腿步兵电控开发中的阶段性实践，记录方案设计、控制实现以及整车联调过程中积累的思路、经验和问题总结。希望这些内容能够为相关技术的学习与交流提供参考。</p><p>需要说明的是，文中的方案均基于本赛季机器人的实际需求和开发条件，不一定适用于所有车型与使用场景。</p><p><span style="background-color: rgba(255, 246, 122, 0.8);">受赛季进度和整理时间限制，目前文档中的部分内容仍不完整，相关文档与代码将在后续开发和验证过程中持续补充、修订。</span>若发现问题或有改进建议，欢迎与我们交流。</p><h2 style="text-align: start;">二、声明</h2><p style="text-align: start; line-height: 1.5;">本开源项目由同济大学SuperPower机器人战队整理并发布，仅用于技术交流。未经作者允许，不得将本开源内容用于任何商业用途。</p><p style="text-align: start; line-height: 1.5;">本开源文件的最终解释权归同济大学SuperPower机器人战队所有。</p><h2 style="text-align: start;">三、资料下载</h2><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://drive.google.com/file/d/1YjvDZIE3Zo5G4hiPReLnjaDfWCRouLG9/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-file-name="【RM2026-串联腿步兵底盘控制系统设计与实现开源】同济大学SuperPower战队.pdf" data-file-md5="216844c563c8c92782690ad51a775e4c" data-file-len="912080" data-file-key="1789627752536-912080-【RM2026-串联腿步兵底盘控制系统设计与实现开源】同济大学SuperPower战队.pdf-hJD9BBLnl4YpsFXal7EHw" data-file-state="uploadSuccess">【RM2026-串联腿步兵底盘控制系统设计与实现开源】同济大学SuperPower战队.pdf</a></p>
+<h1>Lời nói đầu</h1><p>Dự án này tổng hợp và cung cấp nguồn mở các hoạt động thực hành theo từng giai đoạn của nhóm Siêu năng lực Đại học Đồng Tế (Tongji) trong quá trình phát triển điều khiển điện tử bộ binh chân đôi mùa giải RoboMaster 2026, ghi lại các ý tưởng, kinh nghiệm và tóm tắt vấn đề tích lũy được trong quá trình thiết kế chương trình, triển khai điều khiển và gỡ lỗi chung cho phương tiện. Hy vọng rằng những nội dung này có thể cung cấp tài liệu tham khảo cho việc học tập và trao đổi các công nghệ liên quan.</p><p>Cần lưu ý rằng các giải pháp trong bài viết này dựa trên nhu cầu thực tế và điều kiện phát triển của robot trong mùa này và có thể không áp dụng được cho tất cả các mẫu máy và kịch bản sử dụng.</p><p><span style="background-color: rgba(255, 246, 122, 0.8);">Do tiến độ mùa và hạn chế về thời gian biên soạn nên một phần nội dung trong tài liệu hiện tại vẫn chưa đầy đủ. Các tài liệu và quy tắc liên quan sẽ tiếp tục được bổ sung, sửa đổi trong quá trình phát triển và xác minh tiếp theo.</span>Nếu bạn gặp vấn đề hoặc có đề xuất cải tiến, vui lòng liên hệ với chúng tôi.</p><h2 style="text-align: start;">2. Tuyên bố</h2><p style="text-align: start; line-height: 1.5;">Dự án nguồn mở này được biên soạn và phát hành bởi Nhóm Robot SuperPower của Đại học Đồng Tế (Tongji) và chỉ được sử dụng để trao đổi kỹ thuật. Nội dung nguồn mở này không được phép sử dụng cho bất kỳ mục đích thương mại nào mà không có sự cho phép của tác giả.</p><p style="text-align: start; line-height: 1.5;">Quyền giải thích cuối cùng của tài liệu nguồn mở này thuộc về Nhóm Robot siêu năng lực của Đại học Đồng Tế (Tongji).</p><h2 style="text-align: start;">3. Tải dữ liệu</h2><p><a data-file-key="1789627752536-912080-【RM2026-串联腿步兵底盘控制系统设计与实现开源】同济大学SuperPower战队.pdf-hJD9BBLnl4YpsFXal7EHw" data-file-len="912080" data-file-md5="216844c563c8c92782690ad51a775e4c" data-file-name="【RM2026-串联腿步兵底盘控制系统设计与实现开源】同济大学SuperPower战队.pdf" data-file-state="uploadSuccess" data-w-e-is-inline="" data-w-e-is-void="" data-w-e-type="attachment" href="https://drive.google.com/file/d/1YjvDZIE3Zo5G4hiPReLnjaDfWCRouLG9/view?usp=sharing" rel="noopener noreferrer" target="_blank">[RM2026-Thiết kế mã nguồn mở và triển khai Hệ thống điều khiển chassis bộ binh chân song song] ĐH Đồng Tế (Tongji)SuperPower Team.pdf</a></p>
   </div>
 </article>

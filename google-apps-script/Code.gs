@@ -15,7 +15,7 @@ function setup_(){
  if(!id){const ss=SpreadsheetApp.create('Robot Ideas · Private database');id=ss.getId();props.setProperty('SHEET_ID',id);}
  const ss=SpreadsheetApp.openById(id);
  ensureFolder_();
- [['Articles',['id','json']],['Sources',['id','name','feedUrl','enabled']],['Audit',['time','action','articleId']]].forEach(([name,headers])=>{let sh=ss.getSheetByName(name);if(!sh){sh=ss.insertSheet(name);sh.appendRow(headers);sh.setFrozenRows(1);}});
+ [['Articles',['id','json']],['Playlists',['id','json']],['Sources',['id','name','feedUrl','enabled']],['Audit',['time','action','articleId']]].forEach(([name,headers])=>{let sh=ss.getSheetByName(name);if(!sh){sh=ss.insertSheet(name);sh.appendRow(headers);sh.setFrozenRows(1);}});
  // Do not enable sharing on this spreadsheet or its Drive folder.
  console.log('Database: '+ss.getUrl());
 }
@@ -53,16 +53,66 @@ function adminApi(action,payload){payload=payload||{};try{
  const session=requireSession_(payload.token);
  if(action==='session')return {ok:true,expiresAt:session.expiresAt};
  if(action==='logout')return locked_(()=>{const sessions=sessions_();delete sessions[digest_(payload.token)];properties_().setProperty('ADMIN_SESSIONS',JSON.stringify(sessions));return {ok:true};});
- if(action==='list')return {ok:true,apiVersion:2,articles:rows_().map(r=>metadata_(r.article)).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))};
+ if(action==='list')return {ok:true,apiVersion:2,articles:rows_().map(r=>metadata_(r.article)).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt)),playlists:playlists_().map(r=>r.playlist),playlistVersion:1};
  if(action==='get'){const entry=rows_().find(r=>r.article.id===payload.id);if(!entry)throw Error('Bài không tồn tại.');return {ok:true,article:{...metadata_(entry.article),html:readHtml_(entry.article)}};}
  if(action==='sources')return {ok:true,sources:sources_()};
  if(action==='saveSource')return locked_(()=>saveSource_(payload.source||{}));
  if(action==='save')return locked_(()=>save_(payload));
+ if(action==='savePlaylist')return locked_(()=>savePlaylist_(payload.playlist||{}));
+ if(action==='deletePlaylist')return locked_(()=>deletePlaylist_(payload));
+ if(action==='setArticlePlaylists')return locked_(()=>setArticlePlaylists_(payload));
  if(action==='importFeeds'){const count=importFeeds_();return {ok:true,count};}
  if(action==='shareDrive')return locked_(()=>({ok:true,count:shareArticlesFolder_()}));
  throw Error('Thao tác không hợp lệ.');
  }catch(e){return {ok:false,error:e.message,code:e.code||'REQUEST_FAILED'};}}
 function clean_(value,max){if(typeof value!=='string')return '';return value.trim().slice(0,max);}
+// Playlists organize private editorial metadata; they never publish or rewrite article HTML.
+function playlistSheet_(create){
+ const id=properties_().getProperty('SHEET_ID');if(!id)throw Error('Chạy setup() trước.');
+ const ss=SpreadsheetApp.openById(id);let sh=ss.getSheetByName('Playlists');
+ if(!sh&&create){sh=ss.insertSheet('Playlists');sh.appendRow(['id','json']);sh.setFrozenRows(1);}
+ return sh;
+}
+function playlists_(){
+ const sh=playlistSheet_(false);if(!sh||sh.getLastRow()<2)return [];
+ return sh.getRange(2,1,sh.getLastRow()-1,2).getValues().map((r,i)=>({row:i+2,playlist:JSON.parse(r[1])}));
+}
+function playlistConflict_(entry,version){
+ if(!entry||entry.playlist.version!==version)throw Error('Playlist đã thay đổi ở phiên khác hoặc không còn tồn tại. Tải lại trước khi sửa.');
+}
+function savePlaylist_(input){
+ const entries=playlists_(),existing=input.id?entries.find(r=>r.playlist.id===input.id):null;
+ if(input.id)playlistConflict_(existing,input.version);
+ const name=clean_(input.name,100),description=clean_(input.description,500);
+ if(!name)throw Error('Nhập tên playlist.');
+ if(entries.some(r=>r.playlist.id!==input.id&&r.playlist.name.toLocaleLowerCase('vi')===name.toLocaleLowerCase('vi')))throw Error('Tên playlist này đã có.');
+ if(!Array.isArray(input.articleIds)||input.articleIds.length>5000)throw Error('Danh sách bài viết không hợp lệ (tối đa 5.000 bài).');
+ const valid=new Set(rows_().map(r=>r.article.id));
+ if(input.articleIds.some(id=>typeof id!=='string'||!valid.has(id)))throw Error('Có bài viết không còn tồn tại. Tải lại danh sách.');
+ const now=new Date().toISOString(),playlist={id:existing?input.id:Utilities.getUuid(),name,description,articleIds:[...new Set(input.articleIds)],version:existing?existing.playlist.version+1:1,createdAt:existing?existing.playlist.createdAt:now,updatedAt:now};
+ const row=[text_(playlist.id),JSON.stringify(playlist)],sh=playlistSheet_(true);
+ if(existing)sh.getRange(existing.row,1,1,2).setValues([row]);else sh.appendRow(row);
+ return {ok:true,playlist};
+}
+function deletePlaylist_(payload){
+ const entry=playlists_().find(r=>r.playlist.id===payload.id);playlistConflict_(entry,payload.version);
+ playlistSheet_(false).deleteRow(entry.row);return {ok:true};
+}
+function setArticlePlaylists_(payload){
+ if(!rows_().some(r=>r.article.id===payload.articleId))throw Error('Bài viết không tồn tại.');
+ const entries=playlists_();
+ if(!Array.isArray(payload.playlistIds)||payload.playlistIds.some(id=>typeof id!=='string'||!entries.some(r=>r.playlist.id===id)))throw Error('Playlist không tồn tại. Tải lại danh sách.');
+ const selected=new Set(payload.playlistIds),now=new Date().toISOString();let changed=false;
+ const updated=entries.map(entry=>{
+  const p=entry.playlist,has=p.articleIds.includes(payload.articleId),wanted=selected.has(p.id);
+  if(has===wanted)return p;
+  playlistConflict_(entry,payload.versions&&payload.versions[p.id]);changed=true;
+  return {...p,articleIds:wanted?[...p.articleIds,payload.articleId]:p.articleIds.filter(id=>id!==payload.articleId),version:p.version+1,updatedAt:now};
+ });
+ // Validate every change before a single Sheets write, avoiding partial membership updates.
+ if(changed)playlistSheet_(false).getRange(2,1,updated.length,2).setValues(updated.map(p=>[text_(p.id),JSON.stringify(p)]));
+ return {ok:true,playlists:updated};
+}
 function sources_(){const sh=sheet_('Sources');return sh.getLastRow()<2?[]:sh.getRange(2,1,sh.getLastRow()-1,4).getValues().map(r=>({id:String(r[0]),name:String(r[1]),feedUrl:String(r[2]),enabled:String(r[3]).toLowerCase()==='true'}));}
 function saveSource_(input){const name=clean_(input.name,200),feedUrl=https_(input.feedUrl);if(!name||!feedUrl)throw Error('Nhập tên nguồn và URL HTTPS RSS/Atom.');const sources=sources_();const index=input.id?sources.findIndex(s=>s.id===input.id):-1;if(input.id&&index<0)throw Error('Nguồn không tồn tại. Tải lại danh sách.');if(sources.some(s=>s.id!==input.id&&s.feedUrl===feedUrl))throw Error('URL nguồn này đã có.');const source={id:input.id||Utilities.getUuid(),name,feedUrl,enabled:input.enabled===true};const row=[source.id,source.name,source.feedUrl,source.enabled?'TRUE':'FALSE'].map(text_);if(index<0)sheet_('Sources').appendRow(row);else sheet_('Sources').getRange(index+2,1,1,4).setValues([row]);return {ok:true,source};}
 function https_(value){const s=clean_(value,2000);if(s&&!/^https:\/\/[^\s/@]+(?:[/?#][^\s]*)?$/i.test(s))throw Error('Nguồn phải là URL HTTPS hợp lệ.');return s;}

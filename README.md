@@ -8,11 +8,23 @@ Web: https://datahub-shark.github.io/news/ · Quản trị: https://datahub-shar
 
 - **Tổng quan:** tổng số bài, chờ duyệt, đang công khai, bản nháp và bài cập nhật gần đây. Bấm thẻ số liệu để mở danh sách tương ứng.
 - **Tất cả bài viết:** tìm kiếm, lọc trạng thái, chỉnh sửa, duyệt đăng hoặc gỡ công khai. Các thao tác xuất bản đều yêu cầu xác nhận.
+- **Playlist:** tạo bộ sưu tập để phân loại bài, thêm một bài vào nhiều playlist và sắp xếp thứ tự bằng nút lên/xuống. Xóa playlist hoặc gỡ bài khỏi playlist vẫn giữ nguyên bài và trạng thái duyệt.
 - **Hàng chờ duyệt:** chỉ các bài pending để kiểm tra trước khi đăng.
 - **Nguồn thu thập:** thêm/sửa tên và URL RSS/Atom, bật/tắt nguồn và nhập RSS. Không cần sửa Sheet thủ công; cần cập nhật Code.gs mới để dùng các thao tác nguồn.
 - **Hệ thống:** xem cách lưu trữ, xác thực và tình trạng tích hợp AI. Không hiển thị khóa hay token.
 
 Nút **Tạo bài viết** mở trình biên tập riêng, hỗ trợ nhập HTML, sửa mã, xem trước và chọn quyền công khai. Nút **Xem website** mở trang độc giả.
+
+### Phân loại bài bằng playlist và ảnh bìa
+
+1. Mở **Playlist → Tạo playlist**, nhập tên và mô tả, rồi lưu.
+2. Trong **Tất cả bài viết**, xem ảnh bìa nhỏ cạnh tiêu đề. Bài thiếu ảnh hoặc ảnh lỗi hiện ô thay thế; sửa trường **Ảnh bìa** trong trình biên tập để bổ sung ảnh.
+3. Bấm **☷ Playlist** trên một bài để chọn một hoặc nhiều bộ sưu tập. Hoặc tích nhiều bài (có thể qua nhiều trang), chọn playlist ở thanh thao tác rồi bấm thêm.
+4. Dùng bộ lọc playlist hoặc **Chưa vào playlist** để phân loại tiếp. Mở một playlist để đổi thứ tự, gỡ bài hoặc sửa tên/mô tả.
+
+Dữ liệu playlist lưu trong sheet **Playlists**, tự tạo khi lưu playlist đầu tiên. Chỉ phiên quản trị đã xác thực đọc/sửa được; website độc giả chưa hiển thị playlist. Các phiên cùng sửa được kiểm tra phiên bản để tránh ghi đè dữ liệu mới.
+
+Để nâng cấp bản đang chạy, cập nhật cả `google-apps-script/Code.gs` và file HTML **Admin** bằng `google-apps-script/Admin.html`, rồi triển khai **New version** như hướng dẫn bên dưới. Giữ nguyên Script properties và URL `/exec`; không cần chạy lại setup cho riêng chức năng playlist. Bản nguồn và kiểm tra offline không tự cập nhật Apps Script đang triển khai.
 
 ## Nâng cấp sang HTML (giữ dữ liệu hiện tại)
 

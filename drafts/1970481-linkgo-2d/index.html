@@ -1,121 +1,18 @@
 <!-- METADATA
-Tiêu đề: Đại học Nottingham LinkGo - Công cụ thiết kế thanh kết nối 2D nhanh chóng
+Tiêu đề: Đại học Nottingham LinkGo - Công cụ thiết kế và mô phỏng cơ cấu 2D nhanh chóng
 Chuyên mục: Khác
-Tác giả: 俣琦
+Tác giả: 俣琦 (Yuxi) - RoboMaster UNNC
 Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e10a0d1178484e62967966df957aac2f1790594835412/image.png
 Nguồn: https://bbs.robomaster.com/article/1970481
 Tên nguồn: RoboMaster BBS
-Tóm tắt: viết trước Từ lâu, tôi đã muốn tìm một phần mềm có thể sử dụng để thiết kế các nguyên tắc một cách nhanh chóng. Tôi đã thử nhiều lần trước đây nhưng kết quả không như ý. Giao diện phức tạp hoặc đòi hỏi phải học nhiều để sử dụng. Công cụ thân thiện hơn mà tôi từng gặp trước đây là công cụ thiết kế Linkage Mã nguồn mở, nhưng Có, đôi khi thật rắc rối khi không có phiên bản tiếng Trung và liên kết thiếu một số hiệu ứng kỳ diệu hơn mà tôi mong muốn.
-Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: Đại học Nottingham LinkGo - Công cụ thiết kế thanh kết nối 2D nhanh chóng. Ứng dụng thực tế và tối ưu hóa hệ thống trong phân mảng Khác.
-Tệp đính kèm: linkgo-v1.1.html
+Tóm tắt: Tổng quan và hướng dẫn chuyên sâu công cụ LinkGo 2D - nền tảng thiết kế, mô phỏng chuyển động động học, giải động lực học ngược thời gian thực, bóc tách mô-men xoắn, tổng hợp quỹ đạo tự do và tính toán bộ truyền cơ khí (bánh răng, xích, đai răng) chạy độc lập trên trình duyệt. Đi kèm bản Việt hóa tối ưu đa ngôn ngữ, cẩm nang kỹ thuật và 8 video thực hành thao tác chi tiết.
+Gợi ý ứng dụng: Ứng dụng xuất sắc trong thiết kế nguyên lý cơ cấu robot RoboMaster (tay gắp, cơ cấu nâng hạ, nạp đạn, chân robot nhiều khâu) và giảng dạy cơ sở thiết kế máy, lý thuyết cơ cấu.
+Tệp đính kèm: linkgo-v1.1-viet-anh-huong-dan.html, huong-dan-thuc-hanh/index.html, huong-dan-thuc-hanh/HUONG_DAN_SU_DUNG_LINKGO_2D.md, linkgo-v1.1.html
 Trạng thái: READY
 -->
 
 <article class="robot-ideas-article">
-  <h1>LinkGo——快速2D连杆设计工具</h1>
-  <div class="article-meta">
-    <p><strong>Nguồn:</strong> <a href="https://bbs.robomaster.com/article/1970481" target="_blank">RoboMaster BBS</a> · <strong>Tác giả:</strong> 关于作者 俣琦 83 关注Ta 14 文章 0 被引用 582 获赞 关注</p>
-    <p><strong>Chuyên mục:</strong> Khác</p>
-  </div>
-  
-  <div class="article-hero-cover" style="margin:20px 0;border-radius:8px;overflow:hidden;max-height:400px;border:1px solid #dce1d8;">
-    <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e10a0d1178484e62967966df957aac2f1790594835412/image.png" alt="LinkGo——快速2D连杆设计工具" style="width:100%;height:100%;object-fit:cover;display:block;">
-  </div>
-  
-      <div class="local-attachments" style="background:#f4f7fb;border:1.5px solid #0f62fe;padding:18px;border-radius:8px;margin:22px 0;">
-    <h3 style="margin-top:0;margin-bottom:14px;color:#0f62fe;font-size:1.15em;display:flex;align-items:center;gap:8px;">
-      📦 Tệp đính kèm &amp; Bản vẽ CAD / Tài liệu (Google Drive)
-    </h3>
-    <ul style="list-style:none;padding:0;margin:0;">
-      <li style="margin-bottom:10px;padding:10px 14px;background:#ffffff;border:1px solid #c6c6c6;border-radius:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:1.4em;">🌐</span>
-          <div>
-            <a href="https://drive.google.com/file/d/1kVf7XhfPzFxJzyb0dHi4mlqIg5DLh1fj/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:#0f62fe;font-weight:600;text-decoration:none;font-size:1.02em;">linkgo-v1.1-viet-anh-huong-dan.html</a>
-            <div style="font-size:0.82em;color:#525252;margin-top:3px;">
-              <span style="background:#edf5ff;color:#0043ce;padding:1px 6px;border-radius:3px;font-weight:500;">HTML App</span>
-               · 0.76 MB · Lưu trữ Google Drive
-            </div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <a href="https://drive.google.com/file/d/1kVf7XhfPzFxJzyb0dHi4mlqIg5DLh1fj/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="background:#0f62fe;color:#ffffff;padding:6px 14px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
-            👁️ Xem / Mở
-          </a>
-          <a href="https://drive.google.com/uc?export=download&id=1kVf7XhfPzFxJzyb0dHi4mlqIg5DLh1fj" target="_blank" rel="noopener noreferrer" style="background:#e8f0fe;color:#0f62fe;border:1px solid #0f62fe;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
-            ⬇️ Tải file
-          </a>
-        </div>
-      </li>
-      <li style="margin-bottom:10px;padding:10px 14px;background:#ffffff;border:1px solid #c6c6c6;border-radius:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:1.4em;">🌐</span>
-          <div>
-            <a href="https://drive.google.com/file/d/19kdW4ncRqYPiOLp9qDJjvlEYIFhq63_w/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:#0f62fe;font-weight:600;text-decoration:none;font-size:1.02em;">linkgo-v1.1.html</a>
-            <div style="font-size:0.82em;color:#525252;margin-top:3px;">
-              <span style="background:#edf5ff;color:#0043ce;padding:1px 6px;border-radius:3px;font-weight:500;">HTML App</span>
-               · 0.63 MB · Lưu trữ Google Drive
-            </div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <a href="https://drive.google.com/file/d/19kdW4ncRqYPiOLp9qDJjvlEYIFhq63_w/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="background:#0f62fe;color:#ffffff;padding:6px 14px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
-            👁️ Xem / Mở
-          </a>
-          <a href="https://drive.google.com/uc?export=download&id=19kdW4ncRqYPiOLp9qDJjvlEYIFhq63_w" target="_blank" rel="noopener noreferrer" style="background:#e8f0fe;color:#0f62fe;border:1px solid #0f62fe;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
-            ⬇️ Tải file
-          </a>
-        </div>
-      </li>
-      <li style="margin-bottom:10px;padding:10px 14px;background:#ffffff;border:1px solid #c6c6c6;border-radius:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:1.4em;">🌐</span>
-          <div>
-            <a href="https://drive.google.com/file/d/1yaYNOEfcqfH2BrsFMnkzjGYfvW9OEyf3/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:#0f62fe;font-weight:600;text-decoration:none;font-size:1.02em;">linkgo-v1.1.before-help.html</a>
-            <div style="font-size:0.82em;color:#525252;margin-top:3px;">
-              <span style="background:#edf5ff;color:#0043ce;padding:1px 6px;border-radius:3px;font-weight:500;">HTML App</span>
-               · 0.72 MB · Lưu trữ Google Drive
-            </div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <a href="https://drive.google.com/file/d/1yaYNOEfcqfH2BrsFMnkzjGYfvW9OEyf3/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="background:#0f62fe;color:#ffffff;padding:6px 14px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
-            👁️ Xem / Mở
-          </a>
-          <a href="https://drive.google.com/uc?export=download&id=1yaYNOEfcqfH2BrsFMnkzjGYfvW9OEyf3" target="_blank" rel="noopener noreferrer" style="background:#e8f0fe;color:#0f62fe;border:1px solid #0f62fe;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
-            ⬇️ Tải file
-          </a>
-        </div>
-      </li>
-      <li style="margin-bottom:10px;padding:10px 14px;background:#ffffff;border:1px solid #c6c6c6;border-radius:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:1.4em;">🌐</span>
-          <div>
-            <a href="https://drive.google.com/file/d/1gSugGp2VXt6v5_bRYJVj19XxzHMYx4Qg/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:#0f62fe;font-weight:600;text-decoration:none;font-size:1.02em;">linkgo-v1.1.original.html</a>
-            <div style="font-size:0.82em;color:#525252;margin-top:3px;">
-              <span style="background:#edf5ff;color:#0043ce;padding:1px 6px;border-radius:3px;font-weight:500;">HTML App</span>
-               · 0.63 MB · Lưu trữ Google Drive
-            </div>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <a href="https://drive.google.com/file/d/1gSugGp2VXt6v5_bRYJVj19XxzHMYx4Qg/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="background:#0f62fe;color:#ffffff;padding:6px 14px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
-            👁️ Xem / Mở
-          </a>
-          <a href="https://drive.google.com/uc?export=download&id=1gSugGp2VXt6v5_bRYJVj19XxzHMYx4Qg" target="_blank" rel="noopener noreferrer" style="background:#e8f0fe;color:#0f62fe;border:1px solid #0f62fe;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
-            ⬇️ Tải file
-          </a>
-        </div>
-      </li>
-    </ul>
-    <div style="margin-top:14px;text-align:right;">
-      <a href="https://drive.google.com/drive/folders/1F7wgSy3XiZPIyX8sHq5SZdplpmS_9leE?usp=sharing" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;background:#ffffff;color:#0f62fe;border:1px solid #0f62fe;padding:7px 16px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:600;">
-        📂 Mở thư mục tệp đính kèm trên Google Drive ↗
-      </a>
-    </div>
-  </div>
-  <hr>
   <div class="article-body">
-<h2>写在前面</h2><p>很早之前我就很想找一款可以用来快速进行原理设计的软件，我之前曾经尝试过很多，但是效果都不尽人意，要么就是界面复杂要么是使用需要大量的学习，之前接触过比较友好的一款是一个开源的linkage的设计工具，但是吧有时候没有中文版还是比较麻烦的，而且linkage缺少了一些我像要的比较神奇的效果，因此，在反复思考之后（实际是中秋在家闲着没事还多是情况之下没时间用电脑画图），我决定自己搞一个工具，即LinkGo。</p><p>目前LinkGo尚且处于测试阶段，因此仅发布HTML文件作为先导测试，后续收集到足够的反馈之后会推出应用程序包，HTML文件支持各类设备访问，包括手机、平板和电脑，并且软件也对触屏类设备做了一定量的适配使用，帮助用户可以更便捷地在开会场景中直接掏出设备随手画两笔，而不是用手瞎比划（这是一个费时费力不讨好的过程）。</p><p>接下来我将在后续内容中大致介绍一下LinkGo的使用方法与功能，因为内容较多，我将挑选关键内容讲述，其他内容大家可以自己选择。</p><p>同时，程序链接如下（没错，就是这么小，目前还没做封装，大家随意）：</p><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://drive.google.com/file/d/19kdW4ncRqYPiOLp9qDJjvlEYIFhq63_w/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-file-name="LinkGo v1.1.html" data-file-md5="240b8ade21c4882fb3e6ef721dbd08af" data-file-len="662189" data-file-key="1790673397117-662189-LinkGo v1.1.html-GA-Hv9pwjXRmUmdTlTdcU" data-file-state="uploadSuccess">LinkGo v1.1.html ↗ (Xem / Tải trên Google Drive)</a></p><h2>程序功能介绍</h2><p>现在 LinkGo 的设计亮点，可以概括为：<strong>把机构绘制、运动仿真、载荷分析和结果导出放在同一个轻量工作台中：</strong></p><p>1. 直接在画布上操作机构</p><p>节点、连杆、滑块、兴趣点和干涉区域都可以直接编辑。拖动机构时能观察运动关系，区域支持移动、旋转、尺寸调整及元素吸附，减少反复输入坐标的操作。</p><p>2. 从单根连杆扩展到机构组合</p><p>支持多选、框选、复制、对齐、等距分布，以及多节点刚体组合。复制时同步处理节点、驱动、传动和附属区域的引用，便于复用已有结构。</p><p>3. 运动与载荷结合分析</p><p>除了观察运动轨迹，还能分析旋转驱动扭矩、直线驱动力、惯性、重力和接触载荷。兴趣点可以偏离连杆中心线，用于分析实际工作位置及工作范围。</p><p>4. 计算结果有明确的有效性提示</p><p>约束冲突会指出具体问题；无法计算的载荷和缺失周期样本会明确标记。工作范围热力图也区分载荷已知与未知区域，方便判断结果能否用于后续分析。</p><p>5. 仿真过程可控、可重复</p><p>播放与单步共用固定物理步长，支持倍率、暂停续播和起点复位。倍率改变播放速度，便于观察快速运动；复位保留模型设计与环境设置。</p><h3>界面介绍</h3><h4>顶部栏</h4><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e10a0d1178484e62967966df957aac2f1790594835412/image.png" alt="image.png" data-href="" data-file-md5="4e900cdc378cbe1250226c1c0914023d" data-file-len="39388" style=""/></p><p>在顶部栏中从左向右功能分别为左边栏、回到主页、新建、保存、其他选项、标签页、拖拽、绘制机构、调整兴趣点、撤回与重做、擦除、运行/暂停、右边栏</p><p>其中选择左边栏会打开左侧面板，右边栏会打开右边面板，运行/暂停可以播放机构运行动画，标签页可以多次新建，其他选项可以调整展示信息、主题等内容可以自己探索。</p><h4>右边栏</h4><p>右边栏主要是用于绘制，绘制目前支持自己设计与拟合生成两种方法，其中自主设计为自主设计连杆机构、长度等内容，在设置完成之后播放。</p><p>拟合生成为根据绘制的轨迹和预先设置的模式，自主生成一个可以满足运动轨迹的机构。（目前这个功能仍需完善,生成的机构不是最优解）。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/2d556b1c733242d4ba0038547c4bc2321790595349104/image.png" alt="image.png" data-href="" data-file-md5="21145354c2d218a33abf7757ba01512f" data-file-len="34959" style=""/></p><p>在绘制中，凸出的几个功能为手绘轨迹点、轨迹点、记录姿态与拖动录曲线、固定区域与随动区域。</p><p>其中，轨迹点为一个你感兴趣的点，软件可以描述这个点对应的工作空间与工作代价。</p><p>记录姿态与拖动录曲线同为记录功能，前者可以固定记住几个你拖动的姿态，后者为记录你拖动机构的过程的所有姿态，在完成记录之后可以使用播放来观察运动过程。</p><p>固定区域与随动区域的功能是考虑到了大家在设计时会考虑到干涉问题，因此增加了两个区域，一个可以随机构运动，一个不行，用来模拟干涉，不过绘制较为简单，后续可以看情况要不要增加细节。</p><h4>左边栏</h4><p>相较于右边栏的绘制，左边栏就显得更加重要，在左边栏，你可以设置你需要相关物理信息，获得你需要的相关物理量。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/20b32dc79f984de0ab4b090c36b18c741790601936116/image.png" alt="image.png" data-href="" data-file-md5="c638448e17a1362391c790c51742b918" data-file-len="37541" style=""/></p><p>首先在动力学和扭矩方面，你可以获得相关原动机的性能曲线（存在误差，仅供参考）</p><p>连杆参数部分可以设置连杆长度与重量，调节重心位置比例</p><p>在原动力方面，可以设置旋转原动力与直线动力的动力形式</p><p>值得一提的是在节点与约束部分，可以具体设定节点类型，是否有阻力或阻尼，以及运动范围</p><p>传动与碰撞部分可以设定具体的传动比例，与碰撞形式，以及设置地面相关参数</p><p>工作空间部分设定具体计算工作空间的选项与限制。</p><h1>写在后面</h1><p>考虑到后面更新或者维护的话，在论坛上传可能会有审核延迟，所以建一个QQ群，后续有新的工具也会在群里一起放出来。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/01f0118f0c7543a7836cffe99f543f7d1790667138598/image.png" alt="image.png" data-href="" data-file-md5="4b911f245dab613d6c173280f3c18b34" data-file-len="98899" style=""/></p><p><br></p>
+<h2>viết ở phía trước</h2><p>Cách đây rất lâu, tôi đã muốn tìm một phần mềm có thể sử dụng để thiết kế nguyên tắc một cách nhanh chóng. Tôi đã thử nhiều lần trước đây nhưng kết quả không như ý. Giao diện phức tạp hoặc đòi hỏi phải học nhiều để sử dụng. Công cụ thân thiện hơn mà tôi từng gặp trước đây là công cụ thiết kế Linkage mã nguồn mở, nhưng Có, đôi khi thật rắc rối khi không có phiên bản tiếng Trung và liên kết thiếu một số hiệu ứng kỳ diệu hơn mà tôi mong muốn. Vì vậy, sau khi suy đi nghĩ lại (thực ra là do Trung thu nhàn rỗi và không có thời gian vẽ trên máy tính), tôi đã quyết định tự mình xây dựng một công cụ, đó là LinkGo.</p><p>Hiện nay LinkGo vẫn đang trong giai đoạn thử nghiệm nên chỉ phát hành file HTML dưới dạng thử nghiệm thí điểm. Sau khi thu thập đủ phản hồi, một gói ứng dụng sẽ được tung ra. Các tập tin HTML có thể được truy cập bằng nhiều thiết bị khác nhau, bao gồm điện thoại di động, máy tính bảng và máy tính, đồng thời phần mềm cũng đã được điều chỉnh phù hợp với các thiết bị màn hình cảm ứng ở một mức độ nhất định, giúp người dùng lấy thiết bị ra và vẽ hai nét trong cảnh họp một cách thuận tiện hơn thay vì khoa trương bằng tay (đây là một quá trình tốn thời gian và vô ơn).</p><p>Tiếp theo mình sẽ giới thiệu ngắn gọn cách sử dụng và chức năng của LinkGo ở nội dung tiếp theo. Vì có nhiều nội dung nên mình sẽ chọn nội dung chính để nói, các bạn có thể tự chọn nội dung khác.</p><p>Đồng thời, link chương trình như sau (đúng rồi, nó nhỏ quá, chưa được đóng gói, cứ thoải mái sử dụng):</p><p><a data-file-key="1790673397117-662189-LinkGo v1.1.html-GA-Hv9pwjXRmUmdTlTdcU" data-file-len="662189" data-file-md5="240b8ade21c4882fb3e6ef721dbd08af" data-file-name="LinkGo v1.1.html" data-file-state="uploadSuccess" data-w-e-is-inline="" data-w-e-is-void="" data-w-e-type="attachment" href="https://drive.google.com/file/d/19kdW4ncRqYPiOLp9qDJjvlEYIFhq63_w/view?usp=sharing" rel="noopener noreferrer" target="_blank">LinkGo v1.1.html ↗ (Xem / Tải trên Google Drive)</a></p><h2>Giới thiệu chức năng chương trình</h2><p>Những điểm nổi bật về thiết kế hiện tại của LinkGo có thể tóm tắt như sau:<strong>Đặt bản vẽ cơ chế, mô phỏng chuyển động, phân tích tải trọng và xuất kết quả vào cùng một bàn làm việc nhẹ:</strong></p><p>1. Vận hành cơ chế trực tiếp trên canvas</p><p>Các nút, liên kết, thanh trượt, điểm ưa thích và vùng nhiễu đều có thể được chỉnh sửa trực tiếp. Bạn có thể quan sát mối quan hệ chuyển động khi kéo cơ chế và khu vực hỗ trợ chuyển động, xoay, điều chỉnh kích thước và hấp phụ phần tử, giảm nhu cầu nhập tọa độ nhiều lần.</p><p>2. Mở rộng từ thanh liên kết đơn sang tổ hợp cơ cấu</p><p>Hỗ trợ nhiều lựa chọn, chọn khung, sao chép, căn chỉnh, phân bổ khoảng cách bằng nhau và kết hợp thân cứng nhiều nút. Khi sao chép, các tham chiếu đến các nút, ổ đĩa, đường truyền và khu vực phụ trợ được xử lý đồng bộ để tạo điều kiện thuận lợi cho việc tái sử dụng các cấu trúc hiện có.</p><p>3. Phân tích kết hợp chuyển động và tải trọng</p><p>Ngoài việc quan sát quỹ đạo chuyển động, mô men truyền động quay, lực truyền động tuyến tính, quán tính, trọng lực và tải trọng tiếp xúc cũng có thể được phân tích. Các điểm quan tâm có thể lệch khỏi đường tâm của thanh liên kết để phân tích vị trí làm việc thực tế và phạm vi làm việc.</p><p>4. Kết quả tính toán có nhắc nhở hợp lệ rõ ràng</p><p>Vi phạm ràng buộc chỉ ra các vấn đề cụ thể; tải không được tính toán và các mẫu chu kỳ bị thiếu được đánh dấu rõ ràng. Bản đồ nhiệt phạm vi làm việc cũng phân biệt giữa các vùng tải đã biết và chưa biết, giúp dễ dàng xác định xem kết quả có thể được sử dụng cho phân tích tiếp theo hay không.</p><p>5. Quá trình mô phỏng có thể kiểm soát được và lặp lại được</p><p>Phát lại và một bước chia sẻ kích thước bước vật lý cố định và hỗ trợ phóng to, tạm dừng và tiếp tục phát lại cũng như đặt lại điểm bắt đầu. Độ phóng đại thay đổi tốc độ phát lại để tạo điều kiện thuận lợi cho việc quan sát các chuyển động nhanh; reset giữ lại thiết kế mô hình và cài đặt môi trường.</p><h3>Giới thiệu giao diện</h3><h4>Thanh trên cùng</h4><p><img alt="image.png" data-file-len="39388" data-file-md5="4e900cdc378cbe1250226c1c0914023d" data-href="" src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e10a0d1178484e62967966df957aac2f1790594835412/image.png" style=""/></p><p>Các chức năng ở thanh trên cùng từ trái qua phải là cột trái, quay lại trang chủ, mới, lưu, các tùy chọn khác, tab, kéo và thả, cơ chế vẽ, điều chỉnh điểm ưa thích, hoàn tác và làm lại, xóa, chạy/tạm dừng, cột bên phải</p><p>Chọn cột bên trái sẽ mở bảng bên trái và cột bên phải sẽ mở bảng bên phải. Chạy/tạm dừng có thể phát hoạt ảnh đang chạy của tổ chức, các tab có thể được tạo nhiều lần và các tùy chọn khác có thể được điều chỉnh để hiển thị thông tin, chủ đề, v.v. Bạn có thể tự mình khám phá.</p><h4>Cột bên phải</h4><p>Cột bên phải chủ yếu được sử dụng để vẽ. Bản vẽ hiện hỗ trợ hai phương pháp: tự thiết kế và tạo khớp. Tự thiết kế có nghĩa là tự thiết kế cơ chế liên kết, độ dài và các nội dung khác sẽ được phát sau khi hoàn tất cài đặt.</p><p>Tạo khớp nối là tạo ra một cơ chế độc lập có thể đáp ứng quỹ đạo chuyển động dựa trên quỹ đạo đã vẽ và chế độ cài sẵn. (Hiện tại chức năng này vẫn cần phải hoàn thiện hơn và cơ chế tạo ra chưa phải là giải pháp tối ưu).</p><p><img alt="image.png" data-file-len="34959" data-file-md5="21145354c2d218a33abf7757ba01512f" data-href="" src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/2d556b1c733242d4ba0038547c4bc2321790595349104/image.png" style=""/></p><p>Trong bản vẽ, một số chức năng nổi bật là điểm theo dõi vẽ tay, điểm theo dõi, ghi lại tư thế và đường cong kéo, vùng cố định và vùng theo dõi.</p><p>Trong số đó, điểm quỹ đạo là điểm bạn quan tâm, phần mềm có thể mô tả không gian làm việc và chi phí công việc tương ứng với điểm này.</p><p>Ghi lại tư thế và kéo và ghi đường cong đều là chức năng ghi. Cái trước có thể sửa và ghi nhớ một số tư thế bạn kéo, trong khi cái sau ghi lại tất cả các tư thế trong quá trình kéo cơ chế. Sau khi hoàn thành việc ghi âm, bạn có thể sử dụng tính năng phát lại để quan sát quá trình chuyển động.</p><p>Chức năng của vùng cố định và vùng sau có tính đến vấn đề nhiễu mà mọi người sẽ cân nhắc khi thiết kế nên hai vùng được thêm vào, một vùng có thể di chuyển bằng cơ chế, còn vùng kia không thể, dùng để mô phỏng nhiễu, nhưng bản vẽ tương đối đơn giản. Bạn có thể thêm chi tiết sau tùy theo tình huống.</p><h4>Cột bên trái</h4><p>So với việc vẽ ở cột bên phải thì cột bên trái quan trọng hơn. Ở cột bên trái, bạn có thể đặt thông tin vật lý liên quan mà bạn cần và lấy số lượng vật lý liên quan mà bạn cần.</p><p><img alt="image.png" data-file-len="37541" data-file-md5="c638448e17a1362391c790c51742b918" data-href="" src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/20b32dc79f984de0ab4b090c36b18c741790601936116/image.png" style=""/></p><p>Trước hết, về mặt động lực học và mô-men xoắn, bạn có thể lấy đường cong hiệu suất của động cơ chính có liên quan (có sai sót, chỉ mang tính chất tham khảo)</p><p>Trong phần thông số thanh liên kết, bạn có thể đặt chiều dài và trọng lượng của thanh liên kết, đồng thời điều chỉnh tỷ lệ vị trí trọng tâm.</p><p>Về mặt động lực có thể thiết lập được các dạng công suất của động lực quay và động lực tuyến tính</p><p>Điều đáng nói là trong phần nút và ràng buộc, bạn có thể đặt cụ thể loại nút, có lực cản hay giảm chấn và phạm vi chuyển động hay không.</p><p>Trong phần truyền và va chạm, bạn có thể đặt tỷ số truyền, hình thức va chạm cụ thể và các thông số liên quan đến mặt đất.</p><p>Phần không gian làm việc đặt các tùy chọn và hạn chế cho các tính toán cụ thể của không gian làm việc.</p><h1>được viết ở phía sau</h1><p>Xét rằng có thể có sự chậm trễ trong quá trình xem xét khi tải lên diễn đàn do các bản cập nhật hoặc bảo trì tiếp theo, chúng tôi đã tạo nhóm QQ và các công cụ mới sẽ được phát hành trong nhóm trong tương lai.</p><p><img alt="image.png" data-file-len="98899" data-file-md5="4b911f245dab613d6c173280f3c18b34" data-href="" src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/01f0118f0c7543a7836cffe99f543f7d1790667138598/image.png" style=""/></p><p><br/></p>
   </div>
 </article>
