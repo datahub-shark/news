@@ -13,7 +13,7 @@ function fixture(){
   getRange:(row,col,count=1,width=1)=>({getValues:()=>tables[name].slice(row-1,row-1+count).map(r=>r.slice(col-1,col-1+width)),setValues(values){if(name==='Projects'&&failProjectWrite)throw Error('Sheets unavailable');values.forEach((r,i)=>{tables[name][row-1+i]||=[];r.forEach((v,j)=>tables[name][row-1+i][col-1+j]=v);});}}),
   appendRow(row){if(name==='Projects'&&failProjectWrite)throw Error('Sheets unavailable');tables[name].push(row);},deleteRow:row=>tables[name].splice(row-1,1),setFrozenRows(){}
  }:null;
- function folder(){const id=crypto.randomUUID(),f={id,private:false,editors:[],viewers:[],getId:()=>id,getEditors(){return this.editors;},getViewers(){return this.viewers;},setSharing(access,permission){assert.equal(access,'private');assert.equal(permission,'none');this.private=true;},createFile(blob){const fileId=crypto.randomUUID(),record={...blob,folderId:id,private:false,trashed:false};files.set(fileId,record);return {getId:()=>fileId,setSharing(access,permission){assert.equal(access,'private');assert.equal(permission,'none');record.private=true;},setTrashed:value=>record.trashed=value};}};folders.set(id,f);return f;}
+ function folder(name,parentId=null){const id=crypto.randomUUID(),f={id,name,parentId,private:false,editors:[],viewers:[],getId:()=>id,getName(){return this.name;},setName(value){this.name=value;return this;},getParents(){const parents=this.parentId?[folders.get(this.parentId)]:[];let i=0;return {hasNext:()=>i<parents.length,next:()=>parents[i++]};},createFolder(childName){return folder(childName,id);},getEditors(){return this.editors;},getViewers(){return this.viewers;},setSharing(access,permission){assert.equal(access,'private');assert.equal(permission,'none');this.private=true;},createFile(blob){const fileId=crypto.randomUUID(),record={...blob,folderId:id,private:false,trashed:false};files.set(fileId,record);return {getId:()=>fileId,setSharing(access,permission){assert.equal(access,'private');assert.equal(permission,'none');record.private=true;},setTrashed:value=>record.trashed=value};}};folders.set(id,f);return f;}
  const ctx={console,Date,PropertiesService:{getScriptProperties:()=>({getProperty:key=>props.get(key),setProperty:(key,value)=>props.set(key,value)})},CacheService:{getScriptCache:()=>({get:key=>cache.get(key)||null,put:(key,value)=>cache.set(key,value),remove:key=>cache.delete(key)})},
   SpreadsheetApp:{openById:()=>({getSheetByName:sheet,insertSheet(name){tables[name]=[];return sheet(name);},getUrl:()=> 'https://docs.google.com/spreadsheets/d/private'})},
   DriveApp:{Access:{PRIVATE:'private'},Permission:{NONE:'none'},createFolder:folder,getFolderById:id=>{if(!folders.has(id))throw Error('Missing folder');return folders.get(id);},getFileById:id=>({getBlob(){driveReads++;if(!files.has(id))throw Error('Missing file');return {getDataAsString:()=>files.get(id).content};}})},
@@ -87,7 +87,7 @@ test('Google sessions are durable hashes, have expiry and a maximum of ten per a
 test('projects store private immutable Drive JSON revisions and only metadata in Sheets and lists',()=>{
  const f=fixture(),member=f.login('member@gmail.com','2000001'),model=mechanism();
  const saved=f.api('saveProject',{token:member.token,project:{name:'Cơ cấu',model,ownerSub:'1000001',ownerId:'spoof',fileId:'arbitrary'}});assert.equal(saved.ok,true);assert.deepEqual(JSON.parse(JSON.stringify(saved.project.model)),model);assert.equal(saved.project.version,1);assert.equal(saved.project.fileId,undefined);assert.equal(saved.project.ownerSub,undefined);
- const meta=JSON.parse(f.projectRow(saved.project.id)[1]),file=f.files.get(meta.fileId);assert.equal(meta.ownerSub,'2000001');assert.equal(meta.model,undefined);assert.notEqual(meta.fileId,'arbitrary');assert.equal(file.private,true);assert.equal(f.folders.get(file.folderId).private,true);assert.equal(f.props.get('PROJECTS_FOLDER_ID'),file.folderId);
+ const meta=JSON.parse(f.projectRow(saved.project.id)[1]),file=f.files.get(meta.fileId);assert.equal(meta.ownerSub,'2000001');assert.equal(meta.model,undefined);assert.notEqual(meta.fileId,'arbitrary');assert.equal(file.private,true);assert.equal(f.folders.get(file.folderId).private,true);assert.equal(f.folders.get(file.folderId).name,'member@gmail.com');assert.equal(f.folders.get(file.folderId).parentId,f.props.get('PROJECTS_FOLDER_ID'));
  assert.equal(f.api('projects',{token:member.token}).projects[0].model,undefined);assert.equal(f.api('projects',{token:member.token}).projects[0].fileId,undefined);assert.equal(f.getReads(),0);
  assert.deepEqual(JSON.parse(JSON.stringify(f.api('getProject',{token:member.token,id:saved.project.id}).project.model)),model);
  const next=f.api('saveProject',{token:member.token,project:{...saved.project,name:'Version 2',model:{...model,units:'m'}}});assert.equal(next.ok,true);assert.equal(next.project.version,2);assert.equal(f.files.size,2);assert.equal(JSON.parse(file.content).model.units,'mm');assert.notEqual(JSON.parse(f.projectRow(saved.project.id)[1]).fileId,meta.fileId);
@@ -117,6 +117,24 @@ test('invalid models fail before Drive writes; failed Sheets writes clean up the
 test('project folder with explicit collaborators is rejected, and setup is additive',()=>{
  const f=fixture();f.ctx.setup();const folder=f.folders.get(f.props.get('PROJECTS_FOLDER_ID'));folder.editors.push('outsider@gmail.com');const member=f.login('member@gmail.com','2000001');assert.equal(f.api('saveProject',{token:member.token,project:{name:'Secret',model:mechanism()}}).ok,false);assert.equal(f.files.size,0);
  folder.editors=[];f.tables.Articles.push(['existing',JSON.stringify({id:'existing',status:'pending'})]);const before=JSON.stringify(f.tables.Articles);f.ctx.setup();assert.equal(JSON.stringify(f.tables.Articles),before);for(const table of ['Users','UserSessions','Projects'])assert.ok(f.tables[table]);
+});
+
+test('account folders use verified email names, remain separate and are reused after an email change',()=>{
+ const f=fixture(),a=f.login('a@gmail.com','2000001'),b=f.login('b@gmail.com','3000001');
+ const pa=f.api('saveProject',{token:a.token,project:{name:'A',model:mechanism(),projectsFolderId:'spoof'}}).project;
+ const pb=f.api('saveProject',{token:b.token,project:{name:'B',model:mechanism()}}).project;
+ const fileA=f.files.get(JSON.parse(f.projectRow(pa.id)[1]).fileId),fileB=f.files.get(JSON.parse(f.projectRow(pb.id)[1]).fileId);
+ assert.notEqual(fileA.folderId,fileB.folderId);assert.equal(f.folders.get(fileA.folderId).getName(),'a@gmail.com');assert.equal(f.folders.get(fileB.folderId).getName(),'b@gmail.com');
+ const renamed=f.login('renamed@gmail.com','2000001');assert.equal(f.api('getProject',{token:renamed.token,id:pa.id}).ok,true);
+ const saved=f.api('saveProject',{token:renamed.token,project:pa});assert.equal(saved.ok,true);const latest=f.files.get(JSON.parse(f.projectRow(pa.id)[1]).fileId);assert.equal(latest.folderId,fileA.folderId);assert.equal(f.folders.get(latest.folderId).getName(),'renamed@gmail.com');assert.equal(fileA.trashed,false);assert.equal(f.api('getProject',{token:b.token,id:pa.id}).code,'NOT_FOUND');
+});
+
+test('shared or moved account folders reject writes, while old root JSON revisions remain readable',()=>{
+ const f=fixture(),a=f.login('a@gmail.com','2000001'),p=f.api('saveProject',{token:a.token,project:{name:'A',model:mechanism()}}).project;
+ const file=f.files.get(JSON.parse(f.projectRow(p.id)[1]).fileId),folder=f.folders.get(file.folderId),count=f.files.size;
+ folder.viewers.push('outsider@gmail.com');assert.equal(f.api('saveProject',{token:a.token,project:p}).ok,false);assert.equal(f.files.size,count);folder.viewers=[];
+ const root=folder.parentId;folder.parentId='outside';assert.equal(f.api('saveProject',{token:a.token,project:p}).ok,false);assert.equal(f.files.size,count);folder.parentId=root;
+ file.folderId=root;assert.equal(f.api('getProject',{token:a.token,id:p.id}).ok,true);assert.equal(f.api('saveProject',{token:a.token,project:p}).ok,true);assert.equal(file.folderId,root);assert.equal(file.trashed,false);const latest=f.files.get(JSON.parse(f.projectRow(p.id)[1]).fileId);assert.equal(latest.folderId,folder.id);
 });
 
 test('optional automation key has no account/project/admin privileges and cannot publish or alter reviewed articles',()=>{

@@ -80,7 +80,9 @@ Phiên ứng dụng có hạn 30 ngày, tối đa 10 phiên/tài khoản. Server
 
 ## 5. Dự án linkS lưu ở đâu
 
-Lưu trên trình duyệt chỉ tạo bản nháp trên máy hiện tại. Thao tác **lưu vào tài khoản** gửi mô hình lên backend; `Projects` giữ ID, chủ sở hữu, tên, phiên bản và ID file, còn Drive chứa JSON riêng tư. Người dùng mở lại dự án sau khi đăng nhập cùng Google Account trên thiết bị khác.
+Lưu trên trình duyệt tạo bản nháp riêng theo ID tài khoản đã được server xác minh. Đăng xuất/đổi tài khoản đóng bàn thiết kế cũ và mở workspace mới; khách chỉ có bộ nhớ tạm. Bản nháp dùng chung từ phiên bản cũ không được tự nhập vào bất kỳ tài khoản nào và được giữ nguyên để tránh gán nhầm chủ. Thao tác **lưu vào tài khoản** gửi mô hình lên backend; `Projects` giữ ID, chủ sở hữu, tên, phiên bản và ID file, còn Drive chứa JSON riêng tư. Người dùng mở lại dự án sau khi đăng nhập cùng Google Account trên thiết bị khác.
+
+Backend mới tạo thư mục con theo email bên trong `linkS · Private Projects`, ví dụ `ten@gmail.com/<project-id>-v1.json`. ID thư mục được lưu trong bản ghi `Users` và gắn với Google `sub`, không chọn thư mục bằng tên email do trình duyệt gửi. Nếu email của cùng Google ID thay đổi, hệ thống đổi tên thư mục và giữ ID. Không chia sẻ thư mục cho email đó; người dùng đọc qua API đã xác thực. Các JSON cũ nằm ở thư mục gốc vẫn mở được theo metadata hiện có; các lần lưu mới đi vào thư mục tài khoản. Cần thay `Code.gs` và triển khai New version để áp dụng bố cục thư mục này; frontend tự cập nhật không thay backend Drive.
 
 Mỗi lần lưu tạo một JSON phiên bản mới. Backend kiểm tra phiên bản để từ chối ghi đè khi hai cửa sổ cùng sửa; tải lại bản mới trước khi lưu tiếp. Xóa dự án ẩn dự án khỏi ứng dụng, còn các JSON lịch sử được giữ trên Drive để chủ có thể phục hồi thủ công. Dung lượng và hạn mức sử dụng thuộc tài khoản chủ backend; chưa có chính sách dọn phiên bản hoặc hạn mức VIP riêng.
 

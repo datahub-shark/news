@@ -8,7 +8,7 @@ Web: https://datahub-shark.github.io/news/ · linkS: https://datahub-shark.githu
 
 Người dùng đăng nhập bằng Google; tài khoản mới **tự trở thành member**. Admin gán quyền **admin / vip / member** và bật/tắt tài khoản trong mục quản lý tài khoản. VIP hiện là vai trò để phân quyền tiếp theo, chưa có gói trả phí hay hạn mức riêng. Tài khoản chủ cấu hình qua `ADMIN_EMAIL` được bảo vệ và gắn với Google ID sau lần đăng nhập đầu.
 
-Trong linkS, bản nháp trình duyệt vẫn nằm trên thiết bị. Dùng thao tác lưu dự án vào tài khoản để lưu bản JSON riêng tư trên Drive và metadata trong sheet `Projects`; đăng nhập cùng tài khoản để mở lại. Mỗi yêu cầu đọc/sửa/xóa đều kiểm tra chủ dự án ở server, kể cả khi người dùng có quyền admin. Dữ liệu này nằm trong Drive/Sheet của chủ website, không yêu cầu quyền truy cập Drive của từng thành viên.
+Trong linkS, bản nháp trình duyệt được tách theo ID tài khoản; đăng xuất/đổi tài khoản mở workspace riêng, khách chỉ dùng bộ nhớ tạm. Nháp dùng chung cũ không tự gán cho tài khoản nào. Dùng thao tác lưu dự án vào tài khoản để lưu bản JSON riêng tư trên Drive và metadata trong sheet `Projects`; đăng nhập cùng tài khoản để mở lại. Backend mới tạo thư mục con theo email cho từng người trong kho dự án; quyền sở hữu và ID thư mục vẫn gắn với Google ID ổn định. Mỗi yêu cầu đọc/sửa/xóa đều kiểm tra chủ dự án ở server, kể cả khi người dùng có quyền admin. Dữ liệu này nằm trong Drive/Sheet của chủ website, không yêu cầu quyền truy cập Drive của từng thành viên.
 
 **Cần cấu hình OAuth và triển khai trước khi dùng trực tuyến:** xem [GOOGLE-AUTH-SETUP.md](GOOGLE-AUTH-SETUP.md). Thay đổi trong repo và test offline chưa xác nhận Google login, Sheets, Drive hoặc website đang chạy.
 

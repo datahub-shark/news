@@ -3,10 +3,18 @@
   'use strict';
   const $=id=>document.getElementById(id),account=window.RobotAccount;
   const associations=new Map();
-  let pendingSave=null,busy=false,accountId='',generation=0;
+  let pendingSave=null,busy=false,accountId=null,accountToken=null,generation=0;
   function identity(){const s=account.session;return s?.user?.id||s?.user?.sub||s?.user?.email||'';}
   function status(text,error=false){$('cloudStatus').textContent=text;$('cloudStatus').dataset.error=String(error);}
   function ui(){return $('workbench').contentWindow?.LinkSharkUI;}
+  function resetWorkbench(session){
+    const previous=$('workbench'),frame=document.createElement('iframe');
+    frame.id='workbench';frame.title=previous.title;frame.allow='fullscreen';
+    frame.dataset.workbenchSrc=previous.dataset.workbenchSrc;
+    previous.replaceWith(frame);
+    window.LinkSWorkspaceStorage.activate(frame,session);
+    frame.src=frame.dataset.workbenchSrc;
+  }
   function current(){const app=ui(),workspace=app?.getWorkspace(),editor=app?.getEditor();if(!workspace||workspace.home||!editor)throw Error('Mở một cơ cấu hoặc tạo thiết kế trống trước khi lưu.');return {workspace,editor,key:workspace.activeId};}
   function requireAccount(){if(!account.session){$('accountDialog').showModal();throw Error('Đăng nhập Google để lưu và mở dự án trên tài khoản.');}}
   async function task(fn){if(busy)return;busy=true;for(const id of ['cloudSave','cloudSaveCopy','cloudProjects','submitProject','refreshProjects'])$(id).disabled=true;try{await fn();}catch(e){status(e.message,true);}finally{busy=false;for(const id of ['cloudSave','cloudSaveCopy','cloudProjects','submitProject','refreshProjects'])$(id).disabled=false;}}
@@ -20,6 +28,6 @@
   $('cloudSaveCopy').onclick=()=>{try{beginSave(true);}catch(e){status(e.message,true);}};
   $('cloudProjects').onclick=()=>task(async()=>{requireAccount();$('projectsDialog').showModal();await list();});
   $('refreshProjects').onclick=()=>task(list);$('saveProjectForm').onsubmit=save;
-  account.subscribe(()=>{const s=account.session,next=identity();if(next!==accountId){accountId=next;associations.clear();pendingSave=null;generation++;$('projectList').replaceChildren();$('projectsStatus').textContent='';if($('projectsDialog').open)$('projectsDialog').close();if($('saveDialog').open)$('saveDialog').close();} $('accountOpen').textContent=s?s.user.email+' · '+s.user.role:'Đăng nhập Google';$('adminDashboard').hidden=s?.user?.role!=='admin';if(s)status('Đã đăng nhập '+s.user.email+'. Bấm Lưu lên tài khoản để lưu thiết kế đang mở.');else status('Bản nháp trên thiết bị được giữ tự động. Đăng nhập để lưu dự án lên tài khoản.');});
+  account.subscribe(()=>{const s=account.session,next=identity();if(next!==accountId||(s?.token||null)!==accountToken){accountId=next;accountToken=s?.token||null;associations.clear();pendingSave=null;generation++;$('projectList').replaceChildren();$('projectsStatus').textContent='';$('projectName').value='';if($('projectsDialog').open)$('projectsDialog').close();if($('saveDialog').open)$('saveDialog').close();resetWorkbench(s);} $('accountOpen').textContent=s?s.user.email+' · '+s.user.role:'Đăng nhập Google';$('adminDashboard').hidden=s?.user?.role!=='admin';if(s)status('Bản nháp trên trình duyệt được lưu riêng cho '+s.user.email+'. Bấm Lưu lên tài khoản để sao lưu lên Drive.');else status('Chế độ khách không giữ bản nháp sau khi đổi tài khoản hoặc tải lại trang. Đăng nhập để lưu thiết kế.');});
   account.mount($('accountMount')).catch(e=>status(e.message,true));
 })();

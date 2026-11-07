@@ -19,8 +19,8 @@
     </div>
     <button id="accountOpen" type="button">Đăng nhập Google</button>
   </header>
-  <p id="cloudStatus" role="status">Bản nháp trên thiết bị được giữ tự động. Đăng nhập để lưu dự án lên tài khoản.</p>
-  <iframe id="workbench" src="linkS.html" title="Bàn thiết kế cơ cấu linkS" allow="fullscreen"></iframe>
+  <p id="cloudStatus" role="status">Đăng nhập để dùng bản nháp riêng và lưu dự án lên tài khoản.</p>
+  <iframe id="workbench" data-workbench-src="linkS.html?v=account-drafts-1" title="Bàn thiết kế cơ cấu linkS" allow="fullscreen"></iframe>
   <dialog id="accountDialog" aria-labelledby="accountTitle">
     <div class="dialog-heading"><h2 id="accountTitle">Tài khoản Robot Ideas</h2><button type="button" data-close="accountDialog" aria-label="Đóng">×</button></div>
     <div id="accountMount"></div>
@@ -45,6 +45,7 @@
   </dialog>
   <script src="../config.js"></script>
   <script src="../account.js"></script>
-  <script src="projects.js"></script>
+  <script src="workspace-storage.js?v=account-drafts-1"></script>
+  <script src="projects.js?v=account-drafts-1"></script>
 </body>
 </html>
