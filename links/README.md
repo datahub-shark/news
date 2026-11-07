@@ -11,3 +11,5 @@ Bản nháp trình duyệt được tách theo ID tài khoản đã xác minh; �
 Cập nhật bàn thiết kế bằng `npm run build:links -- <đường-dẫn-tới-linkS.html>`; mặc định lấy bản đã build ở `../link-shark-dxf/dist/linkS.html`. `build-info.json` ghi SHA-256 để đối chiếu.
 
 Build chuyển trực tiếp các chuỗi mặc định của ứng dụng sang tiếng Việt bằng AST: tên mẫu, tên khớp/khâu mới, mô tả, thông báo và tiêu đề xuất tệp. Bảng dịch nằm trong bản tham chiếu, bổ sung tại `vi-defaults.json`; tiếng Anh và tùy chọn xem bản gốc vẫn hoạt động. Tên và nội dung do người dùng đã nhập/lưu không bị dịch lại khi nhập JSON.
+
+Danh sách dự án dựng ảnh SVG từ mô hình riêng qua `getProject`, gồm khâu, khớp, biên dạng CAD và bánh răng. Ảnh tải khi gần vùng nhìn thấy, tối đa hai yêu cầu cùng lúc; không công khai tệp Drive, không ghi ảnh vào bộ nhớ trình duyệt và hủy kết quả cũ khi đổi tài khoản. Dự án đã lưu trước đây cũng có ảnh mà không cần lưu lại hay đổi backend.

@@ -13,6 +13,7 @@ function page(){
  function attach(){d.getElementById('workbench').contentWindow.LinkSharkUI={getWorkspace:()=>workspace,getEditor:()=>editor};}
  w.RobotAccount={get session(){return session},ready:async()=>session,mount:async()=>{},subscribe(fn){listener=fn;fn(session);},async call(action,payload){calls.push({action,payload});if(action==='saveProject'){const project={...payload.project,id:payload.project.id||'p-'+(++version),version:(payload.project.version||0)+1,updatedAt:new Date().toISOString()};projects.push(project);return {project};}if(action==='projects')return {projects};if(action==='getProject')return {project:projects.find(p=>p.id===payload.id)};return {ok:true};}};
  w.eval(fs.readFileSync('links/workspace-storage.js','utf8'));
+ w.eval(fs.readFileSync('links/project-preview.js','utf8'));
  w.eval(fs.readFileSync('links/projects.js','utf8'));attach();
  const click=id=>d.getElementById(id).click();
  const save=async(name='Cơ cấu của tôi',copy=false)=>{click(copy?'cloudSaveCopy':'cloudSave');d.getElementById('projectName').value=name;d.getElementById('saveProjectForm').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}));await tick();};
@@ -39,4 +40,20 @@ test('logout removes the old editor document before the next account starts a wo
  const f=page(),old=f.d.getElementById('workbench');old.contentDocument.write('<body>Private mechanism A</body>');assert.match(old.contentDocument.body.textContent,/Private mechanism A/);
  f.setSession(null);assert.equal(old.isConnected,false);assert.equal(f.workspace.home,true);assert.equal(f.d.getElementById('workbench').contentDocument.body?.textContent||'','');
  const guest=f.d.getElementById('workbench');f.setSession({user:{id:'b',email:'b@gmail.com',role:'member'}});assert.equal(guest.isConnected,false);assert.equal(f.editor.model,null);assert.equal(f.d.getElementById('workbench').contentDocument.body?.textContent||'','');f.dom.window.close();
+});
+
+test('existing projects receive private geometry previews without rewriting the saved model',async()=>{
+ const f=page();const design={joints:[{id:'a',x:0,y:0,isGround:true},{id:'b',x:1,y:1,isDriver:true}],links:[{jointA:'a',jointB:'b',color:'#f59e0b',cadProfile:{paths:[{closed:true,points:[{x:0,y:0},{x:1,y:0},{x:1,y:.1}]}]}}],gears:[{jointA:'a',radiusA:.2}]};
+ f.projects.push({id:'old',name:'<img src=x onerror=alert(1)>',version:1,model:design});
+ f.click('cloudProjects');await tick();
+ const svg=f.d.querySelector('.project-preview svg');assert.ok(svg);assert.equal(svg.getAttribute('role'),'img');assert.equal(svg.querySelectorAll('circle').length,3);assert.ok(svg.querySelector('path'));assert.equal(f.d.querySelector('.saved-project img'),null);assert.equal(f.calls.filter(c=>c.action==='saveProject').length,0);
+ f.setSession(null);assert.equal(f.d.querySelector('.project-preview'),null);f.dom.window.close();
+});
+
+test('preview failures leave project actions usable and stale account responses cannot draw',async()=>{
+ const f=page();f.projects.push({id:'old',name:'Private A',version:1});
+ let complete;f.w.RobotAccount.call=async action=>action==='projects'?{projects:f.projects}:new Promise(resolve=>{complete=resolve;});
+ f.click('cloudProjects');await tick();const host=f.d.querySelector('.project-preview');assert.ok(host);assert.match(host.textContent,/Đang tải/);
+ f.setSession({user:{id:'b',email:'b@gmail.com',role:'member'}});complete({project:{model:{joints:[{id:'a',x:0,y:0}],links:[]}}});await tick();assert.equal(host.querySelector('svg'),null);assert.equal(f.d.querySelector('.project-preview'),null);f.dom.window.close();
+ const g=page();g.projects.push({id:'broken',name:'Broken',version:1});g.w.RobotAccount.call=async action=>{if(action==='projects')return {projects:g.projects};throw Error('Offline');};g.click('cloudProjects');await tick();assert.match(g.d.querySelector('.project-preview').textContent,/Chưa tải/);assert.equal(g.d.querySelector('.saved-project-actions button').disabled,false);g.dom.window.close();
 });
