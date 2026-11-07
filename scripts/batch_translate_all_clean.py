@@ -32,6 +32,13 @@ ROBOTICS_POST_DICT = [
     (r'\bvòng hở\b', 'vòng lặp hở (open loop)'),
 ]
 
+def safe_save(articles):
+    temp_file = DATA_FILE.with_suffix('.tmp')
+    with open(temp_file, 'w', encoding='utf-8') as f:
+        json.dump(articles, f, ensure_ascii=False, indent=2)
+    time.sleep(0.05)
+    temp_file.replace(DATA_FILE)
+
 def translate_nodes(texts):
     if not texts:
         return []
@@ -78,7 +85,6 @@ def translate_html_content(html_str):
     if not html_str or len(ZH_REGEX.findall(html_str)) < 15:
         return html_str
 
-    # Don't overwrite LinkGo 2D editorial article if already clean
     if 'robot-ideas-article' in html_str and 'LinkGo' in html_str:
         return html_str
 
@@ -145,7 +151,7 @@ def process_single_article(item):
 
 def main():
     print("======================================================")
-    print("⚡ BẮT ĐẦU DỊCH NHANH TOÀN BỘ THÂN BÀI VIẾT (PARALLEL)")
+    print("⚡ BẮT ĐẦU DỊCH NHANH CÁC BÀI VIẾT CÒN LẠI (PARALLEL)")
     print("======================================================")
 
     articles = json.load(open(DATA_FILE, encoding='utf-8'))
@@ -158,7 +164,11 @@ def main():
         if cn_count > 20:
             items_to_process.append((idx, a))
 
-    print(f"Tổng bài viết: {total} | Cần dịch thân bài: {len(items_to_process)}")
+    print(f"Tổng bài viết: {total} | Còn cần dịch thân bài: {len(items_to_process)}")
+
+    if not items_to_process:
+        print("Tất cả bài viết đã được dịch sạch!")
+        return
 
     t0 = time.time()
     completed = 0
@@ -180,14 +190,14 @@ def main():
             except Exception as e:
                 print(f"[{completed}/{len(items_to_process)}] [ERR]: {e}")
 
-            # Checkpoint save every 20 articles
-            if save_counter >= 20:
-                json.dump(articles, open(DATA_FILE, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+            # Safe atomic save every 15 articles
+            if save_counter >= 15:
+                safe_save(articles)
                 save_counter = 0
-                print(f"  💾 Đã lưu tiến trình ({completed}/{len(items_to_process)}) vào {DATA_FILE}")
+                print(f"  💾 Đã lưu an toàn tiến trình ({completed}/{len(items_to_process)})")
 
-    # Final save
-    json.dump(articles, open(DATA_FILE, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+    # Final atomic save
+    safe_save(articles)
     print(f"\n🎉 HOÀN THÀNH DỊCH 100% THÂN BÀI VIẾT TRONG {time.time()-t0:.1f}s!")
 
 if __name__ == '__main__':

@@ -28,10 +28,35 @@ main{max-width:1500px}.admin-shell{display:grid;grid-template-columns:225px minm
 .selection-cell input{width:17px;height:17px;accent-color:#285e46;cursor:pointer}
 .article-info-cell{min-width:310px}.article-row-info{display:flex;align-items:center;gap:14px}
 .article-row-details{min-width:0;flex:1}.article-row-details .title-button{line-height:1.5;overflow-wrap:anywhere}
-.cover-button{padding:0;background:transparent;flex-shrink:0;display:block;border-radius:6px;overflow:hidden}
+.cover-button{padding:0;background:transparent;flex-shrink:0;display:block;border-radius:6px;overflow:hidden;cursor:pointer}
+a.title-button:hover{color:#285e46;text-decoration:underline}
+a.text-button{display:inline-block;cursor:pointer}
+a.text-button:hover{text-decoration:underline}
+a.recent-item{text-decoration:none;cursor:pointer}
+a.recent-item:hover{background:rgba(40,94,70,0.04)}
 .article-thumbnail{position:relative;display:block;width:92px;height:68px;flex-shrink:0;border:1px solid #dce1d8;border-radius:6px;overflow:hidden;background:linear-gradient(135deg,#e8eee3,#f8f9f4);color:#71816c}
-.article-thumbnail img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.thumbnail-placeholder{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:10px;text-align:center;padding:4px}
+.article-thumbnail img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
+.thumbnail-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;font-size:10px;text-align:center;padding:4px;gap:2px;position:relative;z-index:1}
+.thumb-cat-icon{font-size:22px;line-height:1}
+.thumb-cat-name{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.article-thumbnail.compact .thumb-cat-icon{font-size:16px}
+.article-thumbnail.compact .thumb-cat-name{font-size:8px}
+
+.article-thumbnail.cat-mechanics{background:linear-gradient(135deg,#c2410c,#ea580c);color:#fff}
+.article-thumbnail.cat-vision{background:linear-gradient(135deg,#4338ca,#6366f1);color:#fff}
+.article-thumbnail.cat-control{background:linear-gradient(135deg,#0369a1,#0284c7);color:#fff}
+.article-thumbnail.cat-mobile{background:linear-gradient(135deg,#15803d,#16a34a);color:#fff}
+.article-thumbnail.cat-ai{background:linear-gradient(135deg,#6b21a8,#9333ea);color:#fff}
+.article-thumbnail.cat-other{background:linear-gradient(135deg,#334155,#475569);color:#fff}
+
+.category-pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;margin-bottom:4px;cursor:pointer;width:fit-content;border:0;line-height:1.4}
+.category-pill.cat-mechanics{background:#ffedd5;color:#9a3412}
+.category-pill.cat-vision{background:#e0e7ff;color:#3730a3}
+.category-pill.cat-control{background:#e0f2fe;color:#075985}
+.category-pill.cat-mobile{background:#dcfce7;color:#166534}
+.category-pill.cat-ai{background:#f3e8ff;color:#6b21a8}
+.category-pill.cat-other{background:#f1f5f9;color:#334155}
+.category-pill:hover{opacity:0.85}
 .article-thumbnail.compact{width:64px;height:45px}.recent-article{display:flex;align-items:center;gap:13px;min-width:0}
 .article-playlist-badges{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:8px}
 .playlist-badge{padding:2px 8px;font-size:10px;border-radius:12px;background:#edf2e8;color:#285e46;max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
