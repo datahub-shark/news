@@ -2,6 +2,7 @@
   "name": "robot-ideas-news",
   "private": true,
   "scripts": {
+    "build:links": "node scripts/update-links.mjs",
     "build:admin": "node scripts/build-admin.mjs",
     "crawl:robomaster": "node scripts/crawl-robomaster.mjs",
     "crawl:multi": "node scripts/crawl-multi.mjs",

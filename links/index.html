@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="linkS trên Robot Ideas: thiết kế cơ cấu 2D và lưu dự án riêng bằng tài khoản Google.">
+  <title>linkS · Robot Ideas</title>
+  <link rel="stylesheet" href="../account.css">
+  <link rel="stylesheet" href="projects.css">
+</head>
+<body>
+  <header class="project-bar">
+    <a class="site-home" href="../">← Robot Ideas</a>
+    <strong class="product-name">link<span>S</span></strong>
+    <div class="project-actions">
+      <button id="cloudProjects" type="button">Dự án của tôi</button>
+      <button id="cloudSave" type="button">Lưu lên tài khoản</button>
+      <button id="cloudSaveCopy" type="button" title="Lưu thành một dự án mới">Lưu bản sao</button>
+    </div>
+    <button id="accountOpen" type="button">Đăng nhập Google</button>
+  </header>
+  <p id="cloudStatus" role="status">Bản nháp trên thiết bị được giữ tự động. Đăng nhập để lưu dự án lên tài khoản.</p>
+  <iframe id="workbench" src="linkS.html" title="Bàn thiết kế cơ cấu linkS" allow="fullscreen"></iframe>
+  <dialog id="accountDialog" aria-labelledby="accountTitle">
+    <div class="dialog-heading"><h2 id="accountTitle">Tài khoản Robot Ideas</h2><button type="button" data-close="accountDialog" aria-label="Đóng">×</button></div>
+    <div id="accountMount"></div>
+    <p>Tài khoản mới tự đăng ký thành member. Admin quản lý quyền member, vip và admin.</p>
+    <p>Dự án lưu riêng theo tài khoản trong Google Sheets và Google Drive của hệ thống Robot Ideas.</p>
+    <a id="adminDashboard" href="../admin.html" hidden>Mở quản trị →</a>
+  </dialog>
+  <dialog id="projectsDialog" aria-labelledby="projectsTitle">
+    <div class="dialog-heading"><h2 id="projectsTitle">Dự án của tôi</h2><button type="button" data-close="projectsDialog" aria-label="Đóng">×</button></div>
+    <p id="projectsStatus" role="status"></p>
+    <div id="projectList"></div>
+    <button id="refreshProjects" type="button">Tải lại danh sách</button>
+  </dialog>
+  <dialog id="saveDialog" aria-labelledby="saveTitle">
+    <form id="saveProjectForm">
+      <div class="dialog-heading"><h2 id="saveTitle">Lưu dự án</h2><button type="button" data-close="saveDialog" aria-label="Đóng">×</button></div>
+      <label for="projectName">Tên dự án</label>
+      <input id="projectName" maxlength="160" required autocomplete="off">
+      <p id="saveDescription">Lưu thiết kế đang mở cùng biên dạng DXF, tải và các thông số cơ cấu.</p>
+      <button id="submitProject" type="submit">Lưu dự án</button>
+    </form>
+  </dialog>
+  <script src="../config.js"></script>
+  <script src="../account.js"></script>
+  <script src="projects.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {resolve} from 'node:path';
+import {createHash} from 'node:crypto';
+import vm from 'node:vm';
+const source=resolve(process.argv[2]||'../link-shark-dxf/dist/linkS.html');
+const html=await readFile(source,'utf8');
+if(!html.includes('linkS')||!html.includes('window.LinkSharkUI')||!html.includes('window.LinkSharkForces'))throw Error('Expected the complete linkS workbench.');
+if(/<script[^>]+src=/i.test(html))throw Error('Workbench must be self-contained.');
+for(const match of html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g))new vm.Script(match[1]);
+await mkdir('links',{recursive:true});
+await writeFile('links/linkS.html',html);
+await writeFile('links/build-info.json',JSON.stringify({name:'linkS',sha256:createHash('sha256').update(html).digest('hex'),bytes:Buffer.byteLength(html),source:'link-shark-dxf/dist/linkS.html'},null,2)+'\n');
+console.log('Updated complete linkS workbench: '+Buffer.byteLength(html)+' bytes.');
