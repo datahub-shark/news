@@ -22,14 +22,40 @@ Trạng thái: READY
     <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/251fedfd18aa446eb104362a164bb49b1788109163290/8.JPG" alt="华东理工大学起源战队" style="width:100%;height:100%;object-fit:cover;display:block;">
   </div>
   
-  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
-    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
-    <ul style="margin-bottom:0;">
-      <li><a href="./attachments/bai-viet-tai-nguyen.zip" target="_blank"><strong>bai-viet-tai-nguyen.zip</strong></a> (📁 Đã tải trong thư mục attachments/ - 41.27 MB)</li>
+    <div class="local-attachments" style="background:#f4f7fb;border:1.5px solid #0f62fe;padding:18px;border-radius:8px;margin:22px 0;">
+    <h3 style="margin-top:0;margin-bottom:14px;color:#0f62fe;font-size:1.15em;display:flex;align-items:center;gap:8px;">
+      📦 Tệp đính kèm &amp; Bản vẽ CAD / Tài liệu (Google Drive)
+    </h3>
+    <ul style="list-style:none;padding:0;margin:0;">
+      <li style="margin-bottom:10px;padding:10px 14px;background:#ffffff;border:1px solid #c6c6c6;border-radius:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1.4em;">📦</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1gqw6OP5cuqSeegTIuVAVW8zCVrYbuWhb/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:#0f62fe;font-weight:600;text-decoration:none;font-size:1.02em;">bai-viet-tai-nguyen.zip</a>
+            <div style="font-size:0.82em;color:#525252;margin-top:3px;">
+              <span style="background:#edf5ff;color:#0043ce;padding:1px 6px;border-radius:3px;font-weight:500;">Archive</span>
+               · 41.27 MB · Lưu trữ Google Drive
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://drive.google.com/file/d/1gqw6OP5cuqSeegTIuVAVW8zCVrYbuWhb/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="background:#0f62fe;color:#ffffff;padding:6px 14px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
+            👁️ Xem / Mở
+          </a>
+          <a href="https://drive.google.com/uc?export=download&id=1gqw6OP5cuqSeegTIuVAVW8zCVrYbuWhb" target="_blank" rel="noopener noreferrer" style="background:#e8f0fe;color:#0f62fe;border:1px solid #0f62fe;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
+            ⬇️ Tải file
+          </a>
+        </div>
+      </li>
     </ul>
+    <div style="margin-top:14px;text-align:right;">
+      <a href="https://drive.google.com/drive/folders/1F2r0zoLocfYeb925fi6y1Dex4uDcUjzW?usp=sharing" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;background:#ffffff;color:#0f62fe;border:1px solid #0f62fe;padding:7px 16px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:600;">
+        📂 Mở thư mục tệp đính kèm trên Google Drive ↗
+      </a>
+    </div>
   </div>
   <hr>
   <div class="article-body">
-<h1><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/251fedfd18aa446eb104362a164bb49b1788109163290/8.JPG" alt="8.JPG" data-href="" data-file-md5="82d37ee12522b694f5451a2048828768" data-file-len="7623709" style=""/></h1><h1><strong>一、前言</strong></h1><p>本文档为华东理工大学起源战队在26赛季比赛中使用的飞镖发射架的自缓冲结构设计经验分享。</p><p>飞镖的缓冲结构是困扰了起源飞镖组一整个25赛季的问题，导致在日常调试过程中修镖架的时间多于测飞镖的时间，这也是25赛季起源的飞镖固定靶稳定性差以及未能在25赛季复活赛就将制导镖应用到赛场上的根本原因。因此在26赛季我着重解决了缓冲的稳定性问题，最终保证了在后半个赛季的调试过程中几乎不需要维护镖架，镖架只需要负责把制导镖打出去就行。</p><p>在制导镖不断普及的当下，飞镖作为一个相当依赖经验的兵种会不断增大新老队伍之间的差距。为了帮助新队伍少走弯路，在此分享一下我这个赛季研发自缓冲结构的一些经验和理解，希望可以加快新队伍的成长速度。</p><p>需要注意的是，本赛季季军争夺战时拉簧挂钩出现了疲劳断裂，自缓冲对拉簧存在一定的损伤，建议各队在正式确定使用前先进行压力测试测试其耐久度上限。</p><p>9.3更新：经过探讨分析，在拉簧强度校核过程中忽略了挂钩的拉应力，只校核了弹性段的切应力部分，实际的危险截面在挂钩上，本赛季将拉簧线径修改到3mm，导致应力增大，在疲劳和拉应力的双重作用下挂钩断裂。</p><h1><strong>二、资料</strong></h1><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/6d8175f121cc4a65b850599cdc0e82091788109066411/华东理工大学起源战队飞镖自缓冲结构设计经验分享.zip" data-file-name="华东理工大学起源战队飞镖自缓冲结构设计经验分享.zip" data-file-md5="04135481a5831f52eec5d458765558fc" data-file-len="43277581" data-file-key="1788109048031-43277581-华东理工大学起源战队飞镖自缓冲结构设计经验分享.zip-iev4E-fG_eFPc11N7zkpE" data-file-state="uploadSuccess">华东理工大学起源战队飞镖自缓冲结构设计经验分享.zip</a></p><p>由于本赛季飞镖发射架的图纸经过多人之手修改，如果存在报错、模型缺漏等问题恳请理解。26国赛版本的制导镖（粉色版本）也在模型文件中，在国赛由于算法鲁棒性较差上场次数较少，机械模型仅供参考。</p><h1><strong>三、联系方式</strong></h1><p>飞镖机械 周楠渐 QQ：3464144391</p><h1><strong>四、致谢</strong></h1><p>感谢南京航空航天大学对制导镖技术路线的指导</p><p>感谢中国矿业大学提供缓冲结构的设计思路</p><p>感谢复旦大学、同济大学、深圳大学、哈尔滨工业大学（深圳）、上海应用技术大学提供的调试场地</p><p><span id="referenceDom-1" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/9124/1" data-order="1">[1]</span><span id="referenceDom-2" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/803765/2" data-order="2">[2]</span><span id="referenceDom-3" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/1297577/3" data-order="3">[3]</span></p>
+<h1><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/251fedfd18aa446eb104362a164bb49b1788109163290/8.JPG" alt="8.JPG" data-href="" data-file-md5="82d37ee12522b694f5451a2048828768" data-file-len="7623709" style=""/></h1><h1><strong>一、前言</strong></h1><p>本文档为华东理工大学起源战队在26赛季比赛中使用的飞镖发射架的自缓冲结构设计经验分享。</p><p>飞镖的缓冲结构是困扰了起源飞镖组一整个25赛季的问题，导致在日常调试过程中修镖架的时间多于测飞镖的时间，这也是25赛季起源的飞镖固定靶稳定性差以及未能在25赛季复活赛就将制导镖应用到赛场上的根本原因。因此在26赛季我着重解决了缓冲的稳定性问题，最终保证了在后半个赛季的调试过程中几乎不需要维护镖架，镖架只需要负责把制导镖打出去就行。</p><p>在制导镖不断普及的当下，飞镖作为一个相当依赖经验的兵种会不断增大新老队伍之间的差距。为了帮助新队伍少走弯路，在此分享一下我这个赛季研发自缓冲结构的一些经验和理解，希望可以加快新队伍的成长速度。</p><p>需要注意的是，本赛季季军争夺战时拉簧挂钩出现了疲劳断裂，自缓冲对拉簧存在一定的损伤，建议各队在正式确定使用前先进行压力测试测试其耐久度上限。</p><p>9.3更新：经过探讨分析，在拉簧强度校核过程中忽略了挂钩的拉应力，只校核了弹性段的切应力部分，实际的危险截面在挂钩上，本赛季将拉簧线径修改到3mm，导致应力增大，在疲劳和拉应力的双重作用下挂钩断裂。</p><h1><strong>二、资料</strong></h1><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://drive.google.com/file/d/1gqw6OP5cuqSeegTIuVAVW8zCVrYbuWhb/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-file-name="华东理工大学起源战队飞镖自缓冲结构设计经验分享.zip" data-file-md5="04135481a5831f52eec5d458765558fc" data-file-len="43277581" data-file-key="1788109048031-43277581-华东理工大学起源战队飞镖自缓冲结构设计经验分享.zip-iev4E-fG_eFPc11N7zkpE" data-file-state="uploadSuccess">华东理工大学起源战队飞镖自缓冲结构设计经验分享.zip</a></p><p>由于本赛季飞镖发射架的图纸经过多人之手修改，如果存在报错、模型缺漏等问题恳请理解。26国赛版本的制导镖（粉色版本）也在模型文件中，在国赛由于算法鲁棒性较差上场次数较少，机械模型仅供参考。</p><h1><strong>三、联系方式</strong></h1><p>飞镖机械 周楠渐 QQ：3464144391</p><h1><strong>四、致谢</strong></h1><p>感谢南京航空航天大学对制导镖技术路线的指导</p><p>感谢中国矿业大学提供缓冲结构的设计思路</p><p>感谢复旦大学、同济大学、深圳大学、哈尔滨工业大学（深圳）、上海应用技术大学提供的调试场地</p><p><span id="referenceDom-1" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/9124/1" data-order="1">[1]</span><span id="referenceDom-2" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/803765/2" data-order="2">[2]</span><span id="referenceDom-3" style="display: inline-block; color: rgb(33, 110, 209); cursor: pointer; user-select: none;" data-w-e-type="reference" data-w-e-is-inline data-link="bbs://reference.com/1/undefined/undefined/1297577/3" data-order="3">[3]</span></p>
   </div>
 </article>

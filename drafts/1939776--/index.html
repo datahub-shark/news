@@ -22,16 +22,41 @@ Trạng thái: READY
     <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/643ccb9a13104790a141407b40731d371786952539581/poster.png" alt="北京理工大学-" style="width:100%;height:100%;object-fit:cover;display:block;">
   </div>
   
-  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
-    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
-    <ul style="margin-bottom:0;">
-      <li><a href="./attachments/tai-nguyen.pdf" target="_blank"><strong>tai-nguyen.pdf</strong></a> (📁 Đã tải trong thư mục attachments/ - 7.41 MB)</li>
-      <li><a href="./attachments/tai-nguyen.pdf" target="_blank"><strong>tai-nguyen.pdf</strong></a> (📁 Đã tải trong thư mục attachments/ - đã có sẵn trên máy)</li>
+    <div class="local-attachments" style="background:#f4f7fb;border:1.5px solid #0f62fe;padding:18px;border-radius:8px;margin:22px 0;">
+    <h3 style="margin-top:0;margin-bottom:14px;color:#0f62fe;font-size:1.15em;display:flex;align-items:center;gap:8px;">
+      📦 Tệp đính kèm &amp; Bản vẽ CAD / Tài liệu (Google Drive)
+    </h3>
+    <ul style="list-style:none;padding:0;margin:0;">
+      <li style="margin-bottom:10px;padding:10px 14px;background:#ffffff;border:1px solid #c6c6c6;border-radius:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1.4em;">📄</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1OdEna5xRAx-atJD3Nw4wIwPC5PwGW2DG/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:#0f62fe;font-weight:600;text-decoration:none;font-size:1.02em;">tai-nguyen.pdf</a>
+            <div style="font-size:0.82em;color:#525252;margin-top:3px;">
+              <span style="background:#edf5ff;color:#0043ce;padding:1px 6px;border-radius:3px;font-weight:500;">PDF</span>
+               · 7.41 MB · Lưu trữ Google Drive
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://drive.google.com/file/d/1OdEna5xRAx-atJD3Nw4wIwPC5PwGW2DG/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="background:#0f62fe;color:#ffffff;padding:6px 14px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
+            👁️ Xem / Mở
+          </a>
+          <a href="https://drive.google.com/uc?export=download&id=1OdEna5xRAx-atJD3Nw4wIwPC5PwGW2DG" target="_blank" rel="noopener noreferrer" style="background:#e8f0fe;color:#0f62fe;border:1px solid #0f62fe;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
+            ⬇️ Tải file
+          </a>
+        </div>
+      </li>
     </ul>
+    <div style="margin-top:14px;text-align:right;">
+      <a href="https://drive.google.com/drive/folders/1lj0u3ma1OFEVc0bg2SnbFDG1aG8rJm8G?usp=sharing" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;background:#ffffff;color:#0f62fe;border:1px solid #0f62fe;padding:7px 16px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:600;">
+        📂 Mở thư mục tệp đính kèm trên Google Drive ↗
+      </a>
+    </div>
   </div>
   <hr>
   <div class="article-body">
-<p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/643ccb9a13104790a141407b40731d371786952539581/poster.png" alt="poster.png" data-href="" data-file-md5="881b66724798be1e9ec0346c10b9da5e" data-file-len="1478420" style=""/></p><h1>简介</h1><p> &nbsp; &nbsp;此项目是北京理工大学DreamChaser战队在RM2026赛季使用的制导飞镖主控板的全栈开源，项目包含控制板的全部工程文件和源码，包括Altium Designer格式的<strong>PCB</strong>工程文件、ZYNQ PL部分的<strong>RTL</strong>代码和Vivado工程、PS部分运行的<strong>PetaLinux</strong>操作系统的全部源代码、Linux上运行的镖体<strong>制导控制</strong>的源代码，以及适配的<strong>PC上位机</strong>的源代码，同时也提供了一份较为相近和完整的技术报告供各参赛队参考。</p><p> &nbsp; &nbsp;此控制板搭配OV9282摄像头在<strong>640*400</strong>分辨率下实现了稳定的<strong>296.72 FPS</strong>的识别帧率，同时在比赛场上几乎没有出现误识别的现象。值得一提的是，此控制板能实现的识别帧率和分辨率上限<strong>远不止于此</strong>，它的识别是通过纯流水线式的硬件电路实现的，因此它的理论上限只取决于数据传输的带宽，通过理论计算可知，识别帧率的极限为<strong>4K@192fps、2K@431fps、1080P@768fps、640*480@5208fps</strong>，但受限于成本等因素，我们并没有使用其他帧率或分辨率更高的摄像头。</p><p> &nbsp; &nbsp;OV9282是一款<strong>全局快门</strong>的<strong>黑白摄像头</strong>，因此需要搭配绿色的带通滤光片来使用，但识别部分的RTL代码也有对彩色摄像头做兼容设计，前期的算法验证也是在OV5640彩色摄像头上完成的，无需花费过多精力即可完成迁移。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c729ed5befc442cfbc621bf035bdb9a41786955550062/image.png" alt="image.png" data-href="" data-file-md5="df29bdcfb6a23af372f10debae2ca278" data-file-len="314007" style="width: 841.00px;height: 472.41px;"/></p><h1>工程文件</h1><p>开源仓库链接：<a href="https://gitee.com/BITRM2026/dart2026_-open-source" target="">BITRM2026/Dart2026_OpenSource</a></p><p>硬件、FPGA、Linux、控制和上位机部分分别作为子模块存储在开源仓库内，可以根据需要下载&Clone</p><p>Linux部分代码体积较大，约2GB左右，下载前请预留好足够的硬盘空间</p><p><br></p><h1>开源报告</h1><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/d353293fae1e43178deac6b1d00852c31786955070998/技术报告.pdf" data-file-name="技术报告.pdf" data-file-md5="e293363ff3807b190f52a58494c8b509" data-file-len="7774945" data-file-key="1786889974259-7774945-技术报告.pdf-DouuMTkqEX-Q8S4vVKpxF" data-file-state="uploadSuccess">技术报告.pdf</a></p><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b7296175e8f7427281ec5202c2c4bd5f1786955073226/报告省流版.pdf" data-file-name="报告省流版.pdf" data-file-md5="68080255da581dc4db3324146ba39317" data-file-len="6517671" data-file-key="1786886799404-6517671-报告省流版.pdf-6ry3GmTBvZQb-h7_HEiba" data-file-state="uploadSuccess">报告省流版.pdf</a></p><p><br></p><h1>效果展示</h1><div data-w-e-type="video" data-w-e-is-void>
+<p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/643ccb9a13104790a141407b40731d371786952539581/poster.png" alt="poster.png" data-href="" data-file-md5="881b66724798be1e9ec0346c10b9da5e" data-file-len="1478420" style=""/></p><h1>简介</h1><p> &nbsp; &nbsp;此项目是北京理工大学DreamChaser战队在RM2026赛季使用的制导飞镖主控板的全栈开源，项目包含控制板的全部工程文件和源码，包括Altium Designer格式的<strong>PCB</strong>工程文件、ZYNQ PL部分的<strong>RTL</strong>代码和Vivado工程、PS部分运行的<strong>PetaLinux</strong>操作系统的全部源代码、Linux上运行的镖体<strong>制导控制</strong>的源代码，以及适配的<strong>PC上位机</strong>的源代码，同时也提供了一份较为相近和完整的技术报告供各参赛队参考。</p><p> &nbsp; &nbsp;此控制板搭配OV9282摄像头在<strong>640*400</strong>分辨率下实现了稳定的<strong>296.72 FPS</strong>的识别帧率，同时在比赛场上几乎没有出现误识别的现象。值得一提的是，此控制板能实现的识别帧率和分辨率上限<strong>远不止于此</strong>，它的识别是通过纯流水线式的硬件电路实现的，因此它的理论上限只取决于数据传输的带宽，通过理论计算可知，识别帧率的极限为<strong>4K@192fps、2K@431fps、1080P@768fps、640*480@5208fps</strong>，但受限于成本等因素，我们并没有使用其他帧率或分辨率更高的摄像头。</p><p> &nbsp; &nbsp;OV9282是一款<strong>全局快门</strong>的<strong>黑白摄像头</strong>，因此需要搭配绿色的带通滤光片来使用，但识别部分的RTL代码也有对彩色摄像头做兼容设计，前期的算法验证也是在OV5640彩色摄像头上完成的，无需花费过多精力即可完成迁移。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/c729ed5befc442cfbc621bf035bdb9a41786955550062/image.png" alt="image.png" data-href="" data-file-md5="df29bdcfb6a23af372f10debae2ca278" data-file-len="314007" style="width: 841.00px;height: 472.41px;"/></p><h1>工程文件</h1><p>开源仓库链接：<a href="https://gitee.com/BITRM2026/dart2026_-open-source" target="">BITRM2026/Dart2026_OpenSource</a></p><p>硬件、FPGA、Linux、控制和上位机部分分别作为子模块存储在开源仓库内，可以根据需要下载&Clone</p><p>Linux部分代码体积较大，约2GB左右，下载前请预留好足够的硬盘空间</p><p><br></p><h1>开源报告</h1><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://drive.google.com/file/d/1OdEna5xRAx-atJD3Nw4wIwPC5PwGW2DG/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-file-name="技术报告.pdf" data-file-md5="e293363ff3807b190f52a58494c8b509" data-file-len="7774945" data-file-key="1786889974259-7774945-技术报告.pdf-DouuMTkqEX-Q8S4vVKpxF" data-file-state="uploadSuccess">技术报告.pdf</a></p><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://drive.google.com/file/d/1OdEna5xRAx-atJD3Nw4wIwPC5PwGW2DG/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-file-name="报告省流版.pdf" data-file-md5="68080255da581dc4db3324146ba39317" data-file-len="6517671" data-file-key="1786886799404-6517671-报告省流版.pdf-6ry3GmTBvZQb-h7_HEiba" data-file-state="uploadSuccess">报告省流版.pdf</a></p><p><br></p><h1>效果展示</h1><div data-w-e-type="video" data-w-e-is-void>
 <video poster="" controls="true" width="auto" height="auto" data-file-md5="b185cc22e264ca19187b3abd9627b204" data-file-len="24423018" data-file-name="飞镖命中.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/13478206e6d548b1a096a940afe5502b1786955123827/飞镖命中.mp4" type="video/mp4"/></video>
 </div><div data-w-e-type="video" data-w-e-is-void>
 <video poster="" controls="true" width="auto" height="auto" data-file-md5="f50a408076b5d97a5a95d109b7a23258" data-file-len="21882631" data-file-name="3836652340.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/e9159894f0f44f9aa80e4a9aa212d4f11786955133309/3836652340.mp4" type="video/mp4"/></video>

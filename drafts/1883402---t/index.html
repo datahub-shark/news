@@ -22,16 +22,42 @@ Trạng thái: READY
     <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b420db07fb9b4d7a827be993949c7d3f1776008245277/note.png" alt="平动-自旋耦合目标下的火控拦截时间t解析与数值混合寻优策略" style="width:100%;height:100%;object-fit:cover;display:block;">
   </div>
   
-  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
-    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
-    <ul style="margin-bottom:0;">
-      <li><a href="./attachments/t-tai-nguyen.ggb" target="_blank"><strong>t-tai-nguyen.ggb</strong></a> (📁 Đã tải trong thư mục attachments/ - 0.06 MB)</li>
+    <div class="local-attachments" style="background:#f4f7fb;border:1.5px solid #0f62fe;padding:18px;border-radius:8px;margin:22px 0;">
+    <h3 style="margin-top:0;margin-bottom:14px;color:#0f62fe;font-size:1.15em;display:flex;align-items:center;gap:8px;">
+      📦 Tệp đính kèm &amp; Bản vẽ CAD / Tài liệu (Google Drive)
+    </h3>
+    <ul style="list-style:none;padding:0;margin:0;">
+      <li style="margin-bottom:10px;padding:10px 14px;background:#ffffff;border:1px solid #c6c6c6;border-radius:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1.4em;">📎</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1kA9QLctYr4Cs2_e4AKrpui4Bbv0hX4EI/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:#0f62fe;font-weight:600;text-decoration:none;font-size:1.02em;">t-tai-nguyen.ggb</a>
+            <div style="font-size:0.82em;color:#525252;margin-top:3px;">
+              <span style="background:#edf5ff;color:#0043ce;padding:1px 6px;border-radius:3px;font-weight:500;">GGB</span>
+               · 0.06 MB · Lưu trữ Google Drive
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://drive.google.com/file/d/1kA9QLctYr4Cs2_e4AKrpui4Bbv0hX4EI/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="background:#0f62fe;color:#ffffff;padding:6px 14px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
+            👁️ Xem / Mở
+          </a>
+          <a href="https://drive.google.com/uc?export=download&id=1kA9QLctYr4Cs2_e4AKrpui4Bbv0hX4EI" target="_blank" rel="noopener noreferrer" style="background:#e8f0fe;color:#0f62fe;border:1px solid #0f62fe;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
+            ⬇️ Tải file
+          </a>
+        </div>
+      </li>
     </ul>
+    <div style="margin-top:14px;text-align:right;">
+      <a href="https://drive.google.com/drive/folders/1Rn2RIftIcAa12ursBOcT9MV_3l19Wc-u?usp=sharing" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;background:#ffffff;color:#0f62fe;border:1px solid #0f62fe;padding:7px 16px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:600;">
+        📂 Mở thư mục tệp đính kèm trên Google Drive ↗
+      </a>
+    </div>
   </div>
   <hr>
   <div class="article-body">
 <p>今天在实验室凑热闹时，看到组里的小灯在啃同济开源的自瞄预测代码，突然有点感慨。</p><p>以前我也是小灯的时候，碰到这种问题简直就像见到了“米基哈哈追乌龟”的悖论：目标在动，子弹在飞，在这个无限套娃里根本找不到解出真正命中时间 t 的办法。当时实在搞不明白，最后只能简单粗暴地把“当前车距 / 弹速”当成 t 凑合用。</p><p>现在回过头看，突然想头铁挑战一下，看看能不能纯靠数学把这个方程给解出来，而不是单纯当个黑盒去迭代。</p><p><strong>必须提前声明下：在实际工程落地时，这套基于泰勒展开和牛顿迭代的算式，综合性能和鲁棒性大概率是打不过简单粗暴的 while 迭代的。但搞技术的嘛，有时候就是想追求个底层的明白。写下这篇推导，主要是希望能给大家抛砖引玉，提供点不一样的解题思路。</strong></p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b420db07fb9b4d7a827be993949c7d3f1776008245277/note.png" alt="note.png" data-href="" data-file-md5="0d71af66225f4c8a576e05acf4ef6c0b" data-file-len="767665" style="width: 864.97px;height: 5782.43px;"/>在GGB上的测试视频(vx=vy=3,omega=8)，左下角Error_NR即简单的误差计算。</p><div data-w-e-type="video" data-w-e-is-void>
 <video poster="" controls="true" width="auto" height="auto" data-file-md5="b670d32904cbf0da60a69d5a066f2cb6" data-file-len="3559452" data-file-name="ggb测试.mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/23b2bebce21245a3b453cbca5f5a0ac11776008310449/ggb测试.mp4" type="video/mp4"/></video>
-</div><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b5da0e92ac7e44cebe593c5b0b95d6181776008348327/解析解弹道预测.ggb" data-file-name="解析解弹道预测.ggb" data-file-md5="59a1208afae8b4bda7939be0aaa59f81" data-file-len="67551" data-file-key="1775982866775-67551-解析解弹道预测.ggb-u6sPEihMZL6Liccl6pGmM" data-file-state="uploadSuccess">解析解弹道预测.ggb</a></p>
+</div><p><a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://drive.google.com/file/d/1kA9QLctYr4Cs2_e4AKrpui4Bbv0hX4EI/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-file-name="解析解弹道预测.ggb" data-file-md5="59a1208afae8b4bda7939be0aaa59f81" data-file-len="67551" data-file-key="1775982866775-67551-解析解弹道预测.ggb-u6sPEihMZL6Liccl6pGmM" data-file-state="uploadSuccess">解析解弹道预测.ggb</a></p>
   </div>
 </article>

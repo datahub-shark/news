@@ -22,14 +22,40 @@ Trạng thái: READY
     <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a787adb5a42a4da6b4f653c20ea9b32c1787625461989/%E5%9B%BE%E7%89%871.png" alt="RM2026首都师范大学WPIE手持装甲板软硬件开源" style="width:100%;height:100%;object-fit:cover;display:block;">
   </div>
   
-  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
-    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
-    <ul style="margin-bottom:0;">
-      <li><a href="./attachments/wpie-tai-nguyen.docx" target="_blank"><strong>wpie-tai-nguyen.docx</strong></a> (📁 Đã tải trong thư mục attachments/ - 2.20 MB)</li>
+    <div class="local-attachments" style="background:#f4f7fb;border:1.5px solid #0f62fe;padding:18px;border-radius:8px;margin:22px 0;">
+    <h3 style="margin-top:0;margin-bottom:14px;color:#0f62fe;font-size:1.15em;display:flex;align-items:center;gap:8px;">
+      📦 Tệp đính kèm &amp; Bản vẽ CAD / Tài liệu (Google Drive)
+    </h3>
+    <ul style="list-style:none;padding:0;margin:0;">
+      <li style="margin-bottom:10px;padding:10px 14px;background:#ffffff;border:1px solid #c6c6c6;border-radius:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1.4em;">📎</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1Wdp2pcrlqDDMJEqRZ7uVUgc9BdITO7DJ/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:#0f62fe;font-weight:600;text-decoration:none;font-size:1.02em;">wpie-tai-nguyen.docx</a>
+            <div style="font-size:0.82em;color:#525252;margin-top:3px;">
+              <span style="background:#edf5ff;color:#0043ce;padding:1px 6px;border-radius:3px;font-weight:500;">DOCX</span>
+               · 2.20 MB · Lưu trữ Google Drive
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://drive.google.com/file/d/1Wdp2pcrlqDDMJEqRZ7uVUgc9BdITO7DJ/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="background:#0f62fe;color:#ffffff;padding:6px 14px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
+            👁️ Xem / Mở
+          </a>
+          <a href="https://drive.google.com/uc?export=download&id=1Wdp2pcrlqDDMJEqRZ7uVUgc9BdITO7DJ" target="_blank" rel="noopener noreferrer" style="background:#e8f0fe;color:#0f62fe;border:1px solid #0f62fe;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
+            ⬇️ Tải file
+          </a>
+        </div>
+      </li>
     </ul>
+    <div style="margin-top:14px;text-align:right;">
+      <a href="https://drive.google.com/drive/folders/1KnIemwnoroDl1KPQHalIcFvfY4NywviE?usp=sharing" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;background:#ffffff;color:#0f62fe;border:1px solid #0f62fe;padding:7px 16px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:600;">
+        📂 Mở thư mục tệp đính kèm trên Google Drive ↗
+      </a>
+    </div>
   </div>
   <hr>
   <div class="article-body">
-<h1>1. 为什么要自制便捷手持装甲板</h1><p><span style="color: rgb(0, 0, 0);"> &nbsp; &nbsp;在平时设备调试与赛场赛前准备阶段，为验证机器人自瞄</span><span style="color: rgb(0, 0, 0); font-family: 宋体;">是否</span><span style="color: rgb(0, 0, 0);">正常</span><span style="color: rgb(0, 0, 0); font-family: 宋体;">开启</span><span style="color: rgb(0, 0, 0);">，经常需要一块轻便易拿的手持装甲板。但队内现有的手持装甲板需要外接电池/充电宝等，上场时容易造成不便以及麻烦。为此我们制作一个方便拿取使用的装甲板是很有必要的。</span></p><h1><span style="color: rgb(0, 0, 0);">2. 芯片选型</span></h1><p> &nbsp; &nbsp;为了成本便宜以及考虑到对于队内队员对stm32系列极其熟悉，最终选择stm32f103c8t6芯片，开发平台为keil</p><h1>3.PCB外观<img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a787adb5a42a4da6b4f653c20ea9b32c1787625461989/图片1.png" alt="图片1.png" data-href="" data-file-md5="994ae31fed4408b43a96826f502ee821" data-file-len="706562" style=""/></h1><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/995a12f36bc64edf8c711f1a49a12bf01787625497009/图片2.png" alt="图片2.png" data-href="" data-file-md5="741ce4ef0da3bed6bb77dd381a13b420" data-file-len="4008730" style=""/></p><h1>4.使用方法</h1><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a51914dad9a64abdabd119f334df59971787625559686/image.png" alt="image.png" data-href="" data-file-md5="4311be04ef504e4c050112b3d32bfa9b" data-file-len="79154" style=""/></p><h1>5.</h1><p>软件开源链接： <a href="https://github.com/zzz0620/rm2026-handheld-armor-plate" target="_blank">https://github.com/zzz0620/rm2026-handheld-armor-plate</a> </p><p>硬件开源链接：<a href="https://pan.baidu.com/s/1ZeZq-NdWnxV0Iol--rD4Vg?pwd=9p19" target="_blank">https://pan.baidu.com/s/1ZeZq-NdWnxV0Iol--rD4Vg?pwd=9p19</a> 提取码: 9p19</p><p>文档：<a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/8f6b97f3d2db4299b3e33f3d64ed16eb1787625608073/RM2026 首都师范大学PIE 手持装甲板开源.docx" data-file-name="RM2026 首都师范大学PIE 手持装甲板开源.docx" data-file-md5="ac1c36f612dc75f2cb2f4ed179a592ca" data-file-len="2305572" data-file-key="1787619734388-2305572-RM2026 首都师范大学PIE 手持装甲板开源.docx-_fIBtBC0vTAKJyl3vntLB" data-file-state="uploadSuccess">RM2026 首都师范大学PIE 手持装甲板开源.docx</a></p><p><br></p><p><br></p><p><br></p>
+<h1>1. 为什么要自制便捷手持装甲板</h1><p><span style="color: rgb(0, 0, 0);"> &nbsp; &nbsp;在平时设备调试与赛场赛前准备阶段，为验证机器人自瞄</span><span style="color: rgb(0, 0, 0); font-family: 宋体;">是否</span><span style="color: rgb(0, 0, 0);">正常</span><span style="color: rgb(0, 0, 0); font-family: 宋体;">开启</span><span style="color: rgb(0, 0, 0);">，经常需要一块轻便易拿的手持装甲板。但队内现有的手持装甲板需要外接电池/充电宝等，上场时容易造成不便以及麻烦。为此我们制作一个方便拿取使用的装甲板是很有必要的。</span></p><h1><span style="color: rgb(0, 0, 0);">2. 芯片选型</span></h1><p> &nbsp; &nbsp;为了成本便宜以及考虑到对于队内队员对stm32系列极其熟悉，最终选择stm32f103c8t6芯片，开发平台为keil</p><h1>3.PCB外观<img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a787adb5a42a4da6b4f653c20ea9b32c1787625461989/图片1.png" alt="图片1.png" data-href="" data-file-md5="994ae31fed4408b43a96826f502ee821" data-file-len="706562" style=""/></h1><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/995a12f36bc64edf8c711f1a49a12bf01787625497009/图片2.png" alt="图片2.png" data-href="" data-file-md5="741ce4ef0da3bed6bb77dd381a13b420" data-file-len="4008730" style=""/></p><h1>4.使用方法</h1><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a51914dad9a64abdabd119f334df59971787625559686/image.png" alt="image.png" data-href="" data-file-md5="4311be04ef504e4c050112b3d32bfa9b" data-file-len="79154" style=""/></p><h1>5.</h1><p>软件开源链接： <a href="https://github.com/zzz0620/rm2026-handheld-armor-plate" target="_blank">https://github.com/zzz0620/rm2026-handheld-armor-plate</a> </p><p>硬件开源链接：<a href="https://pan.baidu.com/s/1ZeZq-NdWnxV0Iol--rD4Vg?pwd=9p19" target="_blank">https://pan.baidu.com/s/1ZeZq-NdWnxV0Iol--rD4Vg?pwd=9p19</a> 提取码: 9p19</p><p>文档：<a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://drive.google.com/file/d/1Wdp2pcrlqDDMJEqRZ7uVUgc9BdITO7DJ/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-file-name="RM2026 首都师范大学PIE 手持装甲板开源.docx" data-file-md5="ac1c36f612dc75f2cb2f4ed179a592ca" data-file-len="2305572" data-file-key="1787619734388-2305572-RM2026 首都师范大学PIE 手持装甲板开源.docx-_fIBtBC0vTAKJyl3vntLB" data-file-state="uploadSuccess">RM2026 首都师范大学PIE 手持装甲板开源.docx</a></p><p><br></p><p><br></p><p><br></p>
   </div>
 </article>

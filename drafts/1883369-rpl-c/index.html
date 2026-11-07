@@ -22,15 +22,41 @@ Trạng thái: READY
     <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/7cbe21eda99a4cd2997d8060dd9c8b731775815001627/image.png" alt="RPL：面向高频机器人通信的 C++ 低延迟协议解析库" style="width:100%;height:100%;object-fit:cover;display:block;">
   </div>
   
-  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
-    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
-    <ul style="margin-bottom:0;">
-      <li><a href="./attachments/rpl_design.pdf" target="_blank"><strong>rpl_design.pdf</strong></a> (📁 Đã tải trong thư mục attachments/ - 0.59 MB)</li>
+    <div class="local-attachments" style="background:#f4f7fb;border:1.5px solid #0f62fe;padding:18px;border-radius:8px;margin:22px 0;">
+    <h3 style="margin-top:0;margin-bottom:14px;color:#0f62fe;font-size:1.15em;display:flex;align-items:center;gap:8px;">
+      📦 Tệp đính kèm &amp; Bản vẽ CAD / Tài liệu (Google Drive)
+    </h3>
+    <ul style="list-style:none;padding:0;margin:0;">
+      <li style="margin-bottom:10px;padding:10px 14px;background:#ffffff;border:1px solid #c6c6c6;border-radius:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1.4em;">📄</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1yQjDmhbCNu91s7ymY7U5PO1_8Pe7WHAQ/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:#0f62fe;font-weight:600;text-decoration:none;font-size:1.02em;">rpl_design.pdf</a>
+            <div style="font-size:0.82em;color:#525252;margin-top:3px;">
+              <span style="background:#edf5ff;color:#0043ce;padding:1px 6px;border-radius:3px;font-weight:500;">PDF</span>
+               · 0.59 MB · Lưu trữ Google Drive
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://drive.google.com/file/d/1yQjDmhbCNu91s7ymY7U5PO1_8Pe7WHAQ/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="background:#0f62fe;color:#ffffff;padding:6px 14px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
+            👁️ Xem / Mở
+          </a>
+          <a href="https://drive.google.com/uc?export=download&id=1yQjDmhbCNu91s7ymY7U5PO1_8Pe7WHAQ" target="_blank" rel="noopener noreferrer" style="background:#e8f0fe;color:#0f62fe;border:1px solid #0f62fe;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
+            ⬇️ Tải file
+          </a>
+        </div>
+      </li>
     </ul>
+    <div style="margin-top:14px;text-align:right;">
+      <a href="https://drive.google.com/drive/folders/1IY6FgTo1GpLIhlXwGAwJUs_uZWJXBCFQ?usp=sharing" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;background:#ffffff;color:#0f62fe;border:1px solid #0f62fe;padding:7px 16px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:600;">
+        📂 Mở thư mục tệp đính kèm trên Google Drive ↗
+      </a>
+    </div>
   </div>
   <hr>
   <div class="article-body">
-<p>大家好，我是大连民族大学 C·ONE 战队的梁家祥。今天向大家分享并开源我们队伍从零研发的底层通信架构 —— <strong>RPL (RoboMaster Packet Library)</strong>。</p><p>🔗 <strong>GitHub 开源仓库：</strong> <a href="https://github.com/RoboMaster-DLMU-CONE/rpl" target="_blank">https://github.com/RoboMaster-DLMU-CONE/rpl</a><br><br>📖 <strong>设计文档：</strong> <a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/f4ba81fa9ffb4b0fae5cc2bed572cd741775749113705/rpl_design.pdf" data-file-name="rpl_design.pdf" data-file-md5="d3b48f1343d0f9e1751c6a1f202780a1" data-file-len="616562" data-file-key="1775748197392-616562-rpl_design.pdf-AIgrnpedZ1coK9cdHKDcL" data-file-state="uploadSuccess">rpl_design.pdf</a></p><p>📖 <strong>代码文档： </strong><a href="https://rpl.doc.cone.team/" target="_blank">https://rpl.doc.cone.team/</a> <br>🌐 <strong>Web 在线协议生成器：</strong> <a href="https://rplc.cone.team" target="_blank">https://rplc.cone.team</a></p><hr/><h3>一分钟了解 RPL：快速的集成与使用</h3><p>RPL 的设计哲学是<strong>“让使用者少写代码，让 CPU 少做无用功”</strong>。它极其容易集成，且在嵌入式平台（如 STM32）上能够优雅地实现低延迟的协议解析。</p><p><strong>1. 极简引入（支持单文件头）</strong><br><br>无论你是使用 CMake 的现代工程，还是使用 Keil/IAR 的传统工程，RPL 都提供了零门槛的接入方式。你可以通过 CMake <code>FetchContent</code> 引入，或者<code><strong>直接将自动生成的单文件头 RPL.hpp 拖入工程</strong></code>，无需配置任何路径，开箱即用。</p><p>你还可以一并引用我们做好的开箱即用的裁判系统包头文件。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/7cbe21eda99a4cd2997d8060dd9c8b731775815001627/image.png" alt="image.png" data-href="" data-file-md5="c5ba29cd2f346e2195a4302dbff8f1d9" data-file-len="346881" style=""/></p><p><strong>2. 核心运转模式：DMA 零拷贝写入 + O(1) 无锁读取</strong><br><br>以 STM32 串口接收为例，传统的做法需要繁琐的接收中断和双缓冲切换。而在 RPL 中，底层逻辑被简化到了极致：</p><pre><code class="language-cpp">#include "RPL.hpp"
+<p>大家好，我是大连民族大学 C·ONE 战队的梁家祥。今天向大家分享并开源我们队伍从零研发的底层通信架构 —— <strong>RPL (RoboMaster Packet Library)</strong>。</p><p>🔗 <strong>GitHub 开源仓库：</strong> <a href="https://github.com/RoboMaster-DLMU-CONE/rpl" target="_blank">https://github.com/RoboMaster-DLMU-CONE/rpl</a><br><br>📖 <strong>设计文档：</strong> <a data-w-e-type="attachment" data-w-e-is-void data-w-e-is-inline href="https://drive.google.com/file/d/1yQjDmhbCNu91s7ymY7U5PO1_8Pe7WHAQ/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-file-name="rpl_design.pdf" data-file-md5="d3b48f1343d0f9e1751c6a1f202780a1" data-file-len="616562" data-file-key="1775748197392-616562-rpl_design.pdf-AIgrnpedZ1coK9cdHKDcL" data-file-state="uploadSuccess">rpl_design.pdf</a></p><p>📖 <strong>代码文档： </strong><a href="https://rpl.doc.cone.team/" target="_blank">https://rpl.doc.cone.team/</a> <br>🌐 <strong>Web 在线协议生成器：</strong> <a href="https://rplc.cone.team" target="_blank">https://rplc.cone.team</a></p><hr/><h3>一分钟了解 RPL：快速的集成与使用</h3><p>RPL 的设计哲学是<strong>“让使用者少写代码，让 CPU 少做无用功”</strong>。它极其容易集成，且在嵌入式平台（如 STM32）上能够优雅地实现低延迟的协议解析。</p><p><strong>1. 极简引入（支持单文件头）</strong><br><br>无论你是使用 CMake 的现代工程，还是使用 Keil/IAR 的传统工程，RPL 都提供了零门槛的接入方式。你可以通过 CMake <code>FetchContent</code> 引入，或者<code><strong>直接将自动生成的单文件头 RPL.hpp 拖入工程</strong></code>，无需配置任何路径，开箱即用。</p><p>你还可以一并引用我们做好的开箱即用的裁判系统包头文件。</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/7cbe21eda99a4cd2997d8060dd9c8b731775815001627/image.png" alt="image.png" data-href="" data-file-md5="c5ba29cd2f346e2195a4302dbff8f1d9" data-file-len="346881" style=""/></p><p><strong>2. 核心运转模式：DMA 零拷贝写入 + O(1) 无锁读取</strong><br><br>以 STM32 串口接收为例，传统的做法需要繁琐的接收中断和双缓冲切换。而在 RPL 中，底层逻辑被简化到了极致：</p><pre><code class="language-cpp">#include "RPL.hpp"
 #include "MyPackets.hpp" // 你的数据包定义
 
 // 1. 全局实例化解析器与内存池

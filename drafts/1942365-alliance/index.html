@@ -22,16 +22,42 @@ Trạng thái: READY
     <img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/0127aab8fffa47e0bd1bb9b32bdc820a1787550090146/%E6%97%A0%E7%BA%BF%E5%85%85%E7%94%B5%E6%8E%A5%E6%94%B6%E7%AB%AF%E8%83%8C%E9%9D%A2.jpg" alt="南京理工大学 Alliance战队" style="width:100%;height:100%;object-fit:cover;display:block;">
   </div>
   
-  <div class="local-attachments" style="background:#f0f7ff;border:1px solid #1b85ff;padding:14px;border-radius:8px;margin:18px 0;">
-    <h3 style="margin-top:0;color:#1b85ff;">📦 File đính kèm / Mã nguồn CAD:</h3>
-    <ul style="margin-bottom:0;">
-      <li><a href="./attachments/proprj_esp32c3-wlc_identify.epro" target="_blank"><strong>proprj_esp32c3-wlc_identify.epro</strong></a> (📁 Đã tải trong thư mục attachments/ - 0.40 MB)</li>
+    <div class="local-attachments" style="background:#f4f7fb;border:1.5px solid #0f62fe;padding:18px;border-radius:8px;margin:22px 0;">
+    <h3 style="margin-top:0;margin-bottom:14px;color:#0f62fe;font-size:1.15em;display:flex;align-items:center;gap:8px;">
+      📦 Tệp đính kèm &amp; Bản vẽ CAD / Tài liệu (Google Drive)
+    </h3>
+    <ul style="list-style:none;padding:0;margin:0;">
+      <li style="margin-bottom:10px;padding:10px 14px;background:#ffffff;border:1px solid #c6c6c6;border-radius:6px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1.4em;">📎</span>
+          <div>
+            <a href="https://drive.google.com/file/d/1AbhBNwhwRYfDjUqmsacOk5nwCyB58HrG/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="color:#0f62fe;font-weight:600;text-decoration:none;font-size:1.02em;">proprj_esp32c3-wlc_identify.epro</a>
+            <div style="font-size:0.82em;color:#525252;margin-top:3px;">
+              <span style="background:#edf5ff;color:#0043ce;padding:1px 6px;border-radius:3px;font-weight:500;">EPRO</span>
+               · 0.40 MB · Lưu trữ Google Drive
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <a href="https://drive.google.com/file/d/1AbhBNwhwRYfDjUqmsacOk5nwCyB58HrG/view?usp=sharing" target="_blank" rel="noopener noreferrer" style="background:#0f62fe;color:#ffffff;padding:6px 14px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
+            👁️ Xem / Mở
+          </a>
+          <a href="https://drive.google.com/uc?export=download&id=1AbhBNwhwRYfDjUqmsacOk5nwCyB58HrG" target="_blank" rel="noopener noreferrer" style="background:#e8f0fe;color:#0f62fe;border:1px solid #0f62fe;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:500;display:inline-flex;align-items:center;gap:5px;">
+            ⬇️ Tải file
+          </a>
+        </div>
+      </li>
     </ul>
+    <div style="margin-top:14px;text-align:right;">
+      <a href="https://drive.google.com/drive/folders/1PaGkRSeG8CuwiBqS2lkU4H7jxxenbd5g?usp=sharing" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:6px;background:#ffffff;color:#0f62fe;border:1px solid #0f62fe;padding:7px 16px;border-radius:4px;text-decoration:none;font-size:0.88em;font-weight:600;">
+        📂 Mở thư mục tệp đính kèm trên Google Drive ↗
+      </a>
+    </div>
   </div>
   <hr>
   <div class="article-body">
 <p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/0127aab8fffa47e0bd1bb9b32bdc820a1787550090146/无线充电接收端背面.jpg" alt="无线充电接收端背面.jpg" data-href="" data-file-md5="49b9b4986108bb1cd5c1963532a58072" data-file-len="14131027" style="width: 100%;"/></p><p><br></p><h1 style="text-align: start;"><strong>简介</strong></h1><p> &nbsp; &nbsp;无线充电部分设计过于复杂，静态功耗难以压低至1W以下，故开发了该外置识别模块，实测能在0.5m内稳定识别并传输信息，成功识别后驱动继电器打开功率级，识别模块最大功耗约0.8w，赛场上没有出现误识别的情况。还可以20Hz左右的频率将超级电容主控板回报的数据发送到基站上，辅助基站进行识别和传输效率优化。</p><h2><strong>核心功能：CAN数据透传</strong></h2><p>模式：</p><ul><li>红外透传</li><li>蓝牙/2.4G</li></ul><p>实际上场使用红外透传（蓝牙/2.4gWiFi不被允许使用），调试时使用WIFI可以通过网页方便监看。</p><h2><strong>关键原理图</strong></h2><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/ba8982f8d80d47f78a9f1bb300eee3bb1787550505742/image.png" alt="image.png" data-href="" data-file-md5="ac2062840f960ad32722a307ef9af0db" data-file-len="99911" style=""/></p><p>红外透传部分对UART透明，可使用任意MCU。串口波特率配置在4800，配合CRC等校验算法可进一步防止误码。</p><p><br></p><h3><strong>相关图片：</strong></h3><p>基站安装效果:</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/4adc29e5e9c04294a712cb671ffb881f1787550640720/基站细节.jpg" alt="基站细节.jpg" data-href="" data-file-md5="3d9673cc1576ef0537948b2b0d4931ec" data-file-len="11785559" style=""/></p><p>便携测试架：</p><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/a0a12920b4b54d8a900e25cf9c2989af1787550140358/便携接收测试架-2.jpg" alt="便携接收测试架-2.jpg" data-href="" data-file-md5="9325914873c6f150444b82fb389cb89f" data-file-len="13438204" style=""/></p><p>测试视频：</p><p><br></p><div data-w-e-type="video" data-w-e-is-void>
 <video poster="" controls="true" width="auto" height="auto" data-file-md5="f06b401bc520150d1f18a95aa20be308" data-file-len="18534314" data-file-name="8月24日 (1).mp4"><source src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b5b01515164e47b89212b581570039b31787550843575/8月24日 (1).mp4" type="video/mp4"/></video>
-</div><h3></h3><h3><strong>！？巧合 ？！</strong></h3><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/1452208dadf146af8356c0bb74fc0dc01787552944645/image.png" alt="image.png" data-href="" data-file-md5="5cf981797ba06a1df673b5a43c8223b2" data-file-len="736282" style=""/></p><p><br></p><h2 style="text-align: start;"><strong>硬件</strong></h2><p style="text-align: start; line-height: 1.5;">使用立创EDA专业版</p><p style="text-align: start; line-height: 1.5;"><a data-w-e-type="attachment" data-w-e-is-void="" data-w-e-is-inline="" href="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b736ca00cc924e9d9308812c51d2fa051787553174069/ProPrj_ESP32C3-WLC_Identify.epro" data-file-name="ProPrj_ESP32C3-WLC_Identify.epro" data-file-md5="1107c56ee1514ca771a58829679a3113" data-file-len="414613" data-file-key="1787553160671-414613-ProPrj_ESP32C3-WLC_Identify.epro-SME6eCRXr9BPxF9sQYcUt" data-file-state="uploadSuccess">ProPrj_ESP32C3-WLC_Identify.epro</a></p><h2 style="text-align: start; line-height: 1.5;"><strong>软件</strong></h2><p>基于ESP-IDF</p><p><a href="https://github.com/Kaiser041224/ESP32_WLC-ID" target="">Kaiser041224/ESP32_WLC-ID</a></p><h1 style="text-align: start;"><strong>声明</strong></h1><p style="text-align: start; line-height: 1.5;">1.本次开源项目所有权归属南京理工大学Alliance战队，作品仅用于技术交流，未经作者允许，不得作任何商业用途。</p><p style="text-align: start; line-height: 1.5;">2.本次开源文件的最终解释权归南京理工大学Alliance战队所有。</p><p style="text-align: start; line-height: 1.5;">3.开源目的在于加强参赛队之间交流，有助于提高自身和其他参赛队的水平</p><h1 style="text-align: start;"><strong>联系方式</strong></h1><p style="text-align: start; line-height: 1.5;">Kaiser</p><p style="text-align: start; line-height: 1.5;">QQ：604764002 </p><p><br></p>
+</div><h3></h3><h3><strong>！？巧合 ？！</strong></h3><p><img src="https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/1452208dadf146af8356c0bb74fc0dc01787552944645/image.png" alt="image.png" data-href="" data-file-md5="5cf981797ba06a1df673b5a43c8223b2" data-file-len="736282" style=""/></p><p><br></p><h2 style="text-align: start;"><strong>硬件</strong></h2><p style="text-align: start; line-height: 1.5;">使用立创EDA专业版</p><p style="text-align: start; line-height: 1.5;"><a data-w-e-type="attachment" data-w-e-is-void="" data-w-e-is-inline="" href="https://drive.google.com/file/d/1AbhBNwhwRYfDjUqmsacOk5nwCyB58HrG/view?usp=sharing" target="_blank" rel="noopener noreferrer" data-file-name="ProPrj_ESP32C3-WLC_Identify.epro" data-file-md5="1107c56ee1514ca771a58829679a3113" data-file-len="414613" data-file-key="1787553160671-414613-ProPrj_ESP32C3-WLC_Identify.epro-SME6eCRXr9BPxF9sQYcUt" data-file-state="uploadSuccess">ProPrj_ESP32C3-WLC_Identify.epro</a></p><h2 style="text-align: start; line-height: 1.5;"><strong>软件</strong></h2><p>基于ESP-IDF</p><p><a href="https://github.com/Kaiser041224/ESP32_WLC-ID" target="">Kaiser041224/ESP32_WLC-ID</a></p><h1 style="text-align: start;"><strong>声明</strong></h1><p style="text-align: start; line-height: 1.5;">1.本次开源项目所有权归属南京理工大学Alliance战队，作品仅用于技术交流，未经作者允许，不得作任何商业用途。</p><p style="text-align: start; line-height: 1.5;">2.本次开源文件的最终解释权归南京理工大学Alliance战队所有。</p><p style="text-align: start; line-height: 1.5;">3.开源目的在于加强参赛队之间交流，有助于提高自身和其他参赛队的水平</p><h1 style="text-align: start;"><strong>联系方式</strong></h1><p style="text-align: start; line-height: 1.5;">Kaiser</p><p style="text-align: start; line-height: 1.5;">QQ：604764002 </p><p><br></p>
   </div>
 </article>
