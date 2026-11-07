@@ -1,0 +1,7 @@
+{
+  "草图": ["Phác thảo", "Sketch"],
+  "中文 (gốc)": ["Tiếng Trung (bản gốc)", "Chinese (original)"],
+  "标准格拉霍夫曲柄摇杆四杆机构，包含连杆耦合感兴趣点轨迹追踪与实时传动角 μ 死点监测。": ["Cơ cấu bốn khâu Grashof kiểu tay quay–cần lắc, theo dõi quỹ đạo điểm khảo sát và giám sát góc truyền μ, điểm chết theo thời gian thực.", "Grashof crank-rocker four-bar mechanism with coupler-point tracking and real-time transmission-angle and dead-center monitoring."],
+  "演示正弦摆动驱动源、关节活动角范围限制 (0°~135°) 以及固定连接 (Welded) L型刚体拐臂。": ["Minh họa dẫn động lắc hình sin, giới hạn góc khớp (0°–135°) và tay gập chữ L liên kết cứng.", "Demonstrates sinusoidal drive, joint-angle limits (0°–135°), and a welded L-shaped rigid arm."],
+  "° 偏小（建议保持在 40°~140° 之间）": ["° nhỏ (nên giữ trong khoảng 40°–140°).", "° is small (keep it between 40° and 140°)."]
+}

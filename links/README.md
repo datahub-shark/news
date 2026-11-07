@@ -9,3 +9,5 @@ Ngày 07/11/2026: backend tài khoản mới đã được triển khai và cấ
 Bản nháp trình duyệt được tách theo ID tài khoản đã xác minh; đăng xuất/đổi tài khoản thay toàn bộ cửa sổ thiết kế để không giữ mô hình cũ trong bộ nhớ. Khách chỉ dùng bộ nhớ tạm. Nháp dùng chung từ bản cũ không được tự nhận vào tài khoản mới. `workspace-storage.js` cấp vùng lưu riêng trước khi app khởi động; bản app mở trực tiếp cũng không đọc khóa nháp dùng chung.
 
 Cập nhật bàn thiết kế bằng `npm run build:links -- <đường-dẫn-tới-linkS.html>`; mặc định lấy bản đã build ở `../link-shark-dxf/dist/linkS.html`. `build-info.json` ghi SHA-256 để đối chiếu.
+
+Build chuyển trực tiếp các chuỗi mặc định của ứng dụng sang tiếng Việt bằng AST: tên mẫu, tên khớp/khâu mới, mô tả, thông báo và tiêu đề xuất tệp. Bảng dịch nằm trong bản tham chiếu, bổ sung tại `vi-defaults.json`; tiếng Anh và tùy chọn xem bản gốc vẫn hoạt động. Tên và nội dung do người dùng đã nhập/lưu không bị dịch lại khi nhập JSON.
