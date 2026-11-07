@@ -127,6 +127,7 @@
       font-size: 13px;
       font-weight: 500;
     }
+    [hidden] { display: none !important; }
     .loading-state, .error-state {
       text-align: center;
       padding: 60px 20px;
@@ -141,6 +142,61 @@
       margin: 0 auto 20px;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .admin-review-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #eef4ec;
+      border: 1px solid #c5d6bf;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+    }
+    .admin-review-info {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .admin-review-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .admin-review-actions button,
+    .admin-review-actions a {
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      text-decoration: none;
+    }
+    .admin-review-actions button:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+    .btn-admin-approve { background: #166534; color: #fff; }
+    .btn-admin-approve:hover { background: #14532d; }
+    .btn-admin-reject { background: #fee2e2; color: #991b1b; border-color: #fecaca !important; }
+    .btn-admin-reject:hover { background: #fecaca; }
+    .btn-admin-pending { background: #fef3c7; color: #92400e; border-color: #fde68a !important; }
+    .btn-admin-pending:hover { background: #fde68a; }
+    .btn-admin-edit { background: #fff; color: var(--green); border-color: #c5d6bf !important; }
+    .btn-admin-edit:hover { background: #f8faf6; }
+    .status-badge.pending { background: #fef3c7; color: #92400e; }
+    .status-badge.rejected { background: #fee2e2; color: #991b1b; }
+    .status-badge.draft { background: #e2e8f0; color: #334155; }
   </style>
 </head>
 <body>
@@ -158,6 +214,20 @@
   <main class="article-page">
     <a href="./" class="back-nav">← Quay lại danh sách bài viết</a>
 
+    <div id="adminReviewBar" class="admin-review-bar" hidden>
+      <div class="admin-review-info">
+        <span>🛡️ Chế độ duyệt bài:</span>
+        <span id="adminBarStatus" class="status-badge">Đang chờ</span>
+        <span id="adminReviewNotice" style="font-weight:500;color:var(--green);"></span>
+      </div>
+      <div class="admin-review-actions">
+        <button id="btnAdminApprove" type="button" class="btn-admin-approve">✓ Duyệt đăng</button>
+        <button id="btnAdminReject" type="button" class="btn-admin-reject">✕ Từ chối</button>
+        <button id="btnAdminPending" type="button" class="btn-admin-pending">◷ Đang chờ</button>
+        <a id="btnAdminEdit" href="admin.html" class="btn-admin-edit">✎ Chỉnh sửa HTML</a>
+      </div>
+    </div>
+
     <div id="loadingBox" class="loading-state">
       <div class="loading-spinner"></div>
       <p>Đang tải nội dung bài viết từ thư viện đám mây…</p>
@@ -166,7 +236,10 @@
     <div id="errorBox" class="error-state" hidden>
       <h2 style="color:#b91c1c;">Không tìm thấy bài viết</h2>
       <p id="errorMessage" style="color:var(--muted);margin:12px 0 24px;"></p>
-      <a href="./" class="button">Về trang chủ</a>
+      <div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;">
+        <a id="errorAdminLogin" href="admin.html" class="button" hidden>Đăng nhập Quản trị để duyệt bài →</a>
+        <a href="./" class="button" style="background:#475569;">Về trang chủ</a>
+      </div>
     </div>
 
     <article id="articleContainer" hidden>
@@ -222,6 +295,53 @@
     const $ = id => document.getElementById(id);
     $('year').textContent = new Date().getFullYear();
 
+    const ADMIN_SESSION_KEY = 'robot_ideas_admin_session';
+    const STATUS_LABELS = {
+      published: '✓ Đã duyệt',
+      pending: '◷ Đang chờ duyệt',
+      rejected: '✕ Từ chối',
+      draft: 'Bản nháp'
+    };
+
+    function safeHttpsUrl(value) {
+      try {
+        const u = new URL(value);
+        return u.protocol === 'https:' && !u.username && !u.password ? u.href : '';
+      } catch {
+        return '';
+      }
+    }
+
+    function getAdminSession() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(ADMIN_SESSION_KEY) || 'null');
+        if (saved && typeof saved.token === 'string' && Number.isFinite(saved.expiresAt) && saved.expiresAt > Date.now()) {
+          return saved;
+        }
+      } catch {}
+      return null;
+    }
+
+    async function adminCall(api, action, payload, token) {
+      const res = await fetch(api, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+        body: JSON.stringify({ action, payload: { ...payload, token } }),
+        redirect: 'follow'
+      });
+      if (!res.ok) throw new Error(`Không kết nối được máy chủ quản trị (${res.status}).`);
+      const data = await res.json();
+      if (!data.ok) {
+        if (data.code === 'AUTH_REQUIRED') {
+          try { localStorage.removeItem(ADMIN_SESSION_KEY); } catch {}
+        }
+        const err = new Error(data.error || 'Thao tác thất bại.');
+        err.code = data.code;
+        throw err;
+      }
+      return data;
+    }
+
     // Lấy ID bài viết từ query ?id=... hoặc hash #id=...
     function getArticleId() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -230,6 +350,58 @@
       if (hash.startsWith('id=')) return hash.slice(3);
       if (hash) return hash;
       return '';
+    }
+
+    let currentArticle = null;
+
+    function updateStatusBadges(status = 'published') {
+      const text = STATUS_LABELS[status] || STATUS_LABELS.published;
+      const cls = 'status-badge' + (status !== 'published' ? ' ' + status : '');
+      $('articleStatusBadge').textContent = text;
+      $('articleStatusBadge').className = cls;
+      $('adminBarStatus').textContent = text;
+      $('adminBarStatus').className = cls;
+      $('btnAdminApprove').hidden = status === 'published';
+      $('btnAdminReject').hidden = status === 'rejected';
+      $('btnAdminPending').hidden = status === 'pending';
+    }
+
+    function setupAdminBar(api, id, session, status) {
+      if (!session) {
+        $('adminReviewBar').hidden = true;
+        return;
+      }
+      $('adminReviewBar').hidden = false;
+      $('btnAdminEdit').href = `admin.html?edit=${encodeURIComponent(id)}`;
+      updateStatusBadges(status);
+
+      const changeStatus = async (newStatus, confirmText) => {
+        const activeSession = getAdminSession();
+        if (!activeSession) {
+          $('adminReviewNotice').textContent = 'Phiên quản trị đã hết hạn. Hãy đăng nhập lại.';
+          return;
+        }
+        if (confirmText && !confirm(confirmText)) return;
+        const buttons = [...$('adminReviewBar').querySelectorAll('button')];
+        buttons.forEach(b => b.disabled = true);
+        $('adminReviewNotice').textContent = 'Đang lưu trạng thái…';
+        try {
+          const latest = await adminCall(api, 'get', { id }, activeSession.token);
+          const saved = await adminCall(api, 'save', { article: { ...latest.article, status: newStatus } }, activeSession.token);
+          currentArticle = saved.article;
+          updateStatusBadges(saved.article.status);
+          $('adminReviewNotice').textContent = `Đã cập nhật: ${STATUS_LABELS[saved.article.status] || saved.article.status}`;
+          try { localStorage.setItem('robot_ideas_last_saved', Date.now().toString()); } catch {}
+        } catch (err) {
+          $('adminReviewNotice').textContent = `Lỗi: ${err.message}`;
+        } finally {
+          buttons.forEach(b => b.disabled = false);
+        }
+      };
+
+      $('btnAdminApprove').onclick = () => changeStatus('published', 'Duyệt đăng công khai bài viết này lên website?');
+      $('btnAdminReject').onclick = () => changeStatus('rejected', 'Chuyển bài viết này sang danh sách Từ chối?');
+      $('btnAdminPending').onclick = () => changeStatus('pending', 'Đưa bài viết này về hàng Đang chờ duyệt?');
     }
 
     async function loadArticle() {
@@ -245,18 +417,52 @@
         return;
       }
 
+      const isPreview = new URLSearchParams(window.location.search).has('preview');
+      let session = getAdminSession();
+
       try {
+        // Nếu mở từ trang Quản trị (?preview=1) và đã có phiên đăng nhập, đọc trực tiếp bản nháp/chờ duyệt
+        if (isPreview && session) {
+          try {
+            const adminData = await adminCall(api, 'get', { id }, session.token);
+            currentArticle = adminData.article;
+            renderArticle(adminData.article);
+            setupAdminBar(api, id, session, adminData.article.status || 'pending');
+            return;
+          } catch (err) {
+            if (err.code !== 'AUTH_REQUIRED') throw err;
+            session = null;
+          }
+        }
+
         const res = await fetch(`${api}?action=article&id=${encodeURIComponent(id)}&t=${Date.now()}`);
         if (!res.ok) throw new Error(`Máy chủ phản hồi lỗi: ${res.status}`);
         const data = await res.json();
 
-        if (!data.ok || !data.article) {
-          throw new Error(data.error || 'Bài viết chưa được công khai hoặc đã bị gỡ.');
+        if (data.ok && data.article) {
+          currentArticle = { ...data.article, status: 'published' };
+          renderArticle(currentArticle);
+          setupAdminBar(api, id, session, 'published');
+          return;
         }
 
-        renderArticle(data.article);
+        // Fallback: bài chưa công khai nhưng người xem đang có phiên Quản trị hợp lệ
+        if (session) {
+          const adminData = await adminCall(api, 'get', { id }, session.token);
+          currentArticle = adminData.article;
+          renderArticle(adminData.article);
+          setupAdminBar(api, id, session, adminData.article.status || 'pending');
+          return;
+        }
+
+        showError(
+          isPreview
+            ? 'Bài viết này đang chờ duyệt (chưa công khai). Hãy đăng nhập Quản trị trên trình duyệt này để xem và duyệt bài.'
+            : (data.error || 'Bài viết chưa được công khai hoặc đã bị gỡ.'),
+          id
+        );
       } catch (err) {
-        showError(err.message);
+        showError(err.message, id);
       }
     }
 
@@ -271,16 +477,19 @@
       $('articleTitle').textContent = a.title;
       $('articleCategory').textContent = a.category || 'Khác';
       $('articleSummary').textContent = a.summary || '';
+      updateStatusBadges(a.status || 'published');
 
-      const dateStr = a.publishedAt ? new Date(a.publishedAt).toLocaleDateString('vi-VN', {
+      const rawDate = a.publishedAt || a.updatedAt || a.createdAt;
+      const dateStr = rawDate ? new Date(rawDate).toLocaleDateString('vi-VN', {
         year: 'numeric', month: 'long', day: 'numeric'
       }) : '';
-      $('articleDate').textContent = dateStr ? `Ngày đăng: ${dateStr}` : 'Cộng đồng kỹ sư';
+      $('articleDate').textContent = dateStr ? `${a.publishedAt ? 'Ngày đăng' : 'Cập nhật'}: ${dateStr}` : 'Cộng đồng kỹ sư';
       $('articleSource').textContent = `Nguồn: ${a.sourceName || 'Robot Ideas'}`;
 
-      if (a.coverImage) {
+      const safeCover = safeHttpsUrl(a.coverImage);
+      if (safeCover) {
         $('articleCoverWrap').hidden = false;
-        $('articleCoverImg').src = a.coverImage;
+        $('articleCoverImg').src = safeCover;
       } else {
         $('articleCoverWrap').hidden = true;
       }
@@ -292,8 +501,9 @@
         $('robotIdeaBox').hidden = true;
       }
 
-      if (a.sourceUrl) {
-        $('originalSourceLink').href = a.sourceUrl;
+      const safeSource = safeHttpsUrl(a.sourceUrl);
+      if (safeSource) {
+        $('originalSourceLink').href = safeSource;
         $('originalSourceLink').textContent = `Xem bài nguyên tác (${a.sourceName || 'Tác giả gốc'}) ↗`;
         $('originalSourceLink').hidden = false;
       } else {
@@ -301,26 +511,32 @@
       }
 
       // Đưa nội dung HTML vào sandbox iframe an toàn
-      const frame = articleFrame(a.html, a.sourceUrl, true);
+      const frame = articleFrame(a.html, safeSource, true);
       $('articleFrameContainer').replaceChildren(frame);
 
-      // Nút copy link
+      // Nút copy link công khai sạch (bỏ tham số preview=1)
       $('btnCopyLink').onclick = async () => {
+        const shareUrl = new URL(window.location.href);
+        shareUrl.searchParams.delete('preview');
         try {
-          await navigator.clipboard.writeText(window.location.href);
+          await navigator.clipboard.writeText(shareUrl.href);
           $('copyNotice').hidden = false;
           setTimeout(() => $('copyNotice').hidden = true, 2500);
         } catch {
-          prompt('Sao chép liên kết:', window.location.href);
+          prompt('Sao chép liên kết:', shareUrl.href);
         }
       };
     }
 
-    function showError(msg) {
+    function showError(msg, id = '') {
       $('loadingBox').hidden = true;
       $('articleContainer').hidden = true;
       $('errorBox').hidden = false;
       $('errorMessage').textContent = msg;
+      if (id && $('errorAdminLogin')) {
+        $('errorAdminLogin').href = `admin.html?edit=${encodeURIComponent(id)}`;
+        $('errorAdminLogin').hidden = false;
+      }
     }
 
     loadArticle();
