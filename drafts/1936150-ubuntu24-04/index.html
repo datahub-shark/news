@@ -1,12 +1,12 @@
 <!-- METADATA
-Tiêu đề: 算法]关于Ubuntu24.04内核版本与海康相机驱动兼容性问题的提醒 哈尔滨工业大学（深圳）南工骁鹰
+Tiêu đề: [RM2026] Nhắc nhở thuật toán về vấn đề tương thích giữa phiên bản kernel Ubuntu24.04 và trình điều khiển camera Hikvision Nangong Xiaoying · HIT Thâm Quyến
 Chuyên mục: Cơ khí
 Tác giả: Cộng đồng RoboMaster
 Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/abf029e62fad484a8b3801cfacaf351a1783692554083/C31B38B3094E4E338DF01A11ABDF89EF.jpg
 Nguồn: https://bbs.robomaster.com/article/1936150
 Tên nguồn: RoboMaster BBS
-Tóm tắt: <h4<strong一，问题描述</strong</h4<p我们队在使用华硕NUC15 ubuntu24.04时出现了小电脑开机时频繁卡死在开机页面长时间等待无法进入系统的问题，小电脑开机成功概率不高。考虑到这个问题可能不止我们会遇见且影响巨大，遂发布此帖提醒大家。</p<h4<strong二，问题定位</strong</h4<p这个问题是由海康相机驱动MVS的gevfilter模块与ubuntu24.04于5月底发布的6.17.0-35的HWE内核版本导致的。</p<p调取Ubuntu日志，我发现Kernel boot时硬件初始化正常，但是在InitModuleService加载gevfil
-Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 关于Ubuntu24.04内核版本与海康相机驱动兼容性问题的提醒 哈尔滨工业大学（深圳）南工骁鹰. Ứng dụng trong phân mảng Cơ khí.
+Tóm tắt: 1. Mô tả sự cố: Khi nhóm chúng tôi sử dụng ASUS NUC15 ubuntu24.04, sự cố xảy ra là máy tính nhỏ thường xuyên bị kẹt ở trang khởi động và đợi rất lâu mới vào được hệ thống khi khởi động. Khả năng khởi động thành công của máy tính nhỏ không cao. Xét rằng vấn đề này có thể không chỉ chúng ta gặp phải và ảnh hưởng rất lớn nên tôi đăng bài này để nhắc nhở mọi người.
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: [RM2026] Nhắc nhở thuật toán về vấn đề tương thích giữa phiên bản kernel Ubuntu24.04 và trình điều khiển camera Hikvision Nangong Xiaoying · HIT Thâm Quyến. Ứng dụng thực tế và tối ưu hóa hệ thống trong phân mảng Cơ khí.
 Tệp đính kèm: record.txt
 Trạng thái: READY
 -->

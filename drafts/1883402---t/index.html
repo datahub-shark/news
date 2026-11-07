@@ -1,12 +1,12 @@
 <!-- METADATA
-Tiêu đề: 平动-自旋耦合目标下的火控拦截时间t解析与数值混合寻优策略
+Tiêu đề: Chiến lược tối ưu hóa kết hợp số và phân tích cho thời gian đánh chặn điều khiển hỏa lực t theo mục tiêu khớp nối tịnh tiến-spin
 Chuyên mục: Thị giác máy
 Tác giả: 米基哈哈
 Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b420db07fb9b4d7a827be993949c7d3f1776008245277/note.png
 Nguồn: https://bbs.robomaster.com/article/1883402
 Tên nguồn: RoboMaster BBS
-Tóm tắt: <p今天在实验室凑热闹时，看到组里的小灯在啃同济开源的自瞄预测代码，突然有点感慨。</p<p以前我也是小灯的时候，碰到这种问题简直就像见到了“米基哈哈追乌龟”的悖论：目标在动，子弹在飞，在这个无限套娃里根本找不到解出真正命中时间 t 的办法。当时实在搞不明白，最后只能简单粗暴地把“当前车距 / 弹速”当成 t 凑合用。</p<p现在回过头看，突然想头铁挑战一下，看看能不能纯靠数学把这个方程给解出来，而不是单纯当个黑盒去迭代。</p<p<strong必须提前声明下：在实际工程落地时，这套基于泰勒展开和牛顿迭代的算式，综合性能和鲁棒性大概率是打不过简单粗暴的 while 迭代的。但搞技术的嘛，有时
-Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 平动-自旋耦合目标下的火控拦截时间t解析与数值混合寻优策略. Ứng dụng trong phân mảng Thị giác máy.
+Tóm tắt: Hôm nay khi tôi đang tham gia cuộc vui trong phòng thí nghiệm, tôi nhìn thấy Xiaodeng trong nhóm đang nhai mã dự đoán tự nhắm của Tongji Open Source, và đột nhiên tôi cảm thấy có chút xúc động. Khi tôi còn nhỏ, việc gặp phải loại vấn đề này giống như nhìn thấy nghịch lý của "Mickey đuổi rùa": mục tiêu đang di chuyển, đạn đang bay và không có cách nào giải quyết thời gian bắn thực sự t trong con búp bê làm tổ vô tận này.
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: Chiến lược tối ưu hóa kết hợp số và phân tích cho thời gian đánh chặn điều khiển hỏa lực t theo mục tiêu khớp nối tịnh tiến-spin. Ứng dụng thực tế và tối ưu hóa hệ thống trong phân mảng Thị giác máy.
 Tệp đính kèm: t-tai-nguyen.ggb
 Trạng thái: READY
 -->

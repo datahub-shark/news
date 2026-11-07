@@ -1,12 +1,12 @@
 <!-- METADATA
-Tiêu đề: 电控小巧思】6020的神秘速度反馈和奇妙变噪卡尔曼
+Tiêu đề: Điều khiển điện tử 6020 phản hồi tốc độ bí ẩn và khả năng giảm tiếng ồn tuyệt vời Kalman
 Chuyên mục: Cơ khí
 Tác giả: SunWater
 Ảnh bìa: https://hz-rm-bbs-web-prod.oss-cn-hangzhou.aliyuncs.com/b134c8386f0b4e3ea154cafea5d079001786767573461/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_2026-08-15_121920_022.png
 Nguồn: https://bbs.robomaster.com/article/1938355
 Tên nguồn: RoboMaster BBS
-Tóm tắt: <h1注意: 这个项目是玩玩的，实际使用不用这样做,如果你觉的有用，那非常好；但如果你觉得这个项目是作者纯闲着没事干，那么你猜对了（</h1<p大家好啊，最近台风天，不知道大家怎么样，我这儿被淹惨了(；へ：)</p<p反正被困在家里没事情干，我就继续玩玩之前一直想干而且很酷的项目---GM6020的速度融合</p<p6020反馈的速度精度只有1RPM，这就导致在在某些场景下对6020的控制存在困难。直接对编码器进行微分+滑动窗口能较好的解决这个问题，而且效果还行，但是这样会带来一些延时和抖动，在高速场景不太可靠<s而且不是很酷</s等问题，所以我就想尝试一些不一样的东西。</p<p我搭建了一个
-Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: 6020的神秘速度反馈和奇妙变噪卡尔曼. Ứng dụng trong phân mảng Cơ khí.
+Tóm tắt: Lưu ý: Dự án này mang tính chất giải trí, bạn không cần phải thực hiện nó để sử dụng thực tế. Nếu bạn thấy nó hữu ích thì thật tuyệt; nhưng nếu bạn nghĩ dự án này chỉ dành cho tác giả rảnh rỗi thì bạn đã đoán đúng (Xin chào mọi người, không biết mọi người dạo này thế nào trong cơn bão vừa rồi, tôi bị ngập ở đây (；へ：) Dù sao thì tôi đang bị kẹt ở...
+Gợi ý ứng dụng: Giải pháp kỹ thuật tham khảo từ bài viết: Điều khiển điện tử 6020 phản hồi tốc độ bí ẩn và khả năng giảm tiếng ồn tuyệt vời Kalman. Ứng dụng thực tế và tối ưu hóa hệ thống trong phân mảng Cơ khí.
 Tệp đính kèm: chassis_task.c
 Trạng thái: READY
 -->
