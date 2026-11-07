@@ -4,34 +4,17 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { createEditorialClient, getEditorialCredential } from './editorial-auth.mjs';
 
 const DATA_FILE = path.resolve('data/crawled_articles.json');
-const API_URL = 'https://script.google.com/macros/s/AKfycbzptC6MVeswlOqbKiIVXSohkfdU0aZeAkkKeRB9r1xbX7gZvzf_NKmiLJY3DzT_sSwB/exec';
-const SYNC_TOKEN = 'robot-ideas-sync-secret-2026';
+const callApi = createEditorialClient();
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function callApi(action, payload = {}, token = SYNC_TOKEN) {
-  const request = { ...payload, token };
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-    body: JSON.stringify({ action, payload: request })
-  });
-
-  if (!res.ok) throw new Error(`Lỗi kết nối máy chủ Google: ${res.status}`);
-  const data = await res.json();
-  if (!data.ok) {
-    const err = new Error(data.error || 'Thao tác thất bại.');
-    err.code = data.code;
-    throw err;
-  }
-  return data;
-}
-
 export async function updateQueueTranslations() {
+  getEditorialCredential({ requireAdmin: true });
   if (!fs.existsSync(DATA_FILE)) {
     console.error('Không tìm thấy tệp crawled_articles.json');
     return;

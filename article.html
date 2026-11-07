@@ -296,7 +296,7 @@
     const $ = id => document.getElementById(id);
     $('year').textContent = new Date().getFullYear();
 
-    const ADMIN_SESSION_KEY = 'robot_ideas_admin_session';
+    const ADMIN_SESSION_KEY = 'robot_ideas_user_session';
     const STATUS_LABELS = {
       published: '✓ Đã duyệt',
       pending: '◷ Đang chờ duyệt',
@@ -316,7 +316,7 @@
     function getAdminSession() {
       try {
         const saved = JSON.parse(localStorage.getItem(ADMIN_SESSION_KEY) || 'null');
-        if (saved && typeof saved.token === 'string' && Number.isFinite(saved.expiresAt) && saved.expiresAt > Date.now()) {
+        if (saved && saved.user?.role === 'admin' && typeof saved.token === 'string' && Number.isFinite(saved.expiresAt) && saved.expiresAt > Date.now()) {
           return saved;
         }
       } catch {}

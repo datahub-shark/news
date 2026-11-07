@@ -17,7 +17,7 @@ async function fixture(count=3,supported=true){
   if(action==='setArticlePlaylists'){playlists=playlists.map(p=>({...p,articleIds:payload.playlistIds.includes(p.id)?[...new Set([...p.articleIds,payload.articleId])]:p.articleIds.filter(id=>id!==payload.articleId),version:p.version+1}));result.playlists=playlists;}
   queueMicrotask(()=>success(JSON.parse(JSON.stringify(result))));
  }catch(e){failure(e)}}}}}}}}};
- w.eval(fs.readFileSync('admin.js','utf8'));d.getElementById('loginForm').dispatchEvent(new w.Event('submit',{cancelable:true}));await tick();
+ require('./helpers/admin-account.cjs')(w);w.eval(fs.readFileSync('admin.js','utf8'));await tick();
  openWindows.push(w);return {dom,w,d,articles,calls,getPlaylists:()=>playlists};
 }
 test('admin thumbnails load lazily, reject unsafe URLs, recover from broken images and keep titles as text',async()=>{

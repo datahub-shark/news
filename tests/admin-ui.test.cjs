@@ -3,9 +3,9 @@ test('admin flow imports HTML, previews safely, saves private/public and clears 
  const dom=new JSDOM(fs.readFileSync('admin.html','utf8'),{url:'https://datahub-shark.github.io/news/admin.html',runScripts:'outside-only'});const w=dom.window,d=w.document;w.confirm=()=>true;let saved=null;const calls=[];
  w.HTMLDialogElement.prototype.showModal=function(){this.open=true};w.HTMLDialogElement.prototype.close=function(){this.open=false};
  w.google={script:{run:{withSuccessHandler(success){return {withFailureHandler(failure){return {adminApi(action,payload){calls.push({action,payload});try{let r={ok:true};if(action==='login')r.token='test-session';if(action==='list')r={ok:true,apiVersion:2,articles:saved?[saved]:[]};if(action==='save'){saved={...payload.article,id:'article',version:(saved?.version||0)+1,updatedAt:'2026-11-06T00:00:00Z'};r.article=saved;}if(action==='get')r.article=saved;queueMicrotask(()=>success(r));}catch(e){failure(e)}}}}}}}}};
+ require('./helpers/admin-account.cjs')(w);
  for(const f of ['vendor/purify.min.js','html-viewer.js','admin.js'])w.eval(fs.readFileSync(f,'utf8'));
- d.getElementById('request').click();await tick();assert.equal(calls[0].action,'requestCode');
- d.getElementById('code').value='123456';d.getElementById('loginForm').dispatchEvent(new w.Event('submit',{cancelable:true}));await tick();assert.equal(d.getElementById('workspace').hidden,false);
+ await tick();assert.equal(d.getElementById('workspace').hidden,false);
  assert.equal(d.getElementById('viewOverview').hidden,false);assert.equal(d.getElementById('viewEditor').hidden,true);assert.equal(d.getElementById('statAll').textContent,'0');d.getElementById('startNew').click();assert.equal(d.getElementById('viewEditor').hidden,false);
  const file={name:'robot.html',size:100,text:async()=>'<h1>Robot file</h1><script>alert(1)</script><p>HTML content</p>'};Object.defineProperty(d.getElementById('htmlFile'),'files',{value:[file]});d.getElementById('htmlFile').dispatchEvent(new w.Event('change'));await tick();assert.equal(d.getElementById('title').value,'Robot file');assert.match(d.getElementById('html').value,/<h1>/);
  d.getElementById('preview').click();const frame=d.querySelector('#previewContent iframe');assert.ok(frame);assert.ok(!frame.srcdoc.includes('<script>'));assert.equal(frame.getAttribute('sandbox'),'allow-popups');

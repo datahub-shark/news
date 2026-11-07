@@ -7,12 +7,12 @@ import os
 from pathlib import Path
 from bs4 import BeautifulSoup, NavigableString, Comment
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from editorial_auth import (get_editorial_token, get_editorial_api_url,
+                            assert_editorial_action, redact_editorial_error)
 
 DATA_FILE = Path('data/crawled_articles.json')
 CACHE_FILE = Path('data/translation_cache.json')
 DRAFTS_DIR = Path('drafts')
-API_URL = 'https://script.google.com/macros/s/AKfycbzptC6MVeswlOqbKiIVXSohkfdU0aZeAkkKeRB9r1xbX7gZvzf_NKmiLJY3DzT_sSwB/exec'
-SYNC_TOKEN = 'robot-ideas-sync-secret-2026'
 
 ZH_REGEX = re.compile(r'[\u4e00-\u9fa5]')
 
@@ -195,13 +195,18 @@ def translate_html_soup(html_str):
     return str(soup)
 
 def call_api(action, payload):
+    token = get_editorial_token(require_admin=True)
+    assert_editorial_action(action, payload)
     req = urllib.request.Request(
-        API_URL,
-        data=json.dumps({'action': action, 'payload': {'token': SYNC_TOKEN, **payload}}).encode('utf-8'),
+        get_editorial_api_url(),
+        data=json.dumps({'action': action, 'payload': {**payload, 'token': token}}).encode('utf-8'),
         headers={'Content-Type': 'text/plain;charset=UTF-8'}
     )
     with urllib.request.urlopen(req, timeout=30) as resp:
-        return json.loads(resp.read().decode('utf-8'))
+        result = json.loads(resp.read().decode('utf-8'))
+        if result.get('error'):
+            result['error'] = redact_editorial_error(result['error'])
+        return result
 
 def process_one_article(idx_art):
     idx, a = idx_art
@@ -213,6 +218,7 @@ def process_one_article(idx_art):
     return idx, trans_html, True
 
 def main():
+    get_editorial_token(require_admin=True)
     print("======================================================")
     print("BẮT ĐẦU DỊCH THÂN BÀI VIẾT (HTML BODY) TOÀN BỘ 456 BÀI")
     print("======================================================")

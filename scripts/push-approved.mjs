@@ -8,88 +8,11 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import readline from 'node:readline';
+import { createEditorialClient, getEditorialCredential } from './editorial-auth.mjs';
 
 const DRAFTS_DIR = path.resolve('drafts');
 const PUBLISHED_DIR = path.resolve('published');
-const DATA_DIR = path.resolve('data');
-const SESSION_FILE = path.join(DATA_DIR, '.admin_session.json');
-
-function getApiUrl() {
-  try {
-    const configContent = fs.readFileSync('config.js', 'utf8');
-    const match = configContent.match(/apiUrl:\s*['"]([^'"]+)['"]/);
-    if (match) return match[1];
-  } catch {}
-  return '';
-}
-
-const API_URL = getApiUrl();
-
-async function callApi(action, payload = {}, token = '') {
-  if (!API_URL) throw new Error('Chưa cấu hình apiUrl trong config.js.');
-
-  const request = { ...payload, token };
-  const res = await fetch(API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
-    body: JSON.stringify({ action, payload: request })
-  });
-
-  if (!res.ok) throw new Error(`Lỗi kết nối máy chủ Google: ${res.status}`);
-  const data = await res.json();
-  if (!data.ok) {
-    const err = new Error(data.error || 'Thao tác thất bại.');
-    err.code = data.code;
-    throw err;
-  }
-  return data;
-}
-
-function ask(question) {
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-  return new Promise(resolve => rl.question(question, ans => { rl.close(); resolve(ans.trim()); }));
-}
-
-function loadSession() {
-  if (!fs.existsSync(SESSION_FILE)) return null;
-  try {
-    const session = JSON.parse(fs.readFileSync(SESSION_FILE, 'utf8'));
-    if (session.token && session.expiresAt > Date.now()) {
-      return session;
-    }
-  } catch {}
-  return null;
-}
-
-function saveSession(session) {
-  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-  fs.writeFileSync(SESSION_FILE, JSON.stringify(session, null, 2), 'utf8');
-}
-
-async function loginFlow() {
-  console.log('\n======================================================');
-  console.log('🔑 ĐĂNG NHẬP ADMIN ĐỂ ĐẨY BÀI LÊN DRIVE');
-  console.log('======================================================\n');
-
-  const codeArgIdx = process.argv.indexOf('--code');
-  let code = codeArgIdx !== -1 && process.argv[codeArgIdx + 1] ? process.argv[codeArgIdx + 1] : '';
-
-  if (!code) {
-    console.log('Đang yêu cầu gửi mã xác nhận đến email quản trị...');
-    await callApi('requestCode');
-    console.log('✅ Đã gửi mã OTP đến email quản trị.');
-
-    code = await ask('\n👉 Nhập mã OTP 6 số từ email: ');
-  }
-
-  if (!code) throw new Error('Chưa nhập mã OTP.');
-
-  const res = await callApi('login', { code });
-  saveSession({ token: res.token, expiresAt: res.expiresAt });
-  console.log('🎉 Đăng nhập thành công! Phiên làm việc lưu trong 30 ngày.\n');
-  return res.token;
-}
+const callApi = createEditorialClient();
 
 function parseDraft(content) {
   const metaMatch = content.match(/<!--\s*METADATA([\s\S]*?)-->/);
@@ -191,20 +114,9 @@ export async function pushApprovedArticles(options = {}) {
     return;
   }
 
-  // Kiểm tra phiên đăng nhập
-  let session = loadSession();
-  if (!session) {
-    try {
-      const test = await callApi('list', {}, 'robot-ideas-sync-secret-2026');
-      if (test && test.ok) {
-        session = { token: 'robot-ideas-sync-secret-2026' };
-      }
-    } catch {}
-  }
-  if (!session) {
-    const token = await loginFlow();
-    session = { token };
-  }
+  // Publishing requires a Google admin session; import keys only create pending items.
+  getEditorialCredential({ requireAdmin: !!options.publishImmediately });
+  await callApi('list');
 
   let successCount = 0;
 
@@ -229,7 +141,7 @@ export async function pushApprovedArticles(options = {}) {
         }
       };
 
-      await callApi('save', payload, session.token);
+      await callApi('save', payload);
 
       console.log(`✅ [ĐÃ LÊN GOOGLE DRIVE] Đưa vào hàng chờ duyệt thành công!`);
 
@@ -269,5 +181,5 @@ export async function pushApprovedArticles(options = {}) {
 }
 
 if (process.argv[1] && process.argv[1].endsWith('push-approved.mjs')) {
-  pushApprovedArticles().catch(console.error);
+  pushApprovedArticles().catch(error => { console.error(error.message); process.exitCode = 1; });
 }
