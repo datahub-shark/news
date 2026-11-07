@@ -30,6 +30,15 @@ Kiểm tra Audience và các yêu cầu Google đang hiển thị trong Console.
 
 ## 2. Cấu hình Apps Script
 
+Client ID đã được chủ website cung cấp và gắn vào bản nguồn chuyển đổi. Trong Apps Script → **Project Settings → Script properties → Add script property**, thêm đúng cặp sau rồi bấm **Save script properties**:
+
+```text
+Property: GOOGLE_CLIENT_ID
+Value: 154903359845-bca2nv8a7slar9knmt8ov60aevh5doag.apps.googleusercontent.com
+```
+
+Việc gắn ID vào `config.js` không tự thay Script Properties hay deployment đang chạy. Backend bắt buộc dùng cùng ID để kiểm tra Google token.
+
 Thay `Code.gs` bằng [bản trong repo](google-apps-script/Code.gs). Trong **Project Settings → Script properties**, cấu hình:
 
 | Property | Giá trị / công dụng |
